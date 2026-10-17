@@ -2,9 +2,10 @@
 User-agent: *
 Allow: /
 
-# Private account, auth, and utility endpoints
-Disallow: /account/
-Disallow: /auth/
+# Private account, auth, admin, and utility endpoints
+Disallow: /account
+Disallow: /auth
+Disallow: /admin
 Disallow: /404
 
 Sitemap: https://cumid.store/sitemap.xml

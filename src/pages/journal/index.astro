@@ -23,7 +23,7 @@ const breadcrumbs = [
       <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
         Stories &amp; Ergonomics
       </span>
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight">
+      <h1 class="text-4xl sm:text-5xl font-semibold text-charcoal-900 tracking-tight">
         The CUMID Journal
       </h1>
       <p class="text-base text-charcoal-700 leading-relaxed">
@@ -34,7 +34,7 @@ const breadcrumbs = [
     <!-- Article Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {JOURNAL_ARTICLES.map((article) => (
-        <article class="p-6 rounded-3xl bg-ivory-100 border border-charcoal-800/10 shadow-soft-sm hover:shadow-soft transition-all duration-300 flex flex-col justify-between space-y-5">
+        <article class="p-6 rounded-sm bg-ivory-100 border border-charcoal-800/10   transition-all duration-300 flex flex-col justify-between space-y-5">
           <div class="space-y-4">
             <div class="flex items-center justify-between text-xs text-charcoal-700/60 font-semibold uppercase tracking-wider">
               <span>{article.category}</span>

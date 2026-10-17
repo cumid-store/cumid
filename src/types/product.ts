@@ -7,7 +7,7 @@
  * - Strictly confirmed specs (unknown specifications are omitted, never guessed)
  */
 
-export type CollectionSlug = 'floral' | 'cute' | 'hinglish' | 'cars-and-jets';
+export type CollectionSlug = 'floral' | 'cute' | 'hinglish' | 'cars-and-jets' | 'originals';
 
 export interface ConfirmedSpecifications {
   format: string; // e.g., "Square pocket diary"

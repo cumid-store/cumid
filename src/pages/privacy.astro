@@ -10,7 +10,7 @@ const breadcrumbs = [
 
 <BaseLayout
   title="Privacy Policy | CUMID Stationery"
-  description="Plain-language privacy policy for CUMID (cumid.store). Details our data handling, local storage, optional analytics, Supabase accounts, and DPDP compliance."
+  description="Plain-language privacy policy for CUMID (cumid.store). Details our data handling, local storage, optional analytics, Supabase accounts, and privacy choices."
   canonicalUrl={`${SITE.canonicalUrl}/privacy`}
 >
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
@@ -20,35 +20,30 @@ const breadcrumbs = [
       <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
         Privacy &amp; Data Protection
       </span>
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+      <h1 class="text-3xl sm:text-4xl font-semibold text-charcoal-900 tracking-tight">
         Privacy Policy
       </h1>
       <p class="text-xs text-charcoal-700/70">
-        Last Meaningful Update: October 15, 2026 · Market: India
+        Last Meaningful Update: October 17, 2026 · Market: India
       </p>
     </header>
 
     <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
       
-      <div class="p-4 rounded-2xl bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
-        <strong class="font-bold text-charcoal-900 block">Owner Setup Transparency Note:</strong>
-        <p>
-          Formal registered company name and physical corporate premises are currently pending final owner input on our launch checklist. Communications and data requests are monitored via our verified customer WhatsApp (+91 7023987458).
-        </p>
-      </div>
+      <p>For privacy questions or data requests, email <a href="mailto:support@cumid.store" class="underline">support@cumid.store</a> or message our customer WhatsApp at +91 9201871597.</p>
 
       <h2 class="text-xl font-bold text-charcoal-900">1. Overview &amp; Core Philosophy</h2>
       <p>
         CUMID ("we", "our", "us") operates the website <strong>https://cumid.store</strong>. We build pocket diaries and stationery. We do not sell personal data, do not run behavioural advertising trackers, and do not log your keystrokes or browsing across external websites.
       </p>
       <p>
-        This policy outlines how data is handled across our website, optional customer accounts, and our WhatsApp preorder channel in alignment with applicable Indian laws, including the Digital Personal Data Protection (DPDP) framework as its provisions phase into force.
+        This notice describes our website, optional account features and WhatsApp enquiry channel. Optional services only operate when configured. You can browse and send an enquiry without signing in.
       </p>
 
       <h2 class="text-xl font-bold text-charcoal-900">2. Information We Collect and How</h2>
       <h3 class="text-base font-semibold text-charcoal-900">A. Browsing &amp; Local Storage (Guests)</h3>
       <p>
-        You can browse our entire catalog without an account. When you save favourite covers, they are stored locally on your device in your browser's <code>localStorage</code> under <code>cumid_guest_favourites_v1</code>. This data never leaves your device unless you choose to sign in.
+        You can browse our entire catalog without an account. When you save favourite covers, they are stored locally on your device in your browser's <code>localStorage</code> under <code>cumid_guest_favourites_v1</code>. These guest favourites remain on this device unless you sign in and explicitly import them into your account. Signed-in favourites are kept separately.
       </p>
 
       <h3 class="text-base font-semibold text-charcoal-900">B. Optional Customer Accounts (Google OAuth via Supabase)</h3>
@@ -58,24 +53,24 @@ const breadcrumbs = [
 
       <h3 class="text-base font-semibold text-charcoal-900">C. Preorder Enquiries via WhatsApp</h3>
       <p>
-        When you click "Enquire about preorder on WhatsApp", you voluntarily send a message to our business WhatsApp number (+91 7023987458). We receive your WhatsApp display name, phone number, and whatever message text you send. We do not pretend that no data is collected simply because communication occurs on WhatsApp; we treat this communication with strict confidentiality for the purpose of answering your product queries.
+        When you click "Enquire about preorder on WhatsApp", a draft opens. Only if you choose to send it do you send a message to our business WhatsApp number (+91 9201871597). We receive your WhatsApp display name, phone number, and whatever message text you send. We do not pretend that no data is collected simply because communication occurs on WhatsApp; we treat this communication with strict confidentiality for the purpose of answering your product queries.
       </p>
 
       <h3 class="text-base font-semibold text-charcoal-900">D. Technical Hosting Logs</h3>
       <p>
-        Our hosting partner (Cloudflare Pages) maintains standard transient access logs (IP addresses, user-agent, request timestamps) to protect the site from distributed denial-of-service (DDoS) attacks and ensure uptime.
+        Cloudflare hosts this website and processes technical request information, such as IP addresses and browser headers, to deliver content and operate its security services. Its processing is governed by Cloudflare’s own privacy policy.
       </p>
 
       <h2 class="text-xl font-bold text-charcoal-900">3. Optional Analytics &amp; Cookies</h2>
       <p>
-        We operate two distinct analytics tiers:
+        The website supports the following optional measurement services. Availability depends on the deployed configuration:
       </p>
       <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
-        <li><strong>Cloudflare Web Analytics:</strong> Cookieless, aggregate metrics to monitor page load performance and aggregate visitor counts. No personal identifiers or cross-site tracking.</li>
-        <li><strong>Google Analytics 4 (GA4):</strong> Strictly consent-gated. GA4 scripts and cookies are NOT loaded until you affirmatively click "Accept analytics". IP addresses are anonymized, Google Signals is disabled, and ad personalization is turned off.</li>
+        <li><strong>Cloudflare Web Analytics:</strong> When enabled, cookieless aggregate metrics measure page performance and visits. Technical requests are processed by Cloudflare.</li>
+        <li><strong>Google Analytics 4 (GA4):</strong> When configured, strictly consent-gated. GA4 scripts and cookies are NOT loaded until you affirmatively click "Accept analytics". We do not send names, emails, phone numbers or WhatsApp message text in analytics events. Google Signals and advertising personalisation are disabled. Google processes technical connection information when its service is enabled.</li>
       </ul>
       <p>
-        You can accept, reject, or change your choice at any time using the "Cookie &amp; Privacy Preferences" link in our footer. Essential website functions remain 100% available if you reject analytics.
+        You can accept, reject, or change your choice at any time using the "Cookie &amp; Privacy Preferences" link in our footer. Browsing, saving favourites and WhatsApp enquiry links remain available if you reject analytics.
       </p>
 
       <h2 class="text-xl font-bold text-charcoal-900">4. Service Providers &amp; Cross-Border Transfers</h2>
@@ -110,7 +105,7 @@ const breadcrumbs = [
             <tr>
               <td class="p-3 font-semibold">Google LLC</td>
               <td class="p-3">OAuth Sign-in &amp; Optional GA4</td>
-              <td class="p-3">OAuth tokens (transient), aggregate page events</td>
+              <td class="p-3">Sign-in information; consent-based events and browser identifiers</td>
             </tr>
           </tbody>
         </table>
@@ -120,7 +115,7 @@ const breadcrumbs = [
       <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
         <li><strong>Guest Favourites:</strong> Stored on your device until you clear your browser data.</li>
         <li><strong>Account Data:</strong> Retained until you delete your account. You can permanently delete your account and all associated cloud favourites directly from <a href="/account" class="underline font-semibold">Account Settings</a>.</li>
-        <li><strong>WhatsApp Messages:</strong> Preorder conversations are retained for up to 180 days to fulfill batch requests, after which chats may be archived or deleted upon request.</li>
+        <li><strong>WhatsApp Messages:</strong> The website does not automatically delete WhatsApp conversations. To request deletion of your enquiry messages, email support@cumid.store or contact us on WhatsApp. Deleting a website account does not delete these messages.</li>
       </ul>
 
       <h2 class="text-xl font-bold text-charcoal-900">6. Children's Privacy</h2>
@@ -133,7 +128,7 @@ const breadcrumbs = [
         Under Indian privacy principles, you have the right to access, rectify, or request deletion of your personal data, as well as withdraw consent for optional analytics at any time.
       </p>
       <p>
-        To exercise any privacy rights or request manual deletion of records, message our designated privacy contact on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong> with the subject <em>"Privacy Data Request"</em>.
+        To request access, correction or deletion, email <a href="mailto:support@cumid.store" class="underline">support@cumid.store</a> with the subject “Privacy request”, or message <strong>{SITE.whatsappDisplayNumber}</strong>. Please describe the request without including passwords or identity documents.
       </p>
 
     </div>

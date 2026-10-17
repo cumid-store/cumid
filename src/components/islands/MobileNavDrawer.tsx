@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useDialogFocus } from '../../lib/useDialogFocus';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Heart, User, MessageCircle, ExternalLink } from 'lucide-react';
 import { SITE } from '../../config/site';
-import { getLocalFavourites } from '../../lib/supabase';
+import { initializeFavourites, snapshot } from '../../lib/favourites';
 
 export const MobileNavDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [favCount, setFavCount] = useState(0);
 
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(isOpen, drawerRef, () => setIsOpen(false));
+
   useEffect(() => {
-    setFavCount(getLocalFavourites().length);
+    void initializeFavourites().then(() => setFavCount(snapshot().favourites.length));
     const handleFavChange = (e: any) => {
-      const list = e.detail?.favourites || getLocalFavourites();
+      const list = e.detail?.favourites || snapshot().favourites;
       setFavCount(list.length);
     };
     window.addEventListener('cumid:favourites-updated', handleFavChange);
@@ -40,19 +44,21 @@ export const MobileNavDrawer: React.FC = () => {
         aria-expanded={isOpen}
         aria-controls="mobile-navigation-drawer"
         aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        className="p-2 rounded-xl text-charcoal-800 hover:bg-ivory-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-600"
+        className="p-2 rounded-sm text-charcoal-800 hover:bg-ivory-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-600"
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
       {isOpen && (
         <div
+          ref={drawerRef}
           id="mobile-navigation-drawer"
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="fixed inset-0 top-[73px] z-40 bg-ivory-100 flex flex-col justify-between p-6 border-t border-charcoal-800/10 overflow-y-auto animate-in fade-in duration-200"
+          className="fixed inset-x-0 top-full h-[calc(100dvh-8rem)] z-40 bg-ivory-100 flex flex-col justify-between p-6 border-t border-charcoal-800/10 overflow-y-auto animate-in fade-in duration-200"
         >
+          <button type="button" onClick={() => setIsOpen(false)} className="self-end p-3" aria-label="Close menu">Close</button>
           <nav className="flex flex-col space-y-4 pt-2">
             <span className="text-xs uppercase tracking-widest font-semibold text-charcoal-700/60 pb-1 border-b border-charcoal-800/10">
               Navigation
@@ -77,7 +83,7 @@ export const MobileNavDrawer: React.FC = () => {
                   key={theme.slug}
                   href={`/collections/${theme.slug}`}
                   onClick={() => setIsOpen(false)}
-                  className="px-3 py-2 rounded-xl bg-ivory-200 text-xs font-medium text-charcoal-800 hover:bg-ivory-300"
+                  className="px-3 py-2 rounded-sm bg-ivory-200 text-xs font-medium text-charcoal-800 hover:bg-ivory-300"
                 >
                   {theme.name}
                 </a>
@@ -91,7 +97,7 @@ export const MobileNavDrawer: React.FC = () => {
               <a
                 href="/account/favourites"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-ivory-200 text-sm font-medium text-charcoal-800"
+                className="flex items-center justify-between px-3 py-2.5 rounded-sm bg-ivory-200 text-sm font-medium text-charcoal-800"
               >
                 <div className="flex items-center gap-2">
                   <Heart className="w-4 h-4 text-peach-700" />
@@ -107,7 +113,7 @@ export const MobileNavDrawer: React.FC = () => {
               <a
                 href="/account"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-ivory-200 text-sm font-medium text-charcoal-800"
+                className="flex items-center gap-2 px-3 py-2.5 rounded-sm bg-ivory-200 text-sm font-medium text-charcoal-800"
               >
                 <User className="w-4 h-4 text-lavender-700" />
                 <span>Account &amp; Sign-in</span>

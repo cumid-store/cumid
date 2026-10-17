@@ -8,7 +8,7 @@ import { COLLECTION_LIST } from '../data/collections';
       <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
         Curated Themes
       </span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900">
+      <h2 class="text-3xl sm:text-4xl font-semibold text-charcoal-900">
         Choose your personality
       </h2>
       <p class="text-sm sm:text-base text-charcoal-700">
@@ -20,7 +20,7 @@ import { COLLECTION_LIST } from '../data/collections';
       {COLLECTION_LIST.map((col) => (
         <a
           href={`/collections/${col.slug}`}
-          class="group p-6 rounded-3xl border border-charcoal-800/10 shadow-soft-sm hover:shadow-soft transition-all duration-300 flex flex-col justify-between"
+          class="group p-6 rounded-sm border border-charcoal-800/10   transition-all duration-300 flex flex-col justify-between"
           style={`background-color: ${col.accentBg};`}
         >
           <div class="space-y-4">

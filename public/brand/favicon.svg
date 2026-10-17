@@ -1,12 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
-  <!-- CUMID High-Contrast Favicon (64x64) -->
-  <rect width="64" height="64" rx="14" fill="#252321" />
-  
-  <!-- "C" Geometry in Warm Ivory -->
-  <path d="M 46 16 H 26 C 18 16, 14 20, 14 28 V 36 C 14 44, 18 48, 26 48 H 46 C 49 48, 51 46, 51 43 C 51 40, 49 38, 46 38 H 27 C 23 38, 21 36, 21 32 C 21 28, 23 26, 27 26 H 46 C 49 26, 51 24, 51 21 C 51 18, 49 16, 46 16 Z" fill="#F7F4EF" />
-
-  <!-- 3 Top Spiral Rings in Soft Lavender Accent -->
-  <rect x="23" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
-  <rect x="31" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
-  <rect x="39" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="280 300 740 650" role="img" aria-labelledby="title"><title id="title">CUMID Notebook Bird</title>
+<path fill="#756284" d="M578 340C557 417 564 472 624 519L726 584C760 606 778 644 782 682C798 659 811 637 817 615C820 550 769 512 707 467C644 421 608 383 578 340Z"/>
+<path fill="#756284" d="M348 632L358 655Q366 674 379 668Q389 663 383 654L366 618Q359 600 372 597Q385 594 391 610L400 630L423 622L418 606Q412 588 427 583Q441 580 447 596L459 624Q466 640 479 634Q487 630 481 619L466 583Q461 567 475 562Q489 560 495 575L500 585L520 579Q557 570 573 609L615 710Q638 754 684 771L449 881Q414 902 393 876L317 692Q306 656 331 642Z"/>
+<path fill="#596B58" d="M780 683C811 644 835 601 875 566Q925 517 984 566C943 561 925 594 909 624L858 708Q821 765 767 797C787 761 789 724 780 683Z"/>
+<path fill="#596B58" d="M762 695C738 745 712 758 669 781L470 904C572 900 682 889 728 849C768 814 777 755 762 695Z"/>
 </svg>

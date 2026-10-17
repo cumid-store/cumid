@@ -26,7 +26,7 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
         flowType: 'pkce',
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: true,
+        detectSessionInUrl: false,
       },
     })
   : null;
@@ -40,7 +40,7 @@ export function getLocalFavourites(): string[] {
     const raw = localStorage.getItem(GUEST_FAVOURITES_STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string' && /^CUMID-(FL|HG|CT|CJ|OR)-\d{3}$/.test(id)).slice(0, 100) : [];
   } catch (e) {
     console.warn('CUMID: Could not read local favourites', e);
     return [];
@@ -62,4 +62,29 @@ export function toggleLocalFavourite(productId: string): { isFavourite: boolean;
   const updated = exists ? current.filter((id) => id !== productId) : [...current, productId];
   saveLocalFavourites(updated);
   return { isFavourite: !exists, favourites: updated };
+}
+
+export async function getCurrentProfile(): Promise<{ id: string; role: 'customer' | 'admin'; displayName?: string } | null> {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return null;
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id, role, display_name')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !data) {
+      return { id: session.user.id, role: 'customer', displayName: session.user.email };
+    }
+    return {
+      id: data.id,
+      role: (data.role as 'customer' | 'admin') || 'customer',
+      displayName: data.display_name,
+    };
+  } catch {
+    return null;
+  }
 }

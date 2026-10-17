@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
-import { getLocalFavourites, toggleLocalFavourite, supabase, isSupabaseConfigured } from '../../lib/supabase';
+import { initializeFavourites, snapshot, toggleFavourite } from '../../lib/favourites';
 import { trackEvent } from '../../lib/analytics';
 
 interface Props {
@@ -20,67 +20,24 @@ export const FavouritesButton: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Initial check from local storage
-    const list = getLocalFavourites();
-    setIsFav(list.includes(productId));
-
-    const handleSync = (e: any) => {
-      const updated = e.detail?.favourites || getLocalFavourites();
-      setIsFav(updated.includes(productId));
-    };
-
-    window.addEventListener('cumid:favourites-updated', handleSync);
-    return () => window.removeEventListener('cumid:favourites-updated', handleSync);
+    const sync = () => setIsFav(snapshot().favourites.includes(productId));
+    window.addEventListener('cumid:favourites-updated', sync);
+    void initializeFavourites().then(sync);
+    return () => window.removeEventListener('cumid:favourites-updated', sync);
   }, [productId]);
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (loading) return;
-
     setLoading(true);
-    const { isFavourite, favourites } = toggleLocalFavourite(productId);
-    setIsFav(isFavourite);
-
-    // Track analytics event if consent granted
     try {
-      trackEvent(isFavourite ? 'add_to_wishlist' : 'remove_from_wishlist', {
-        productId,
-      });
-    } catch {}
-
-    // Dispatch custom event for real-time app-wide sync
-    window.dispatchEvent(
-      new CustomEvent('cumid:favourites-updated', {
-        detail: { favourites, productId, isFavourite },
-      })
-    );
-
-    // Attempt Supabase sync if user is authenticated and configured
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          if (isFavourite) {
-            await supabase.from('favourites').insert({
-              user_id: session.user.id,
-              product_id: productId,
-            });
-          } else {
-            await supabase
-              .from('favourites')
-              .delete()
-              .eq('user_id', session.user.id)
-              .eq('product_id', productId);
-          }
-        }
-      } catch (err) {
-        // Silently degrade; local storage already preserved user action
-        console.warn('Supabase favourites sync note:', err);
-      }
-    }
-
-    setLoading(false);
+      const added = await toggleFavourite(productId);
+      setIsFav(added);
+      try { trackEvent(added ? 'add_to_wishlist' : 'remove_from_wishlist', { productId }); } catch {}
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : 'Could not save this change.');
+    } finally { setLoading(false); }
   };
 
   const label = isFav
@@ -92,6 +49,7 @@ export const FavouritesButton: React.FC<Props> = ({
       <button
         type="button"
         onClick={handleToggle}
+        disabled={loading}
         aria-label={label}
         aria-pressed={isFav}
         title={label}
@@ -113,6 +71,7 @@ export const FavouritesButton: React.FC<Props> = ({
     <button
       type="button"
       onClick={handleToggle}
+        disabled={loading}
       aria-label={label}
       aria-pressed={isFav}
       className={`btn-secondary gap-2 w-full ${className}`}

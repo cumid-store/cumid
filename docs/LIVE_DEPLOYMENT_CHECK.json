@@ -1,0 +1,71 @@
+{
+  "checked": "2026-10-17",
+  "note": "Existing deployment before this update; not the new upload.",
+  "base": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/shop",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/shop/",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/products/lavender-bloom",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/products/lavender-bloom/",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/products/desi-by-default",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/products/desi-by-default/",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/account",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/account/",
+      "csp": true,
+      "cache": "private, no-cache, no-store, must-revalidate",
+      "robots": "noindex, nofollow, noarchive"
+    },
+    {
+      "path": "/faq",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/faq/",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/sitemap.xml",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    },
+    {
+      "path": "/not-a-real-cumid-page",
+      "status": 404,
+      "finalUrl": "https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/not-a-real-cumid-page",
+      "csp": true,
+      "cache": "public, max-age=0, must-revalidate",
+      "robots": null
+    }
+  ]
+}

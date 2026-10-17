@@ -1,5 +1,5 @@
 {
-  "name": "CUMID — Pocket Diaries",
+  "name": "CUMID \u00e2\u20ac\u201d Pocket Diaries",
   "short_name": "CUMID",
   "description": "Square pocket diaries with top-spiral binding. Personality-filled covers for floral lovers, cute thinkers, Hinglish humorists, and dreamers of speed.",
   "start_url": "/",
@@ -8,10 +8,19 @@
   "theme_color": "#252321",
   "icons": [
     {
+      "src": "/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
       "src": "/brand/favicon.svg",
       "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/svg+xml"
     }
   ]
 }

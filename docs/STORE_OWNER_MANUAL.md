@@ -11,9 +11,9 @@ All customer-facing WhatsApp links across the entire website are controlled in o
 ```typescript
 export const SITE = {
   // Update these two fields if your business phone number changes:
-  whatsappNumber: '917023987458',         // International format without +, spaces or dashes
-  whatsappDisplayNumber: '+91 7023987458', // User-facing display format
-  whatsappBaseUrl: 'https://wa.me/917023987458',
+  whatsappNumber: '919201871597',         // International format without +, spaces or dashes
+  whatsappDisplayNumber: '+91 9201871597', // User-facing display format
+  whatsappBaseUrl: 'https://wa.me/919201871597',
   ...
 };
 ```

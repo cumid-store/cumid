@@ -1,0 +1,80 @@
+[
+  {
+    "id": "CUMID-FL-001",
+    "slug": "lavender-bloom",
+    "source": "C:/Users/M S I/Documents/New project/outputs/floral-cover/purple-floral-cover.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-HG-001",
+    "slug": "kal-se-productive",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-5b353b15-4293-4fc3-9661-40608b76a483.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/03-kal-se.png"
+  },
+  {
+    "id": "CUMID-CT-001",
+    "slug": "low-battery",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-d49eb628-6a7a-4e14-aebb-69027ce59d25.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/04-plans-battery.png"
+  },
+  {
+    "id": "CUMID-CT-002",
+    "slug": "complicated-thoughts",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-45cd9ca7-fa91-4cfc-bf48-2caf8f749c3d.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/01-cute-complicated.png"
+  },
+  {
+    "id": "CUMID-CJ-001",
+    "slug": "grounded-temporarily",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-b0beb815-e837-494b-b47f-71f1aea1d3af.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/06-jet-grounded.png"
+  },
+  {
+    "id": "CUMID-CJ-002",
+    "slug": "plans-in-overdrive",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-61ef87b7-05ad-455f-9a08-d5b5ff7a26e9.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/05-car-overdrive.png"
+  },
+  {
+    "id": "CUMID-CT-003",
+    "slug": "soft-looks-strong-opinions",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-3f1d2be9-0b84-4aba-8031-e3568b7c3cf1.png",
+    "mockup": "C:/Users/M S I/Documents/New project/outputs/diary-cover-mockups/02-soft-strong.png"
+  },
+  {
+    "id": "CUMID-CJ-003",
+    "slug": "afterburner",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-d3e28fda-b0e0-4bfa-b5c2-bf34a83552ba.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-OR-001",
+    "slug": "desi-by-default",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-a7190bb3-d797-4483-b571-08081b5b7cdb.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-OR-002",
+    "slug": "built-for-grit",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-a0716a84-9ed4-45b5-beba-17ace38e8472.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-CT-004",
+    "slug": "boo-whatever",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-461b70e0-5af7-481a-a539-d5034df65d9c.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-OR-003",
+    "slug": "too-many-tabs",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-dae51e38-c0c2-4405-9913-66e26f38b947.png",
+    "mockup": null
+  },
+  {
+    "id": "CUMID-OR-004",
+    "slug": "hero-in-progress",
+    "source": "C:/Users/M S I/.codex/generated_images/01a14671-cf73-7dd1-b8b9-a65de905ca24/exec-410c1353-2fa9-4310-b6bc-c6a5f481d2a1.png",
+    "mockup": null
+  }
+]

@@ -22,8 +22,8 @@ interface Props {
 const {
   title = `${SITE.name} — ${SITE.tagline}`,
   description = SITE.description,
-  canonicalUrl = Astro.url.href,
-  ogImage = `${SITE.canonicalUrl}/brand/og-image.svg`,
+  canonicalUrl = new URL(Astro.url.pathname, SITE.canonicalUrl).href,
+  ogImage = `${SITE.canonicalUrl}/brand/og-image.png`,
   noindex = false,
   preloadImage,
   schemaType = 'website',
@@ -35,7 +35,7 @@ const cfToken = import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -65,14 +65,6 @@ const cfToken = import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN;
     <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Google Fonts Preconnect & Inter / Plus Jakarta Sans Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
-      rel="stylesheet"
-    />
-
     <!-- Preload Hero Image if specified -->
     {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
 
@@ -80,6 +72,7 @@ const cfToken = import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN;
     <StructuredData type={schemaType} product={product} article={article} />
   </head>
   <body class="bg-ivory-200 text-charcoal-800 antialiased selection:bg-lavender-200 selection:text-charcoal-900">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:p-4">Skip to main content</a>
     <AnnouncementBanner />
     <Header />
     
@@ -91,9 +84,12 @@ const cfToken = import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN;
 
     <!-- Privacy Consent Management Island -->
     <AnalyticsConsentBanner client:load />
+    <script>
+      import '../lib/pageAnalytics';
+    </script>
 
     <!-- Optional Cookieless Cloudflare Web Analytics -->
-    {cfToken && (
+    {cfToken && !noindex && (
       <script
         defer
         src="https://static.cloudflareinsights.com/beacon.min.js"

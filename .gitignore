@@ -3,6 +3,10 @@ node_modules/
 
 # Build outputs
 dist/
+dist-e2e/
+audit-output.json
+build-audit.log
+test-audit.log
 .astro/
 
 # Environment files with secrets
@@ -18,3 +22,7 @@ playwright-report/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Workspace artifacts and scratch outputs
+artifacts/
+outputs/

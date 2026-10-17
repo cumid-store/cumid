@@ -59,15 +59,12 @@ if (type === 'website') {
       name: SITE.name,
     },
     category: product.collectionName,
-    // Note: Price is omitted or marked SoldOut/PreOrder according to launch rules.
-    // "If price is unknown, omit fabricated offers... Do not mark products in stock"
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/SoldOut',
+    ...(product.price !== null ? { offers: {
+      '@type': 'Offer', price: product.price, priceCurrency: product.currency,
+      availability: 'https://schema.org/OutOfStock',
       url: `${SITE.canonicalUrl}/products/${product.slug}`,
       itemCondition: 'https://schema.org/NewCondition',
-    },
+    } } : {}),
   };
 } else if (type === 'article' && article) {
   schema = {
@@ -120,4 +117,4 @@ if (type === 'website') {
 }
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />

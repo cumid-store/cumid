@@ -8,14 +8,14 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: 'http://127.0.0.1:4322',
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npm.cmd run preview -- --port 4321',
-    url: 'http://localhost:4321',
-    reuseExistingServer: !process.env.CI,
-    timeout: 60000,
+    command: 'node scripts/test-server.mjs',
+    url: 'http://127.0.0.1:4322',
+    reuseExistingServer: false,
+    timeout: 180000,
   },
   projects: [
     {

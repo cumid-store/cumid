@@ -33,63 +33,31 @@ const breadcrumbs = [
     
     <Breadcrumbs items={breadcrumbs} />
 
-    <!-- Collection Header -->
-    <div class="p-8 sm:p-12 rounded-3xl border border-charcoal-800/10 space-y-4 shadow-soft-sm" style={`background-color: ${collection.accentBg};`}>
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-ivory-100/90 text-charcoal-800 border border-charcoal-800/10">
-        <span>Collection</span>
-        <span>•</span>
-        <span style={`color: ${collection.themeColor};`}>{collection.personalityPill}</span>
-      </div>
-
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight">
-        {collection.name} Collection
-      </h1>
-
-      <p class="text-lg text-charcoal-800 font-medium">
-        {collection.headline}
-      </p>
-
-      <p class="text-sm text-charcoal-700 max-w-2xl leading-relaxed">
-        {collection.description}
-      </p>
+    <div class="shop-heading">
+      <p class="eyebrow">The catalogue</p>
+      <h1>{collection.name} Collection</h1>
+      <p>{collection.description}</p>
     </div>
-
+    <nav class="collection-links" id="collections" aria-label="Cover collections">
+      <a href="/shop">All covers</a>
+      {COLLECTION_LIST.map(c => <a href={`/collections/${c.slug}`} aria-current={c.slug === collection.slug ? 'page' : undefined}>{c.name}</a>)}
+    </nav>
     <!-- Products in this Collection -->
     <div class="space-y-6">
       <div class="flex items-center justify-between pb-2 border-b border-charcoal-800/10">
         <h2 class="text-lg font-bold text-charcoal-900">
-          Available Covers ({products.length})
+          Cover designs ({products.length})
         </h2>
         <span class="text-xs text-charcoal-700/70">All designs currently sold out</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="cover-grid">
         {products.map((product) => (
           <ProductCard product={product} ctaPlacement="featured_grid" />
         ))}
       </div>
     </div>
 
-    <!-- Other Collections Navigation -->
-    <div class="pt-12 border-t border-charcoal-800/10 space-y-6">
-      <h3 class="text-xl font-bold text-charcoal-900 text-center">
-        Explore other personality themes
-      </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {COLLECTION_LIST.filter((c) => c.slug !== collection.slug).map((c) => (
-          <a
-            href={`/collections/${c.slug}`}
-            class="p-5 rounded-2xl bg-ivory-100 hover:bg-ivory-300 border border-charcoal-800/10 transition-colors flex items-center justify-between"
-          >
-            <div>
-              <span class="font-bold text-sm text-charcoal-900 block">{c.name}</span>
-              <span class="text-xs text-charcoal-700/70">{c.personalityPill}</span>
-            </div>
-            <span class="text-charcoal-800 font-bold">&rarr;</span>
-          </a>
-        ))}
-      </div>
-    </div>
 
   </div>
 

@@ -3,7 +3,7 @@ import { SITE } from '../config/site';
 import MobileNavDrawer from './islands/MobileNavDrawer';
 ---
 
-<header class="sticky top-0 z-30 bg-ivory-200/95 backdrop-blur-md border-b border-charcoal-800/10">
+<header class="sticky top-0 z-30 bg-ivory-200 border-b border-charcoal-800/10">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 sm:h-20">
       
@@ -12,9 +12,9 @@ import MobileNavDrawer from './islands/MobileNavDrawer';
         <img
           src="/brand/logo-horizontal.svg"
           alt="CUMID Pocket Diaries"
-          class="h-9 sm:h-11 w-auto transition-transform group-hover:scale-[1.02]"
-          width="200"
-          height="45"
+          class="h-12 sm:h-14 w-16 transition-transform group-hover:scale-[1.02]"
+          width="64"
+          height="56"
         />
       </a>
 
@@ -61,9 +61,9 @@ import MobileNavDrawer from './islands/MobileNavDrawer';
           href={SITE.whatsappBaseUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-ivory-300 hover:bg-ivory-400 text-charcoal-800 border border-charcoal-800/15 transition-all shadow-soft-sm"
+          class="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-medium bg-ivory-200 hover:bg-ivory-400 text-charcoal-800 border border-charcoal-800/15 transition-all "
         >
-          <span class="w-2 h-2 rounded-full bg-green-600" aria-hidden="true"></span>
+          
           <span>WhatsApp Preorders</span>
         </a>
 

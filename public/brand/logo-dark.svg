@@ -1,31 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 70" width="340" height="70" fill="none">
-  <!-- CUMID Logo (Dark Background Variant: Warm Ivory Letterforms) -->
-  <defs>
-    <linearGradient id="darkCoilGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#D7CEE5" />
-      <stop offset="100%" stop-color="#A69ABB" />
-    </linearGradient>
-  </defs>
-
-  <!-- Left Icon -->
-  <g transform="translate(4, 8) scale(0.45)">
-    <path d="M 85 24 H 48 C 30 24, 20 34, 20 52 V 68 C 20 86, 30 96, 48 96 H 85 C 91 96, 96 91, 96 85 C 96 79, 91 74, 85 74 H 50 C 40 74, 38 70, 38 60 C 38 50, 40 46, 50 46 H 85 C 91 46, 96 41, 96 35 C 96 29, 91 24, 85 24 Z" fill="#F7F4EF" />
-    <rect x="42" y="14" width="7" height="22" rx="3.5" fill="url(#darkCoilGrad)" />
-    <ellipse cx="45.5" cy="25" rx="1.5" ry="2" fill="#252321" opacity="0.6" />
-    <rect x="58" y="14" width="7" height="22" rx="3.5" fill="url(#darkCoilGrad)" />
-    <ellipse cx="61.5" cy="25" rx="1.5" ry="2" fill="#252321" opacity="0.6" />
-    <rect x="74" y="14" width="7" height="22" rx="3.5" fill="url(#darkCoilGrad)" />
-    <ellipse cx="77.5" cy="25" rx="1.5" ry="2" fill="#252321" opacity="0.6" />
-    <path d="M 82 74 L 96 88 L 82 88 Z" fill="#D7CEE5" opacity="0.5" />
-  </g>
-
-  <!-- Wordmark Letters in Ivory -->
-  <g transform="translate(68, 6) scale(0.72)">
-    <path d="M 46 16 C 44 14, 40 12, 34 12 C 20 12, 10 22, 10 36 C 10 50, 20 60, 34 60 C 40 60, 44 58, 46 56 C 48 54, 48 50, 45 47 C 42 44, 38 45, 34 47 C 26 47, 22 42, 22 36 C 22 30, 26 25, 34 25 C 38 27, 42 28, 45 25 C 48 22, 48 18, 46 16 Z" fill="#F7F4EF" />
-    <path d="M 64 15 C 64 12, 67 10, 70 10 C 73 10, 76 12, 76 15 V 40 C 76 46, 81 50, 88 50 C 95 50, 100 46, 100 40 V 15 C 100 12, 103 10, 106 10 C 109 10, 112 12, 112 15 V 40 C 112 53, 101 61, 88 61 C 75 61, 64 53, 64 40 Z" fill="#F7F4EF" />
-    <path d="M 126 15 C 126 12, 129 10, 132 10 C 135 10, 137 12, 138 15 L 152 41 L 166 15 C 167 12, 169 10, 172 10 C 175 10, 178 12, 178 15 V 55 C 178 58, 175 60, 172 60 C 169 60, 166 58, 166 55 V 27 L 156 46 C 154 49, 150 49, 148 46 L 138 27 V 55 C 138 58, 135 60, 132 60 C 129 60, 126 58, 126 55 Z" fill="#F7F4EF" />
-    <path d="M 194 15 C 194 12, 197 10, 200 10 C 203 10, 206 12, 206 15 V 55 C 206 58, 203 60, 200 60 C 197 60, 194 58, 194 55 Z" fill="#F7F4EF" />
-    <path d="M 220 15 C 220 12, 223 10, 226 10 H 244 C 259 10, 270 20, 270 35 C 270 50, 259 60, 244 60 H 226 C 223 60, 220 58, 220 55 Z M 232 49 H 244 C 252 49, 258 43, 258 35 C 258 27, 252 21, 244 21 H 232 Z" fill="#F7F4EF" />
-  </g>
-  <text x="76" y="60" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" letter-spacing="4" fill="#D7CEE5">POCKET DIARIES</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="280 300 740 650" role="img" aria-labelledby="title"><title id="title">CUMID Notebook Bird</title>
+<path fill="#A69ABB" d="M578 340C557 417 564 472 624 519L726 584C760 606 778 644 782 682C798 659 811 637 817 615C820 550 769 512 707 467C644 421 608 383 578 340Z"/>
+<path fill="#A69ABB" d="M348 632L358 655Q366 674 379 668Q389 663 383 654L366 618Q359 600 372 597Q385 594 391 610L400 630L423 622L418 606Q412 588 427 583Q441 580 447 596L459 624Q466 640 479 634Q487 630 481 619L466 583Q461 567 475 562Q489 560 495 575L500 585L520 579Q557 570 573 609L615 710Q638 754 684 771L449 881Q414 902 393 876L317 692Q306 656 331 642Z"/>
+<path fill="#B3BDAA" d="M780 683C811 644 835 601 875 566Q925 517 984 566C943 561 925 594 909 624L858 708Q821 765 767 797C787 761 789 724 780 683Z"/>
+<path fill="#B3BDAA" d="M762 695C738 745 712 758 669 781L470 904C572 900 682 889 728 849C768 814 777 755 762 695Z"/>
 </svg>

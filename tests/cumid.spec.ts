@@ -1,6 +1,15 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('CUMID E-Commerce Storefront Test Suite', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('https://cumid-test.supabase.co/**', (route) =>
+      route.fulfill({
+        status: 404,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'mock unconfigured in e2e' }),
+      })
+    );
+  });
   
   test('1. Every product in the catalog is visibly marked as Sold Out', async ({ page }) => {
     await page.goto('/shop');
@@ -64,7 +73,7 @@ test.describe('CUMID E-Commerce Storefront Test Suite', () => {
     expect(tagName).toBe('a');
   });
 
-  test('5. All 6 candidate product pages resolve with 200 OK and valid content', async ({ page }) => {
+  test('5. All 13 candidate product pages resolve with 200 OK and valid content', async ({ page }) => {
     const slugs = [
       'lavender-bloom',
       'kal-se-productive',
@@ -72,6 +81,13 @@ test.describe('CUMID E-Commerce Storefront Test Suite', () => {
       'complicated-thoughts',
       'grounded-temporarily',
       'plans-in-overdrive',
+      'soft-looks-strong-opinions',
+      'afterburner',
+      'desi-by-default',
+      'built-for-grit',
+      'boo-whatever',
+      'too-many-tabs',
+      'hero-in-progress',
     ];
 
     for (const slug of slugs) {
@@ -83,8 +99,8 @@ test.describe('CUMID E-Commerce Storefront Test Suite', () => {
     }
   });
 
-  test('6. All 4 personality collection pages resolve and show distinct products', async ({ page }) => {
-    const collections = ['floral', 'cute', 'hinglish', 'cars-and-jets'];
+  test('6. All 5 personality collection pages resolve and show distinct products', async ({ page }) => {
+    const collections = ['floral', 'cute', 'hinglish', 'cars-and-jets', 'originals'];
 
     for (const col of collections) {
       const response = await page.goto(`/collections/${col}`);
@@ -158,11 +174,12 @@ test.describe('CUMID E-Commerce Storefront Test Suite', () => {
     expect(productSchema).not.toBeNull();
     expect(productSchema['@type']).toBe('Product');
     expect(productSchema.name).toBe('Lavender Bloom');
-    expect(productSchema.offers.availability).toBe('https://schema.org/SoldOut');
+    expect(productSchema.offers).toBeUndefined(); // No priced offer exists at enquiry-only launch.
   });
 
   test('10. Custom 404 page renders for nonexistent routes', async ({ page }) => {
-    await page.goto('/nonexistent-page-url-xyz');
+    const response = await page.goto('/nonexistent-page-url-xyz');
+    expect(response?.status()).toBe(404);
     // In Astro dev/preview, 404 template is served
     await expect(page.getByText('Blank page syndrome.')).toBeVisible();
     await expect(page.getByRole('link', { name: /return to home/i })).toBeVisible();
@@ -184,6 +201,67 @@ test.describe('CUMID E-Commerce Storefront Test Suite', () => {
     await page.goto('/journal/top-spiral-versus-side-spiral-practical-differences');
     await expect(page.locator('h1')).toContainText('Top Spiral Versus Side Spiral');
     await expect(page.getByText('Stationery Ergonomics')).toBeVisible();
+  });
+
+  test('13. Quantity selector on product detail page updates WhatsApp preorder link', async ({ page }) => {
+    await page.goto('/products/lavender-bloom');
+    const whatsappBtn = page.locator('#whatsapp-preorder-cumid-fl-001');
+    await expect(whatsappBtn).toBeVisible();
+
+    // Increase quantity to 3 by clicking + button twice
+    const incBtn = page.getByRole('button', { name: 'Increase quantity' });
+    await expect(incBtn).toBeVisible();
+    await incBtn.click();
+    await incBtn.click();
+
+    const updatedHref = await whatsappBtn.getAttribute('href');
+    expect(updatedHref).toContain(encodeURIComponent('3 diaries'));
+  });
+
+  test('14. Customer orders page and order detail render correctly', async ({ page }) => {
+    await page.goto('/account/orders');
+    await expect(page.locator('h1')).toContainText('My Orders');
+    
+    // Check demo order CMD-2026-0042
+    await expect(page.getByText('CMD-2026-0042')).toBeVisible();
+
+    // Navigate to individual order detail
+    await page.goto('/account/orders/demo-ord-001');
+    await expect(page.getByRole('heading', { name: 'CMD-2026-0042' })).toBeVisible();
+    await expect(page.getByText('Ordered Pocket Diaries (Snapshot)')).toBeVisible();
+    await expect(page.getByText('Agreed Pricing Summary')).toBeVisible();
+  });
+
+  test('15. Admin portal enforces access verification and demo admin works', async ({ page }) => {
+    await page.goto('/admin');
+    await expect(page.getByText('CUMID Admin Authentication Required')).toBeVisible();
+
+    // Enable local demo preview
+    await page.getByRole('button', { name: /Enable Local Demo Admin Preview/i }).click();
+    await expect(page.getByText('Store Operations Overview')).toBeVisible();
+    await expect(page.getByText('Demo Admin', { exact: true })).toBeVisible();
+
+    // Check tabs
+    await page.goto('/admin/orders');
+    await expect(page.getByRole('heading', { name: 'Production & Customer Orders' })).toBeVisible();
+
+    await page.goto('/admin/enquiries');
+    await expect(page.getByRole('heading', { name: 'Preorder Enquiries Inbox' })).toBeVisible();
+
+    await page.goto('/admin/products');
+    await expect(page.getByRole('heading', { name: 'Catalogue & Product Management' })).toBeVisible();
+
+    await page.goto('/admin/batches');
+    await expect(page.getByRole('heading', { name: 'Production Batches & Manufacturing' })).toBeVisible();
+
+    await page.goto('/admin/settings');
+    await expect(page.getByRole('heading', { name: 'Store Operational Settings' })).toBeVisible();
+  });
+
+  test('16. Official customer support email link is active and valid', async ({ page }) => {
+    await page.goto('/contact');
+    const supportEmailLink = page.locator('a[href="mailto:support@cumid.store"]').first();
+    await expect(supportEmailLink).toBeVisible();
   });
 
 });

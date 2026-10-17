@@ -3,8 +3,8 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://www.googletagmanager.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com https://www.google-analytics.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me;
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' __SCRIPT_HASHES__ https://static.cloudflareinsights.com https://www.googletagmanager.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com https://www.google-analytics.com https://region1.google-analytics.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me;
+  Strict-Transport-Security: max-age=31536000
 
 # Cache-control for static hashed assets
 /_astro/*
@@ -22,3 +22,21 @@
 /auth/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: private, no-cache, no-store, must-revalidate
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: private, no-cache, no-store, must-revalidate
+
+/admin
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: private, no-store
+
+/account
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: private, no-store
+
+/auth/callback
+  Referrer-Policy: no-referrer
+
+/auth/callback/
+  Referrer-Policy: no-referrer

@@ -15,6 +15,7 @@ export const ALLOWED_CAMPAIGN_PARAMS = [
 ] as const;
 
 export interface AnalyticsEventParams {
+  quantity?: number;
   productId?: string;
   collectionId?: string;
   ctaPlacement?: 'hero' | 'featured_grid' | 'product_gallery' | 'product_detail' | 'footer' | 'nav' | 'faq';

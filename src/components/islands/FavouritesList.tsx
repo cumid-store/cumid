@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Trash2, ArrowRight } from 'lucide-react';
-import { getLocalFavourites, toggleLocalFavourite } from '../../lib/supabase';
+import { initializeFavourites, snapshot, toggleFavourite } from '../../lib/favourites';
 import { PRODUCTS } from '../../data/products';
 import { WhatsAppPreorderButton } from './WhatsAppPreorderButton';
 
 export const FavouritesList: React.FC = () => {
   const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
+  const [errorMsg, setErrorMsg] = useState('');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setFavouriteIds(getLocalFavourites());
+    void initializeFavourites().then(() => { setFavouriteIds(snapshot().favourites); setErrorMsg(snapshot().error); });
 
     const handleSync = (e: any) => {
-      const list = e.detail?.favourites || getLocalFavourites();
+      const list = e.detail?.favourites || snapshot().favourites;
       setFavouriteIds(list);
+      setErrorMsg(e.detail?.error || '');
     };
 
     window.addEventListener('cumid:favourites-updated', handleSync);
@@ -31,13 +33,12 @@ export const FavouritesList: React.FC = () => {
 
   const savedProducts = PRODUCTS.filter((p) => favouriteIds.includes(p.id));
 
-  const handleRemove = (productId: string) => {
-    const { favourites } = toggleLocalFavourite(productId);
-    setFavouriteIds(favourites);
-    window.dispatchEvent(
-      new CustomEvent('cumid:favourites-updated', { detail: { favourites } })
-    );
+  const handleRemove = async (productId: string) => {
+    try { await toggleFavourite(productId); }
+    catch (error) { window.alert(error instanceof Error ? error.message : 'Could not remove favourite.'); }
   };
+
+  if (errorMsg) return <p role="alert" className="p-6 text-sm">{errorMsg}</p>;
 
   if (savedProducts.length === 0) {
     return (
@@ -73,10 +74,10 @@ export const FavouritesList: React.FC = () => {
         {savedProducts.map((product) => (
           <div
             key={product.id}
-            className="p-5 rounded-2xl bg-ivory-100 border border-charcoal-800/10 flex flex-col justify-between space-y-4 shadow-soft-sm hover:shadow-soft transition-shadow"
+            className="p-5 rounded-sm bg-ivory-100 border border-charcoal-800/10 flex flex-col justify-between space-y-4   transition-shadow"
           >
             <div className="flex gap-4">
-              <a href={`/products/${product.slug}`} className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-ivory-200 border border-charcoal-800/10 block">
+              <a href={`/products/${product.slug}`} className="shrink-0 w-24 h-24 rounded-sm overflow-hidden bg-ivory-200 border border-charcoal-800/10 block">
                 <img
                   src={product.images[0]?.src}
                   alt={product.images[0]?.alt}

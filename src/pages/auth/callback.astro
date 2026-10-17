@@ -25,17 +25,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
+        const code = new URLSearchParams(location.search).get('code');
+        // Strip the one-time code before navigating, logging or loading third-party content.
+        history.replaceState(null, '', '/auth/callback');
+        if (!code) { location.replace('/account?signin_error=1'); return; }
         try {
-          // Supabase PKCE automatically detects the code in hash or query
-          const { error } = await supabase.auth.getSession();
-          if (error) {
-            console.warn('OAuth callback error:', error);
-          }
-        } catch (err) {
-          console.warn('Callback error:', err);
-        } finally {
-          // Always redirect back to account safely
-          window.location.replace('/account');
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          location.replace(error ? '/account?signin_error=1' : '/account');
+        } catch {
+          location.replace('/account?signin_error=1');
         }
       }
 

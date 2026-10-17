@@ -1,3 +1,5 @@
+> Local audit update (17 October 2026): Apply BOTH migration files in chronological order, including `20261017010000_harden_account_functions.sql`. Guest favourites import is now explicit, never automatic. Cloud favourites are kept out of guest storage and cleared at logout. Test real cross-user RLS and deletion; mocked browser tests do not validate a live database. Follow current provider console wording if screens have changed.
+
 # CUMID (cumid.store) — Supabase & Google OAuth Configuration Guide
 
 This guide details how the store owner can connect Google OAuth to Supabase for customer accounts and saved favourites.
@@ -6,7 +8,7 @@ This guide details how the store owner can connect Google OAuth to Supabase for 
 
 ## 1. Overview & Security Rules
 - **Authentication Purpose**: Optional customer sign-in to sync saved favourite pocket diary covers across devices.
-- **Guest Inclusivity**: Browsing the catalog, reading the journal, and enquiring via WhatsApp function 100% without an account.
+- **Guest Inclusivity**: Browsing the catalog, reading the journal, and enquiring via WhatsApp work without an account.
 - **Privacy Principle**: Request minimal identity scopes (`email`, `profile`). Never request sensitive scopes (Gmail, Google Drive, Contacts).
 - **Security Standard**: PKCE (Proof Key for Code Exchange) flow with strict redirect allowlists to prevent open redirect vulnerabilities.
 

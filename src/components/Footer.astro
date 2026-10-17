@@ -12,18 +12,15 @@ import { SITE } from '../config/site';
           <img
             src="/brand/logo-dark.svg"
             alt="CUMID Pocket Diaries"
-            class="h-9 w-auto"
-            width="180"
-            height="40"
+            class="h-16 w-20"
+            width="80"
+            height="70"
           />
         </a>
         <p class="text-xs text-charcoal-300 leading-relaxed">
           {SITE.description}
         </p>
-        <div class="pt-2 text-xs text-charcoal-300 space-y-1">
-          <p>Market: <strong class="text-ivory-100 font-semibold">{SITE.market}</strong> (INR ₹)</p>
-          <p>Product: <strong class="text-ivory-100 font-semibold">Square pocket diaries</strong> with top-edge spiral binding</p>
-        </div>
+
       </div>
 
       <!-- Shop & Collections -->
@@ -62,6 +59,7 @@ import { SITE } from '../config/site';
           ))}
         </ul>
         <div class="pt-2 text-[11px] text-charcoal-300/80">
+          <p><a href={`mailto:${SITE.supportEmail}`} class="hover:underline text-ivory-100">{SITE.supportEmail}</a></p>
           <p>Customer WhatsApp:</p>
           <a href={SITE.whatsappBaseUrl} class="text-peach-200 hover:underline font-mono text-xs">
             {SITE.whatsappDisplayNumber}
@@ -72,7 +70,7 @@ import { SITE } from '../config/site';
       <!-- Legal & Privacy Choices -->
       <div class="space-y-3">
         <h3 class="text-xs font-semibold tracking-wider uppercase text-lavender-300">
-          Compliance &amp; Legal
+          Policies
         </h3>
         <ul class="space-y-2 text-xs text-charcoal-300">
           {SITE.footerLinks.legal.map((link) => (
@@ -86,7 +84,7 @@ import { SITE } from '../config/site';
             <!-- Persistent Cookie & Privacy Preferences Trigger -->
             <button
               type="button"
-              onclick="window.dispatchEvent(new CustomEvent('cumid:open-consent-modal'))"
+              data-open-privacy
               class="hover:text-ivory-100 text-left transition-colors underline underline-offset-2 text-xs text-lavender-300"
             >
               Cookie &amp; Privacy Preferences
@@ -100,15 +98,21 @@ import { SITE } from '../config/site';
     <!-- Bottom Notice & Copyright -->
     <div class="mt-12 pt-8 border-t border-charcoal-700/50 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-charcoal-300">
       <p class="text-center md:text-left">
-        &copy; {new Date().getFullYear()} CUMID (cumid.store). All rights reserved. Indian personality stationery brand.
+        &copy; {new Date().getFullYear()} CUMID. All rights reserved.
       </p>
       <div class="flex items-center gap-4 text-[11px]">
         <span>No ready stock · Preorders on WhatsApp</span>
         <span>•</span>
         <a href="/how-preorders-work" class="underline hover:text-ivory-100">Enquiry Policy</a>
         <span>•</span>
-        <a href="/accessibility" class="underline hover:text-ivory-100">WCAG 2.2 AA</a>
+        <a href="/accessibility" class="underline hover:text-ivory-100">Accessibility</a>
       </div>
     </div>
   </div>
 </footer>
+
+<script>
+  document.querySelector('[data-open-privacy]')?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('cumid:open-consent-modal'));
+  });
+</script>

@@ -5,6 +5,7 @@ import StructuredData from '../../components/StructuredData.astro';
 import WhatsAppPreorderButton from '../../components/islands/WhatsAppPreorderButton';
 import FavouritesButton from '../../components/islands/FavouritesButton';
 import ProductCard from '../../components/ProductCard.astro';
+import DiaryMockup from '../../components/DiaryMockup.astro';
 import { PRODUCTS } from '../../data/products';
 import { FAQ_ITEMS } from '../../data/faq';
 import { SITE } from '../../config/site';
@@ -24,7 +25,7 @@ const breadcrumbs = [
   { label: product.name },
 ];
 
-const relatedProducts = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
+const relatedProducts = [...PRODUCTS.filter(p => p.collection === product.collection && p.slug !== product.slug), ...PRODUCTS.filter(p => p.collection !== product.collection)].slice(0, 3);
 const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.category === 'product').slice(0, 4);
 ---
 
@@ -47,20 +48,11 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
       <!-- Left Column: Product Gallery -->
       <div class="lg:col-span-7 space-y-4">
         <!-- Main Primary View -->
-        <div class="relative aspect-square w-full rounded-3xl overflow-hidden bg-ivory-100 border border-charcoal-800/10 shadow-soft p-4 flex items-center justify-center">
-          <img
-            id="main-product-image"
-            src={product.images[0]?.src}
-            alt={product.images[0]?.alt}
-            width={600}
-            height={600}
-            class="w-full h-full object-contain"
-            loading="eager"
-          />
+        <div class="relative aspect-square w-full overflow-hidden bg-ivory-300 p-5 flex items-center justify-center">
+          <DiaryMockup imageId="main-product-image" src={product.images[0].src} alt={`${product.name} top-spiral diary concept. ${product.images[0].alt}`} eager={true} />
 
           <!-- Floating Badges -->
           <div class="absolute top-4 left-4 flex flex-col gap-1.5">
-            <span class="badge-sold-out shadow-sm text-xs">Sold Out</span>
             {product.isDesignPreview && (
               <span class="badge-preview shadow-sm text-xs">Design preview</span>
             )}
@@ -73,16 +65,18 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
             {product.images.map((img, idx) => (
               <button
                 type="button"
-                onclick={`document.getElementById('main-product-image').src = '${img.src}'; document.getElementById('main-product-image').alt = '${img.alt}';`}
-                class="aspect-square rounded-2xl overflow-hidden bg-ivory-100 border border-charcoal-800/15 p-1.5 hover:border-lavender-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-600 transition-all"
+                data-gallery-src={img.src}
+                data-gallery-alt={img.alt}
+                class="aspect-square rounded-sm overflow-hidden bg-ivory-100 border border-charcoal-800/15 p-1.5 hover:border-lavender-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-600 transition-all"
                 aria-label={`View image ${idx + 1}`}
+                title={img.alt}
               >
                 <img
                   src={img.src}
                   alt={img.alt}
                   width={140}
                   height={140}
-                  class="w-full h-full object-cover rounded-xl"
+                  class="w-full h-full object-cover rounded-sm"
                   loading="lazy"
                 />
               </button>
@@ -92,7 +86,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
 
         {product.isDesignPreview && (
           <p class="text-xs text-charcoal-700/70 italic text-center pt-1">
-            * Design preview rendering. Visualises artwork layout and top-spiral binding. Exact paper textures confirmed prior to batch production.
+            Digital diary mockup. Binding colour, materials and finished dimensions are illustrative; final details will be confirmed before ordering.
           </p>
         )}
       </div>
@@ -110,7 +104,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
 
         <!-- Product Name & Tagline -->
         <div class="space-y-2">
-          <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+          <h1 class="text-3xl sm:text-4xl font-semibold text-charcoal-900 tracking-tight">
             {product.name}
           </h1>
           <p class="text-base text-lavender-700 font-medium">
@@ -118,26 +112,21 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
           </p>
         </div>
 
-        <!-- Personality Note -->
-        <div class="p-4 rounded-2xl bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-800 italic">
-          "{product.personalityNote}"
-        </div>
-
         <!-- Status & Pricing Info -->
-        <div class="p-5 rounded-2xl bg-ivory-100 border border-charcoal-800/10 space-y-2">
+        <div class="py-5 border-y border-charcoal-800/15 space-y-2">
           <div class="flex items-center justify-between text-sm">
             <span class="text-charcoal-700 font-medium">Availability:</span>
             <span class="badge-sold-out text-[11px]">Currently Sold Out</span>
           </div>
           <div class="flex items-center justify-between text-sm pt-1 border-t border-charcoal-800/5">
             <span class="text-charcoal-700 font-medium">Price:</span>
-            <span class="text-charcoal-900 font-semibold italic">Pricing will be confirmed on WhatsApp</span>
+            <span class="text-charcoal-900 font-semibold italic">Ask on WhatsApp</span>
           </div>
         </div>
 
         <!-- Preorder Clarification Notice (Strict requirement from brief) -->
-        <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-xs text-amber-900 leading-relaxed space-y-1">
-          <p class="font-semibold text-amber-950">Preorder Notice:</p>
+        <div class="p-4 rounded-sm bg-ivory-200 border-l border-charcoal-800/20 text-sm text-charcoal-700 leading-relaxed space-y-1">
+          <p class="font-semibold text-charcoal-900">Preorder Notice:</p>
           <p>
             No ready stock is available. Send an enquiry for the next batch. An enquiry does not reserve stock or confirm an order.
           </p>
@@ -166,15 +155,15 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
             Confirmed Format &amp; Specifications
           </h2>
           <dl class="grid grid-cols-2 gap-3 text-xs">
-            <div class="p-3 rounded-xl bg-ivory-100 border border-charcoal-800/10">
+            <div class="py-3 border-b border-charcoal-800/10">
               <dt class="text-charcoal-700/70">Shape &amp; Size</dt>
               <dd class="font-semibold text-charcoal-900 mt-0.5">{product.confirmedSpecs.format}</dd>
             </div>
-            <div class="p-3 rounded-xl bg-ivory-100 border border-charcoal-800/10">
+            <div class="py-3 border-b border-charcoal-800/10">
               <dt class="text-charcoal-700/70">Binding Location</dt>
               <dd class="font-semibold text-charcoal-900 mt-0.5">{product.confirmedSpecs.binding}</dd>
             </div>
-            <div class="p-3 rounded-xl bg-ivory-100 border border-charcoal-800/10 col-span-2">
+            <div class="py-3 border-b border-charcoal-800/10 col-span-2">
               <dt class="text-charcoal-700/70">Writing Orientation</dt>
               <dd class="font-semibold text-charcoal-900 mt-0.5">{product.confirmedSpecs.orientation}</dd>
             </div>
@@ -205,7 +194,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {relevantFaqs.map((faq) => (
-          <div class="p-5 rounded-2xl bg-ivory-100 border border-charcoal-800/10 space-y-2">
+          <div class="py-5 border-y border-charcoal-800/15 space-y-2">
             <h3 class="font-bold text-sm text-charcoal-900">{faq.question}</h3>
             <p class="text-xs text-charcoal-700 leading-relaxed">{faq.answer}</p>
           </div>
@@ -234,11 +223,20 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
   </div>
 
   <StructuredData
-    type="product"
-    product={product}
-  />
-  <StructuredData
     type="breadcrumbs"
     breadcrumbs={breadcrumbs.map((b) => ({ name: b.label, item: b.href || Astro.url.pathname }))}
   />
 </BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-gallery-src]').forEach(button => {
+    button.addEventListener('click', () => {
+      const image = document.querySelector<HTMLImageElement>('#main-product-image');
+      if (image) {
+        image.src = button.dataset.gallerySrc || '';
+        image.alt = button.dataset.galleryAlt || '';
+        image.closest('[data-diary-object]')?.classList.toggle('diary-photo', image.src.includes('/mockup.webp'));
+      }
+    });
+  });
+</script>

@@ -6,7 +6,7 @@
 export const SITE = {
   name: 'CUMID',
   tagline: 'Small diaries. A little more you.',
-  description: 'Square pocket diaries with top-spiral binding. Personality-filled covers for floral lovers, cute thinkers, Hinglish humorists, and dreamers of speed.',
+  description: 'Square pocket diaries. Top spiral binding. Covers with a little personality.',
   canonicalUrl: 'https://cumid.store',
   market: 'India',
   currency: 'INR',
@@ -14,6 +14,7 @@ export const SITE = {
 
   // Customer Contact Facts
   whatsappNumber: '917023987458', // Standard international without punctuation
+  supportEmail: 'support@cumid.store',
   whatsappDisplayNumber: '+91 7023987458',
   whatsappBaseUrl: 'https://wa.me/917023987458',
 
@@ -32,6 +33,7 @@ export const SITE = {
 
   // Personality Themes
   themes: [
+    { id: 'originals', name: 'Originals', slug: 'originals', description: 'Doodles, desi details and illustrated worlds.' },
     { id: 'floral', name: 'Floral', slug: 'floral', description: 'Soft blossoms, botanical reverie, and calm night skies.' },
     { id: 'cute', name: 'Cute', slug: 'cute', description: 'Relatable characters, sleepy companions, and everyday warmth.' },
     { id: 'hinglish', name: 'Hinglish', slug: 'hinglish', description: 'Witty, colloquial banter and relatable work-life ironies.' },
@@ -55,12 +57,15 @@ export const SITE = {
       { label: 'Cute Collection', href: '/collections/cute' },
       { label: 'Hinglish Collection', href: '/collections/hinglish' },
       { label: 'Cars & Jets Collection', href: '/collections/cars-and-jets' },
+      { label: 'Originals Collection', href: '/collections/originals' },
     ],
     info: [
       { label: 'How Preorders Work', href: '/how-preorders-work', isExternal: false },
+      { label: 'My Orders', href: '/account/orders', isExternal: false },
       { label: 'About CUMID', href: '/about', isExternal: false },
       { label: 'Journal & Stories', href: '/journal', isExternal: false },
       { label: 'Frequently Asked Questions', href: '/faq', isExternal: false },
+      { label: 'Store Management (Admin)', href: '/admin', isExternal: false },
       { label: 'Contact WhatsApp', href: 'https://wa.me/917023987458', isExternal: true },
     ],
     legal: [

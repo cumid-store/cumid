@@ -1,12 +1,13 @@
 import type { Collection } from '../types/collection';
 
 export const COLLECTIONS: Record<string, Collection> = {
+  originals: { id: 'originals', slug: 'originals', name: 'Originals', headline: 'Doodles, desi details and comic-book worlds.', description: 'Expressive cover artwork, from everyday Indian references to army-inspired landscapes and illustrated heroes.', personalityPill: 'Art & Illustration', themeColor: '#596B58', accentBg: '#F7F4EF', metaTitle: 'Original Illustrated Pocket Diaries | CUMID', metaDescription: 'Explore CUMID illustrated diary concepts: Desi by Default, Built for Grit, Too Many Tabs and Hero in Progress. WhatsApp enquiries open.' },
   floral: {
     id: 'floral',
     slug: 'floral',
     name: 'Floral',
     headline: 'Soft blossoms, botanical pauses, and midnight blooms.',
-    description: 'Designed for quiet moments, reflective journaling, and those who find solace in garden greens and twilight petals.',
+    description: 'Purple flowers, moonlit skies and botanical cover artwork.',
     personalityPill: 'Calm & Botanical',
     themeColor: '#75806D',
     accentBg: '#F4F6F3',
@@ -18,7 +19,7 @@ export const COLLECTIONS: Record<string, Collection> = {
     slug: 'cute',
     name: 'Cute',
     headline: 'Relatable companions, cozy quirks, and gentle humour.',
-    description: 'Everyday comforts for overthinkers, low-battery mornings, and cat-lovers who appreciate whimsical, heartwarming designs.',
+    description: 'Cats, bunnies, a tired battery and an unbothered ghost. A little humour for your everyday notes.',
     personalityPill: 'Playful & Comforting',
     themeColor: '#9E745C',
     accentBg: '#FBF8F5',
@@ -30,7 +31,7 @@ export const COLLECTIONS: Record<string, Collection> = {
     slug: 'hinglish',
     name: 'Hinglish',
     headline: 'Witty banter, daily ironies, and desi reality checks.',
-    description: 'For the ones balancing hustle and procrastinating until tomorrow. Tongue-in-cheek quotes that capture Indian daily truths.',
+    description: 'Familiar Hindi-English jokes for plans that might start tomorrow.',
     personalityPill: 'Witty & Relatable',
     themeColor: '#6B5B84',
     accentBg: '#F6F4F9',
@@ -42,7 +43,7 @@ export const COLLECTIONS: Record<string, Collection> = {
     slug: 'cars-and-jets',
     name: 'Cars and Jets',
     headline: 'Machinery in motion, runway focus, and high-altitude drive.',
-    description: 'For lovers of velocity, aviation blueprints, and road trips that refuse to slow down. Crisp mechanical aesthetics.',
+    description: 'Sports cars, passenger planes and afterburners. Covers for people who always notice the engine.',
     personalityPill: 'Kinetic & Driven',
     themeColor: '#33302D',
     accentBg: '#F5F5F5',

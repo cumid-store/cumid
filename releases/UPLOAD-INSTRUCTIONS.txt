@@ -1,0 +1,8 @@
+Upload the CONTENTS of dist or this ZIP to the existing Cloudflare Workers static-assets deployment. index.html and _headers must be at the upload root. Do not upload the source repository or dist-e2e.
+
+Google login and analytics are not activated without your real provider settings. See ../docs/LOGIN_ANALYTICS_SETUP.md. After configuration a new build and upload are required.
+
+Existing site: https://fancy-smoke-e09a.ankshitdey-mr-veteran.workers.dev/
+Canonical domain: https://cumid.store
+Support: support@cumid.store
+This release has not been deployed automatically.

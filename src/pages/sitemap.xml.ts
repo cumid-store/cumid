@@ -37,7 +37,6 @@ ${allUrls
   .map(
     (url) => `  <url>
     <loc>${SITE.canonicalUrl}${url}</loc>
-    <lastmod>2026-10-15</lastmod>
     <changefreq>${url === '' || url === '/shop' ? 'weekly' : 'monthly'}</changefreq>
     <priority>${url === '' ? '1.0' : url.startsWith('/products') ? '0.8' : '0.6'}</priority>
   </url>`
