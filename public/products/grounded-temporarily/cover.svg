@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="jetCharcoal" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#2D2A28" />
+      <stop offset="70%" stop-color="#211F1D" />
+      <stop offset="100%" stop-color="#141312" />
+    </radialGradient>
+    <linearGradient id="blueprintLine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BAACD1" />
+      <stop offset="100%" stop-color="#6B5B84" />
+    </linearGradient>
+  </defs>
+
+  <!-- Square Cover Background -->
+  <rect width="600" height="600" rx="28" fill="url(#jetCharcoal)" />
+  <rect x="24" y="24" width="552" height="552" rx="20" fill="none" stroke="#635E59" stroke-width="1.5" stroke-opacity="0.4" />
+
+  <!-- Subtle Blueprint Grid Lines -->
+  <g stroke="#3D3936" stroke-width="1" stroke-dasharray="4 8" opacity="0.6">
+    <line x1="80" y1="80" x2="520" y2="80" />
+    <line x1="80" y1="200" x2="520" y2="200" />
+    <line x1="80" y1="320" x2="520" y2="320" />
+    <line x1="80" y1="440" x2="520" y2="440" />
+    <line x1="200" y1="80" x2="200" y2="480" />
+    <line x1="300" y1="80" x2="300" y2="480" />
+    <line x1="400" y1="80" x2="400" y2="480" />
+  </g>
+
+  <!-- Clean Supersonic Jet Silhouette Top View -->
+  <g transform="translate(300, 240)">
+    <!-- Runway / Flight Path Vector -->
+    <line x1="0" y1="-140" x2="0" y2="120" stroke="url(#blueprintLine)" stroke-width="2" stroke-dasharray="6 6" />
+    <!-- Radar Horizon Ring -->
+    <circle cx="0" cy="0" r="110" fill="none" stroke="#BAACD1" stroke-width="1" stroke-opacity="0.25" />
+
+    <!-- Jet Body (Generic original supersonic aerodynamic silhouette) -->
+    <!-- Nosecone to Tail -->
+    <path d="M 0 -95 
+             L 8 -60 
+             L 12 -20 
+             L 100 45 
+             L 100 58 
+             L 16 48 
+             L 16 85 
+             L 45 105 
+             L 45 112 
+             L 6 106 
+             L 0 114 
+             L -6 106 
+             L -45 112 
+             L -45 105 
+             L -16 85 
+             L -16 48 
+             L -100 58 
+             L -100 45 
+             L -12 -20 
+             L -8 -60 Z" 
+          fill="#F7F4EF" />
+
+    <!-- Cockpit Canopy Glass in Lavender -->
+    <path d="M 0 -70 C 4 -70, 6 -50, 5 -35 C 4 -20, 0 -15, 0 -15 C 0 -15, -4 -20, -5 -35 C -6 -50, -4 -70, 0 -70 Z" fill="#6B5B84" />
+
+    <!-- Wingtip Trailing Edge Accents -->
+    <line x1="100" y1="50" x2="160" y2="50" stroke="#BAACD1" stroke-width="1.5" stroke-opacity="0.4" />
+    <line x1="-100" y1="50" x2="-160" y2="50" stroke="#BAACD1" stroke-width="1.5" stroke-opacity="0.4" />
+  </g>
+
+  <!-- Typography -->
+  <text x="300" y="475" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" font-weight="800" letter-spacing="3" fill="#F7F4EF">GROUNDED,</text>
+  <text x="300" y="510" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="24" font-weight="700" letter-spacing="5" fill="#BAACD1">TEMPORARILY</text>
+
+  <!-- Technical Aeronautical Coordinates Subtext -->
+  <text x="300" y="546" text-anchor="middle" font-family="'Inter', monospace" font-size="11" letter-spacing="3" fill="#8C8782">RWY 09L // CLEARED FOR CLIMB</text>
+</svg>

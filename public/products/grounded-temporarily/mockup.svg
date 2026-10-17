@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <filter id="jetMockupShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#252321" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="spiralCoilMetallic" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8C8782" />
+      <stop offset="35%" stop-color="#E5E4E2" />
+      <stop offset="70%" stop-color="#8C8782" />
+      <stop offset="100%" stop-color="#4D4844" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#FAF8F5" />
+
+  <g filter="url(#jetMockupShadow)">
+    <rect x="122" y="108" width="360" height="364" rx="18" fill="#ECE7DE" stroke="#D5CBB9" stroke-width="1" />
+    <rect x="120" y="105" width="360" height="364" rx="18" fill="#F7F4EF" stroke="#E4DDD0" stroke-width="1" />
+    
+    <g transform="translate(118, 102) scale(0.6)">
+      <rect width="600" height="600" rx="28" fill="#141312" />
+      <rect x="24" y="24" width="552" height="552" rx="20" fill="none" stroke="#635E59" stroke-width="2" stroke-opacity="0.4" />
+      
+      <!-- Mini Jet Silhouette -->
+      <g transform="translate(300, 240) scale(0.9)">
+        <circle cx="0" cy="0" r="110" fill="none" stroke="#BAACD1" stroke-width="1.5" stroke-opacity="0.3" />
+        <path d="M 0 -95 L 8 -60 L 12 -20 L 100 45 L 100 58 L 16 48 L 16 85 L 45 105 L 45 112 L 6 106 L 0 114 L -6 106 L -45 112 L -45 105 L -16 85 L -16 48 L -100 58 L -100 45 L -12 -20 L -8 -60 Z" fill="#F7F4EF" />
+        <path d="M 0 -70 C 4 -70, 6 -50, 5 -35 C 4 -20, 0 -15, 0 -15 C 0 -15, -4 -20, -5 -35 C -6 -50, -4 -70, 0 -70 Z" fill="#6B5B84" />
+      </g>
+
+      <text x="300" y="475" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="800" letter-spacing="3" fill="#F7F4EF">GROUNDED,</text>
+      <text x="300" y="515" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="26" font-weight="700" letter-spacing="5" fill="#BAACD1">TEMPORARILY</text>
+    </g>
+  </g>
+
+  <!-- Top-Spiral Coils -->
+  <g>
+    <g fill="#181716" opacity="0.65">
+      <circle cx="150" cy="114" r="5" />
+      <circle cx="180" cy="114" r="5" />
+      <circle cx="210" cy="114" r="5" />
+      <circle cx="240" cy="114" r="5" />
+      <circle cx="270" cy="114" r="5" />
+      <circle cx="300" cy="114" r="5" />
+      <circle cx="330" cy="114" r="5" />
+      <circle cx="360" cy="114" r="5" />
+      <circle cx="390" cy="114" r="5" />
+      <circle cx="420" cy="114" r="5" />
+      <circle cx="450" cy="114" r="5" />
+    </g>
+
+    <rect x="146" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="176" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="206" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="236" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="266" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="296" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="326" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="356" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="386" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="416" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="446" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+  </g>
+
+  <!-- Design Preview Badge -->
+  <g transform="translate(138, 430)">
+    <rect width="130" height="24" rx="12" fill="#252321" fill-opacity="0.85" />
+    <text x="65" y="16" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" letter-spacing="1" fill="#F7F4EF">DESIGN PREVIEW</text>
+  </g>
+</svg>

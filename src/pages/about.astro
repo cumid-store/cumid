@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../config/site';
+
+const breadcrumbs = [
+  { label: 'Our Story', href: '/about' },
+];
+---
+
+<BaseLayout
+  title="Our Story & Philosophy | CUMID Stationery"
+  description="The philosophy behind CUMID: pocket-sized square diaries with top-spiral binding. Stationery as honest personal expression."
+  canonicalUrl={`${SITE.canonicalUrl}/about`}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+    
+    <Breadcrumbs items={breadcrumbs} />
+
+    <header class="space-y-4">
+      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
+        Brand Philosophy
+      </span>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight leading-tight">
+        Stationery for real thoughts, not pristine display shelves.
+      </h1>
+      <p class="text-lg text-charcoal-700 leading-relaxed font-serif italic">
+        "Most notebooks demand perfection before you even touch pen to paper. We wanted something that welcomes the mess."
+      </p>
+    </header>
+
+    <div class="prose prose-charcoal text-charcoal-800 leading-relaxed text-sm sm:text-base space-y-6">
+      <h2 class="text-2xl font-bold text-charcoal-900 tracking-tight">
+        Why CUMID exists
+      </h2>
+      <p>
+        CUMID was conceived around a simple observation: we collect beautiful, thick notebooks that we rarely finish writing in. The weight, the formal bookbinding, and the stiff covers make opening them feel like a formal chore.
+      </p>
+      <p>
+        We designed CUMID pocket diaries to be completely unpretentious companions. By choosing a compact square format, the notebook slips into your everyday routine without demanding dedicated desk space or twenty minutes of solemn silence.
+      </p>
+
+      <h2 class="text-2xl font-bold text-charcoal-900 tracking-tight mt-8">
+        The Top-Spiral Choice
+      </h2>
+      <p>
+        Traditional side spirals collide with your wrist. If you are left-handed, writing on the left page is an exercise in frustration. If you are right-handed, the coil digs into your forearm on half the spreads.
+      </p>
+      <p>
+        By moving the spiral binding to the top horizontal edge, your wrist enjoys total freedom of movement across the entire page. Both left-handed and right-handed writers can hold the notebook in one hand while standing, flip pages 360 degrees, and write on a rigid backing board wherever inspiration hits.
+      </p>
+
+      <h2 class="text-2xl font-bold text-charcoal-900 tracking-tight mt-8">
+        Four Personality Directions
+      </h2>
+      <p>
+        We don't believe in generic corporate stationery. Your diary's cover should reflect how your mind actually works:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>Floral:</strong> Botanical quietude, midnight blossoms, and quiet evening reflection.</li>
+        <li><strong>Cute:</strong> Relatable everyday quirks, sleepy companions, and honest comfort.</li>
+        <li><strong>Hinglish:</strong> Bilingual desi humour, witty self-deprecation, and daily ironies.</li>
+        <li><strong>Cars &amp; Jets:</strong> High-octane machinery, speed vectors, and restless ambition.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-charcoal-900 tracking-tight mt-8">
+        Intentional Batch Releases
+      </h2>
+      <p>
+        Rather than mass-producing thousands of identical items, CUMID operates through small, curated batch releases. This allows us to focus on cover artwork, paper feel, and personal relationships with our readers over WhatsApp.
+      </p>
+    </div>
+
+    <!-- Preorder CTA Box -->
+    <div class="p-8 rounded-3xl bg-ivory-100 border border-charcoal-800/10 shadow-soft space-y-4 text-center">
+      <h3 class="text-xl font-bold text-charcoal-900">Have a thought or enquiry?</h3>
+      <p class="text-xs sm:text-sm text-charcoal-700 max-w-md mx-auto">
+        We answer all questions about upcoming production batches directly on WhatsApp.
+      </p>
+      <div class="pt-2">
+        <a
+          href={SITE.whatsappBaseUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary text-xs gap-2"
+        >
+          <span>Chat with us on WhatsApp ({SITE.whatsappDisplayNumber})</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>

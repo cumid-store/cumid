@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="ogBg" cx="30%" cy="30%" r="90%">
+      <stop offset="0%" stop-color="#FCFBF9" />
+      <stop offset="50%" stop-color="#F7F4EF" />
+      <stop offset="100%" stop-color="#ECE7DE" />
+    </radialGradient>
+    <linearGradient id="ogSpiral" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#A69ABB" />
+      <stop offset="100%" stop-color="#62537D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#ogBg)" />
+
+  <!-- Outer Frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="32" fill="none" stroke="#D5CBB9" stroke-width="2" />
+
+  <!-- Left Content Column -->
+  <g transform="translate(100, 140)">
+    <!-- Brand Tag -->
+    <rect width="210" height="34" rx="17" fill="#EBE6F2" />
+    <text x="105" y="22" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" letter-spacing="2" fill="#55476B">INDIAN STATIONERY</text>
+
+    <!-- Main Headline -->
+    <text x="0" y="90" font-family="'Plus Jakarta Sans', sans-serif" font-size="52" font-weight="800" fill="#252321" letter-spacing="-1">Small diaries.</text>
+    <text x="0" y="150" font-family="'Plus Jakarta Sans', sans-serif" font-size="52" font-weight="800" fill="#62537D" letter-spacing="-1">A little more you.</text>
+
+    <!-- Subcopy -->
+    <text x="0" y="200" font-family="'Inter', sans-serif" font-size="20" fill="#4D4844">Square pocket diaries with top-spiral binding.</text>
+    <text x="0" y="232" font-family="'Inter', sans-serif" font-size="18" fill="#8C8782">Floral · Cute · Hinglish · Cars &amp; Jets</text>
+
+    <!-- Status Badge -->
+    <g transform="translate(0, 270)">
+      <rect width="360" height="42" rx="21" fill="#252321" />
+      <circle cx="24" cy="21" r="6" fill="#DFC3B2" />
+      <text x="44" y="26" font-family="'Inter', sans-serif" font-size="14" font-weight="600" fill="#F7F4EF">Currently sold out · Preorders on WhatsApp</text>
+    </g>
+
+    <text x="0" y="360" font-family="'Inter', sans-serif" font-size="16" font-weight="600" letter-spacing="2" fill="#252321">cumid.store</text>
+  </g>
+
+  <!-- Right Visual Composition: Stack of Diaries -->
+  <g transform="translate(740, 100)">
+    <!-- Lavender Bloom Preview -->
+    <g transform="rotate(6) scale(0.65)">
+      <rect width="460" height="460" rx="24" fill="#1B1622" stroke="#A69ABB" stroke-width="2" />
+      <!-- Spiral Top -->
+      <g transform="translate(40, -15)">
+        <rect x="20" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="70" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="120" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="170" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="220" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="270" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+        <rect x="320" width="12" height="36" rx="6" fill="url(#ogSpiral)" />
+      </g>
+      <!-- Moon & Flowers -->
+      <circle cx="230" cy="200" r="45" fill="#FFF9E6" />
+      <text x="230" y="380" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="28" font-weight="700" fill="#EBE6F2">LAVENDER BLOOM</text>
+    </g>
+  </g>
+</svg>

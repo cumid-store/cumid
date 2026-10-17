@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { PRODUCTS } from '../../data/products';
+import { COLLECTION_LIST } from '../../data/collections';
+import { SITE } from '../../config/site';
+
+const breadcrumbs = [
+  { label: 'Shop', href: '/shop' },
+];
+---
+
+<BaseLayout
+  title="Shop Pocket Diaries | CUMID Stationery"
+  description="Explore all CUMID square pocket diaries with top-spiral binding. Floral, Cute, Hinglish, and Cars & Jets collections. Sold out — WhatsApp preorder enquiries accepted."
+  canonicalUrl={`${SITE.canonicalUrl}/shop`}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Page Header -->
+    <div class="space-y-4 max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-charcoal-800 text-ivory-100">
+        <span>Batch 01 · All Designs Sold Out</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-charcoal-900 tracking-tight">
+        All Pocket Diaries
+      </h1>
+      <p class="text-base text-charcoal-700 leading-relaxed">
+        Compact, square format with comfortable top-edge spiral binding. Each cover is designed around a distinct mood or relatable quirk. Send an enquiry via WhatsApp to receive verified pricing and next-batch availability.
+      </p>
+    </div>
+
+    <!-- Collection Filter Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="collections">
+      <a
+        href="/shop"
+        class="px-4 py-2 rounded-full text-xs font-semibold bg-charcoal-800 text-ivory-100 whitespace-nowrap"
+      >
+        All Covers ({PRODUCTS.length})
+      </a>
+      {COLLECTION_LIST.map((col) => (
+        <a
+          href={`/collections/${col.slug}`}
+          class="px-4 py-2 rounded-full text-xs font-semibold bg-ivory-100 hover:bg-ivory-300 text-charcoal-800 border border-charcoal-800/10 whitespace-nowrap transition-colors"
+        >
+          {col.name}
+        </a>
+      ))}
+    </div>
+
+    <!-- Catalog Grid (All 6 Products) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+      {PRODUCTS.map((product) => (
+        <ProductCard product={product} ctaPlacement="featured_grid" />
+      ))}
+    </div>
+
+    <!-- Preorder Notice Box -->
+    <div class="p-8 rounded-3xl bg-ivory-100 border border-charcoal-800/10 shadow-soft-sm space-y-3 text-center max-w-2xl mx-auto mt-12">
+      <h2 class="text-xl font-bold text-charcoal-900">How Preorders Are Handled</h2>
+      <p class="text-xs sm:text-sm text-charcoal-700 leading-relaxed">
+        No ready inventory is held on this storefront. Clicking preorder on WhatsApp does not charge you or place an unconfirmed order. Our team personally confirms upcoming production schedules and material specifications before any reservation.
+      </p>
+      <div class="pt-2">
+        <a href="/how-preorders-work" class="text-xs font-semibold text-lavender-700 hover:text-lavender-900 underline underline-offset-4">
+          Learn more about our batch preorder policy &rarr;
+        </a>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>

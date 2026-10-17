@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <!-- CUMID High-Contrast Favicon (64x64) -->
+  <rect width="64" height="64" rx="14" fill="#252321" />
+  
+  <!-- "C" Geometry in Warm Ivory -->
+  <path d="M 46 16 H 26 C 18 16, 14 20, 14 28 V 36 C 14 44, 18 48, 26 48 H 46 C 49 48, 51 46, 51 43 C 51 40, 49 38, 46 38 H 27 C 23 38, 21 36, 21 32 C 21 28, 23 26, 27 26 H 46 C 49 26, 51 24, 51 21 C 51 18, 49 16, 46 16 Z" fill="#F7F4EF" />
+
+  <!-- 3 Top Spiral Rings in Soft Lavender Accent -->
+  <rect x="23" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
+  <rect x="31" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
+  <rect x="39" y="10" width="4" height="12" rx="2" fill="#BAACD1" />
+</svg>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProductCard from '../components/ProductCard.astro';
+import PersonalityGrid from '../components/PersonalityGrid.astro';
+import ProductAnatomy from '../components/ProductAnatomy.astro';
+import HowEnquiriesWork from '../components/HowEnquiriesWork.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import { getFeaturedProducts } from '../data/products';
+
+const featuredProducts = getFeaturedProducts();
+---
+
+<BaseLayout
+  title="CUMID — Small diaries. A little more you. | cumid.store"
+  description="Original Indian personality stationery. Square pocket diaries with top-spiral binding. Floral, Cute, Hinglish, and Cars & Jets covers. Preorder enquiries on WhatsApp."
+  preloadImage="/products/lavender-bloom/mockup.svg"
+  schemaType="website"
+>
+  <!-- 1. Hero Section -->
+  <Hero />
+
+  <!-- 2. Featured Covers Grid -->
+  <section class="py-16 sm:py-24 bg-ivory-200 border-b border-charcoal-800/10" id="featured-covers">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div class="space-y-2">
+          <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
+            Current Batch Preview
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900">
+            Featured covers
+          </h2>
+          <p class="text-sm text-charcoal-700 max-w-xl">
+            Every design is currently sold out. Enquiries are open for our upcoming production run.
+          </p>
+        </div>
+        <div>
+          <a href="/shop" class="btn-secondary text-xs gap-1.5 whitespace-nowrap">
+            <span>View all 6 covers</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Grid of 6 Featured Products, all visibly Sold Out -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {featuredProducts.map((product) => (
+          <ProductCard product={product} ctaPlacement="featured_grid" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Choose Your Personality -->
+  <PersonalityGrid />
+
+  <!-- 4. Product Explanation (Anatomy) -->
+  <ProductAnatomy />
+
+  <!-- 5. How Enquiries Work & Brand Philosophy -->
+  <HowEnquiriesWork />
+
+  <!-- 6. Frequently Asked Questions -->
+  <FAQAccordion limit={6} />
+</BaseLayout>

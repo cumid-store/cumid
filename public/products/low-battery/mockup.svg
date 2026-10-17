@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <filter id="lowBatShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#252321" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="spiralCoilMetallic" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8C8782" />
+      <stop offset="35%" stop-color="#E5E4E2" />
+      <stop offset="70%" stop-color="#8C8782" />
+      <stop offset="100%" stop-color="#4D4844" />
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#FAF8F5" />
+
+  <g filter="url(#lowBatShadow)">
+    <rect x="122" y="108" width="360" height="364" rx="18" fill="#ECE7DE" stroke="#D5CBB9" stroke-width="1" />
+    <rect x="120" y="105" width="360" height="364" rx="18" fill="#F7F4EF" stroke="#E4DDD0" stroke-width="1" />
+    
+    <g transform="translate(118, 102) scale(0.6)">
+      <rect width="600" height="600" rx="28" fill="#EDDCD3" />
+      <rect x="24" y="24" width="552" height="552" rx="20" fill="none" stroke="#9E745C" stroke-width="2" stroke-opacity="0.4" />
+      
+      <!-- Battery Graphic Mini -->
+      <g transform="translate(190, 160)">
+        <rect x="20" y="40" width="180" height="100" rx="22" fill="#FAF8F5" stroke="#252321" stroke-width="6" />
+        <path d="M 200 70 C 208 70, 214 76, 214 84 V 96 C 214 104, 208 110, 200 110 Z" fill="#252321" />
+        <rect x="34" y="54" width="24" height="72" rx="10" fill="#D97768" />
+        <path d="M 96 90 Q 106 100 116 90" stroke="#252321" stroke-width="4.5" stroke-linecap="round" fill="none" />
+        <path d="M 136 90 Q 146 100 156 90" stroke="#252321" stroke-width="4.5" stroke-linecap="round" fill="none" />
+      </g>
+
+      <text x="300" y="390" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="36" font-weight="800" letter-spacing="2" fill="#252321">LOW BATTERY</text>
+      <text x="300" y="430" text-anchor="middle" font-family="'Inter', sans-serif" font-size="18" font-weight="600" letter-spacing="3" fill="#9E745C">PLEASE RECHARGE</text>
+    </g>
+  </g>
+
+  <!-- Top-Spiral Coils -->
+  <g>
+    <g fill="#181716" opacity="0.65">
+      <circle cx="150" cy="114" r="5" />
+      <circle cx="180" cy="114" r="5" />
+      <circle cx="210" cy="114" r="5" />
+      <circle cx="240" cy="114" r="5" />
+      <circle cx="270" cy="114" r="5" />
+      <circle cx="300" cy="114" r="5" />
+      <circle cx="330" cy="114" r="5" />
+      <circle cx="360" cy="114" r="5" />
+      <circle cx="390" cy="114" r="5" />
+      <circle cx="420" cy="114" r="5" />
+      <circle cx="450" cy="114" r="5" />
+    </g>
+
+    <rect x="146" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="176" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="206" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="236" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="266" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="296" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="326" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="356" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="386" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="416" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="446" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+  </g>
+
+  <!-- Design Preview Badge -->
+  <g transform="translate(138, 430)">
+    <rect width="130" height="24" rx="12" fill="#252321" fill-opacity="0.85" />
+    <text x="65" y="16" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" letter-spacing="1" fill="#F7F4EF">DESIGN PREVIEW</text>
+  </g>
+</svg>

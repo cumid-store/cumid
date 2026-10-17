@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.astro/
+
+# Environment files with secrets
+.env
+.env.production
+.env.local
+.env.*.local
+
+# Test outputs
+test-results/
+playwright-report/
+
+# OS metadata
+.DS_Store
+Thumbs.db

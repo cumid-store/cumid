@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../config/site';
+
+const breadcrumbs = [
+  { label: 'Privacy Policy', href: '/privacy' },
+];
+---
+
+<BaseLayout
+  title="Privacy Policy | CUMID Stationery"
+  description="Plain-language privacy policy for CUMID (cumid.store). Details our data handling, local storage, optional analytics, Supabase accounts, and DPDP compliance."
+  canonicalUrl={`${SITE.canonicalUrl}/privacy`}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
+      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
+        Privacy &amp; Data Protection
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+        Privacy Policy
+      </h1>
+      <p class="text-xs text-charcoal-700/70">
+        Last Meaningful Update: October 15, 2026 · Market: India
+      </p>
+    </header>
+
+    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
+      
+      <div class="p-4 rounded-2xl bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
+        <strong class="font-bold text-charcoal-900 block">Owner Setup Transparency Note:</strong>
+        <p>
+          Formal registered company name and physical corporate premises are currently pending final owner input on our launch checklist. Communications and data requests are monitored via our verified customer WhatsApp (+91 7023987458).
+        </p>
+      </div>
+
+      <h2 class="text-xl font-bold text-charcoal-900">1. Overview &amp; Core Philosophy</h2>
+      <p>
+        CUMID ("we", "our", "us") operates the website <strong>https://cumid.store</strong>. We build pocket diaries and stationery. We do not sell personal data, do not run behavioural advertising trackers, and do not log your keystrokes or browsing across external websites.
+      </p>
+      <p>
+        This policy outlines how data is handled across our website, optional customer accounts, and our WhatsApp preorder channel in alignment with applicable Indian laws, including the Digital Personal Data Protection (DPDP) framework as its provisions phase into force.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">2. Information We Collect and How</h2>
+      <h3 class="text-base font-semibold text-charcoal-900">A. Browsing &amp; Local Storage (Guests)</h3>
+      <p>
+        You can browse our entire catalog without an account. When you save favourite covers, they are stored locally on your device in your browser's <code>localStorage</code> under <code>cumid_guest_favourites_v1</code>. This data never leaves your device unless you choose to sign in.
+      </p>
+
+      <h3 class="text-base font-semibold text-charcoal-900">B. Optional Customer Accounts (Google OAuth via Supabase)</h3>
+      <p>
+        If you choose to sign in with Google, authentication is handled via Supabase Auth with PKCE security. We receive only basic profile information (your email address, display name, and avatar URL). We do NOT request access to your Google Drive, Gmail, or phone contacts.
+      </p>
+
+      <h3 class="text-base font-semibold text-charcoal-900">C. Preorder Enquiries via WhatsApp</h3>
+      <p>
+        When you click "Enquire about preorder on WhatsApp", you voluntarily send a message to our business WhatsApp number (+91 7023987458). We receive your WhatsApp display name, phone number, and whatever message text you send. We do not pretend that no data is collected simply because communication occurs on WhatsApp; we treat this communication with strict confidentiality for the purpose of answering your product queries.
+      </p>
+
+      <h3 class="text-base font-semibold text-charcoal-900">D. Technical Hosting Logs</h3>
+      <p>
+        Our hosting partner (Cloudflare Pages) maintains standard transient access logs (IP addresses, user-agent, request timestamps) to protect the site from distributed denial-of-service (DDoS) attacks and ensure uptime.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">3. Optional Analytics &amp; Cookies</h2>
+      <p>
+        We operate two distinct analytics tiers:
+      </p>
+      <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
+        <li><strong>Cloudflare Web Analytics:</strong> Cookieless, aggregate metrics to monitor page load performance and aggregate visitor counts. No personal identifiers or cross-site tracking.</li>
+        <li><strong>Google Analytics 4 (GA4):</strong> Strictly consent-gated. GA4 scripts and cookies are NOT loaded until you affirmatively click "Accept analytics". IP addresses are anonymized, Google Signals is disabled, and ad personalization is turned off.</li>
+      </ul>
+      <p>
+        You can accept, reject, or change your choice at any time using the "Cookie &amp; Privacy Preferences" link in our footer. Essential website functions remain 100% available if you reject analytics.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">4. Service Providers &amp; Cross-Border Transfers</h2>
+      <p>
+        To deliver a secure, fast experience, we partner with reliable infrastructure providers:
+      </p>
+      <div class="overflow-x-auto text-xs">
+        <table class="w-full text-left border border-charcoal-800/10">
+          <thead class="bg-ivory-100 font-bold text-charcoal-900">
+            <tr>
+              <th class="p-3 border-b border-charcoal-800/10">Provider</th>
+              <th class="p-3 border-b border-charcoal-800/10">Purpose</th>
+              <th class="p-3 border-b border-charcoal-800/10">Data Handled</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-charcoal-800/10">
+            <tr>
+              <td class="p-3 font-semibold">Cloudflare, Inc.</td>
+              <td class="p-3">Global CDN, DNS &amp; Hosting</td>
+              <td class="p-3">IP address, request headers, caching</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold">Supabase, Inc.</td>
+              <td class="p-3">Authentication &amp; Favourites Database</td>
+              <td class="p-3">User ID, email, saved cover IDs</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold">WhatsApp (Meta)</td>
+              <td class="p-3">Customer Communication Channel</td>
+              <td class="p-3">Phone number, message transcripts</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold">Google LLC</td>
+              <td class="p-3">OAuth Sign-in &amp; Optional GA4</td>
+              <td class="p-3">OAuth tokens (transient), aggregate page events</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-xl font-bold text-charcoal-900">5. Data Retention &amp; Self-Service Deletion</h2>
+      <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
+        <li><strong>Guest Favourites:</strong> Stored on your device until you clear your browser data.</li>
+        <li><strong>Account Data:</strong> Retained until you delete your account. You can permanently delete your account and all associated cloud favourites directly from <a href="/account" class="underline font-semibold">Account Settings</a>.</li>
+        <li><strong>WhatsApp Messages:</strong> Preorder conversations are retained for up to 180 days to fulfill batch requests, after which chats may be archived or deleted upon request.</li>
+      </ul>
+
+      <h2 class="text-xl font-bold text-charcoal-900">6. Children's Privacy</h2>
+      <p>
+        Our website is not targeted at children under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has created an account without parental consent, please contact us for immediate deletion.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">7. Your Rights &amp; Privacy Requests</h2>
+      <p>
+        Under Indian privacy principles, you have the right to access, rectify, or request deletion of your personal data, as well as withdraw consent for optional analytics at any time.
+      </p>
+      <p>
+        To exercise any privacy rights or request manual deletion of records, message our designated privacy contact on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong> with the subject <em>"Privacy Data Request"</em>.
+      </p>
+
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #F7F4EF;
+    --color-charcoal: #252321;
+    --color-lavender: #A69ABB;
+    --color-lavender-dark: #62537D;
+    --color-sage: #929C8A;
+    --color-peach: #DFC3B2;
+  }
+
+  html {
+    background-color: #F7F4EF;
+    color: #252321;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* Accessible focus rings */
+  :focus-visible {
+    outline: 2px solid #62537D;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Reduced motion support for WCAG 2.2 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Subtle typography rules */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.02em;
+    color: #252321;
+  }
+}
+
+/* Custom interactive classes */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3.5 rounded-full font-medium text-sm transition-all duration-200 shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-600 focus-visible:ring-offset-2;
+    background-color: #252321;
+    color: #F7F4EF;
+  }
+
+  .btn-primary:hover {
+    background-color: #3D3936;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -4px rgba(37, 35, 33, 0.2);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3.5 rounded-full font-medium text-sm transition-all duration-200 border border-charcoal-800/15 text-charcoal-800 bg-ivory-100 hover:bg-ivory-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-charcoal-800 focus-visible:ring-offset-2;
+  }
+
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-full font-semibold text-sm transition-all duration-200 shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2;
+    background-color: #128C7E;
+    color: #FFFFFF;
+  }
+
+  .btn-whatsapp:hover {
+    background-color: #075E54;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -4px rgba(18, 140, 126, 0.35);
+  }
+
+  .badge-sold-out {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-charcoal-800 text-ivory-200;
+  }
+
+  .badge-preview {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-lavender-100 text-lavender-700 border border-lavender-200;
+  }
+}

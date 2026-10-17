@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../config/site';
+
+const breadcrumbs = [
+  { label: 'Returns & Cancellations', href: '/returns-cancellations' },
+];
+---
+
+<BaseLayout
+  title="Returns & Cancellations Policy | CUMID Stationery"
+  description="Returns, damaged item replacement, and preorder cancellation policy for CUMID pocket diaries."
+  canonicalUrl={`${SITE.canonicalUrl}/returns-cancellations`}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
+      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
+        Customer Protection
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+        Returns &amp; Cancellations
+      </h1>
+      <p class="text-xs text-charcoal-700/70">
+        Market: India · Last Meaningful Update: October 15, 2026
+      </p>
+    </header>
+
+    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
+      
+      <!-- Current Status -->
+      <div class="p-4 rounded-2xl bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
+        <strong class="font-bold text-charcoal-900 block">Enquiry-Only Status:</strong>
+        <p>
+          Because all candidate designs are currently sold out and preorders are accepted as inquiries without online payment, no active returns or refund claims can be processed on this storefront today.
+        </p>
+      </div>
+
+      <h2 class="text-xl font-bold text-charcoal-900">1. Preorder Cancellations</h2>
+      <p>
+        An enquiry sent via WhatsApp carries no financial commitment. You are under no obligation to finalize an order. If you decide not to proceed with a preorder after discussing batch timelines, simply inform us on WhatsApp.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">2. Future Confirmed Orders: Transit Damage &amp; Defects</h2>
+      <p>
+        When physical batches are manufactured and dispatched to customers in India:
+      </p>
+      <ul class="list-disc pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Damaged in Transit:</strong> If your diary arrives with bent coils, ripped cover pages, or manufacturing binding flaws, please share a clear photograph or unboxing video via WhatsApp within 48 hours of delivery.</li>
+        <li><strong>Resolution:</strong> We will promptly arrange a replacement from available batch reserve stock or process a direct refund.</li>
+      </ul>
+
+      <h2 class="text-xl font-bold text-charcoal-900">3. Non-Returnable Scenarios</h2>
+      <p>
+        Given the tactile nature of stationery, diaries with written notes, torn leaves, or damage caused by improper storage after delivery cannot be accepted for return.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">4. Support Channel</h2>
+      <p>
+        For any questions regarding cancellations or quality concerns, reach out directly to our customer support desk on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong>.
+      </p>
+
+    </div>
+  </div>
+</BaseLayout>

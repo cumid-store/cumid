@@ -1,0 +1,89 @@
+---
+import { SITE, buildGeneralWhatsAppUrl } from '../config/site';
+
+const heroWhatsAppUrl = buildGeneralWhatsAppUrl('homepage hero preorder');
+---
+
+<section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-ivory-100 to-ivory-200 border-b border-charcoal-800/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Left Column: Copy & CTAs -->
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-lavender-100 text-lavender-800 border border-lavender-200">
+          <span class="w-2 h-2 rounded-full bg-peach-400" aria-hidden="true"></span>
+          <span>Square Pocket Format · Top-Edge Spiral</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-charcoal-900 leading-[1.1] tracking-tight">
+          Small diaries.<br />
+          <span class="text-lavender-700">A little more you.</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-charcoal-700 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          {SITE.heroSubcopy}
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+          <a
+            href="/shop"
+            class="btn-primary w-full sm:w-auto text-center"
+            id="hero-explore-covers-btn"
+          >
+            Explore the covers
+          </a>
+          <a
+            href={heroWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary w-full sm:w-auto text-center"
+            id="hero-whatsapp-preorder-btn"
+          >
+            Ask about preorders &rarr;
+          </a>
+        </div>
+
+        <!-- Micro-guarantee on safety -->
+        <p class="text-xs text-charcoal-700/60 pt-2">
+          No online payments at launch · Preorders confirmed directly on WhatsApp
+        </p>
+      </div>
+
+      <!-- Right Column: Single Strong Product Composition (No autoplay carousel!) -->
+      <div class="lg:col-span-5 relative flex items-center justify-center">
+        <div class="relative w-full max-w-sm sm:max-w-md aspect-square">
+          <!-- Decorative Aura Glow -->
+          <div class="absolute inset-0 rounded-full bg-lavender-200/50 filter blur-3xl transform -rotate-6 scale-95" aria-hidden="true"></div>
+
+          <!-- Master Showcase Mockup -->
+          <div class="relative z-10 w-full h-full rounded-3xl overflow-hidden border border-charcoal-800/10 shadow-soft-xl bg-ivory-100 p-2">
+            <img
+              src="/products/lavender-bloom/mockup.svg"
+              alt="CUMID Lavender Bloom square pocket diary design preview with top spiral binding"
+              width={600}
+              height={600}
+              class="w-full h-full object-contain"
+              loading="eager"
+            />
+          </div>
+
+          <!-- Floating Badge -->
+          <div class="absolute -bottom-3 -left-3 sm:-left-6 z-20 bg-ivory-100 p-3.5 rounded-2xl border border-charcoal-800/10 shadow-soft-lg flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-charcoal-800 flex items-center justify-center text-ivory-100">
+              <svg class="w-5 h-5 text-peach-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </div>
+            <div class="text-xs">
+              <p class="font-bold text-charcoal-900">Next Production Batch</p>
+              <p class="text-charcoal-700/70">WhatsApp Preorders Open</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

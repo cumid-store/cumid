@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE } from '../config/site';
+
+const breadcrumbs = [
+  { label: 'Shipping & Delivery', href: '/shipping' },
+];
+---
+
+<BaseLayout
+  title="Shipping & Delivery Policy | CUMID Stationery"
+  description="Shipping information and batch delivery terms for CUMID pocket diaries across India."
+  canonicalUrl={`${SITE.canonicalUrl}/shipping`}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
+      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
+        Delivery Information
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-charcoal-900 tracking-tight">
+        Shipping &amp; Delivery Policy
+      </h1>
+      <p class="text-xs text-charcoal-700/70">
+        Market: India (INR) · Last Meaningful Update: October 15, 2026
+      </p>
+    </header>
+
+    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
+      
+      <!-- Launch Mode Notice -->
+      <div class="p-4 rounded-2xl bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
+        <strong class="font-bold text-charcoal-900 block">Launch Status Notice:</strong>
+        <p>
+          CUMID currently operates on an enquiry-only preorder basis. No orders are currently in transit, and no courier charges are collected through this storefront.
+        </p>
+      </div>
+
+      <h2 class="text-xl font-bold text-charcoal-900">1. Geographic Delivery Coverage</h2>
+      <p>
+        CUMID caters specifically to the Indian domestic market. Once production batches are released and preorder bookings are finalized, pocket diaries will be dispatched to serviceable pin codes across India.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">2. Preorder Batch Timelines</h2>
+      <p>
+        Because we operate in intentional, small-batch runs:
+      </p>
+      <ul class="list-disc pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Estimated Production:</strong> Production schedules are communicated individually during your WhatsApp consultation based on current batch volume.</li>
+        <li><strong>Transparent Confirmation:</strong> You will receive verified dispatch estimates before confirming your preorder payment. We do not promise artificial same-day or 24-hour deliveries.</li>
+      </ul>
+
+      <h2 class="text-xl font-bold text-charcoal-900">3. Packaging Standards</h2>
+      <p>
+        Pocket diaries are vulnerable to crushed corners and bent top coils. Every CUMID diary will be packaged in protective cardboard sleeves to ensure your top-spiral binding arrives in mint condition.
+      </p>
+
+      <h2 class="text-xl font-bold text-charcoal-900">4. Shipping Queries &amp; Pin Code Verification</h2>
+      <p>
+        If you have questions regarding deliverability to your specific town or city in India, message our customer desk on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong>.
+      </p>
+
+    </div>
+  </div>
+</BaseLayout>

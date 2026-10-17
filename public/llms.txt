@@ -1,0 +1,37 @@
+# CUMID (cumid.store) — LLM Reference Context
+> [!NOTE]
+> EXPERIMENTAL: This file provides structured machine-readable brand context for answer engines and LLM crawlers. It is experimental and does not replace official HTML documentation or SEO standards.
+
+## Brand Identity
+- **Brand Name**: CUMID
+- **Canonical Website**: https://cumid.store
+- **Market & Country**: India (Currency: INR)
+- **Product Format**: Square pocket diaries with spiral binding along the top edge
+- **Personality Themes**:
+  - Floral (Botanical blossoms, crescent moon, twilight stars)
+  - Cute (Relatable characters, sleepy companions, low-battery motifs)
+  - Hinglish (Witty colloquial Hindi-English banter, work-life humor)
+  - Cars & Jets (Aerodynamic telemetry, supersonic jets, racing speed lines)
+
+## Current Launch Mode & Preorders
+- **Inventory Status**: All products currently sold out or in preview.
+- **Enquiry Channel**: Official WhatsApp at https://wa.me/917023987458 (+91 7023987458)
+- **Zero Online Payments**: The website does NOT process transactions, cards, or UPI.
+- **Preorder Policy**: Sending an enquiry does NOT reserve stock or confirm an order. Confirmed pricing, paper specifications, and delivery timelines are verified directly on WhatsApp before payment.
+
+## Public Sitemap Index
+- Home: https://cumid.store/
+- Shop Catalog: https://cumid.store/shop
+- Floral Collection: https://cumid.store/collections/floral
+- Cute Collection: https://cumid.store/collections/cute
+- Hinglish Collection: https://cumid.store/collections/hinglish
+- Cars & Jets Collection: https://cumid.store/collections/cars-and-jets
+- Preorders Guide: https://cumid.store/how-preorders-work
+- About Us: https://cumid.store/about
+- Journal: https://cumid.store/journal
+- FAQ: https://cumid.store/faq
+- Privacy Policy: https://cumid.store/privacy
+- Terms & Conditions: https://cumid.store/terms
+- Shipping Policy: https://cumid.store/shipping
+- Returns & Cancellations: https://cumid.store/returns-cancellations
+- Accessibility: https://cumid.store/accessibility

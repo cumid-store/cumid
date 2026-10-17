@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="nightSky" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#2D2438" />
+      <stop offset="60%" stop-color="#1B1622" />
+      <stop offset="100%" stop-color="#120E17" />
+    </radialGradient>
+    <linearGradient id="moonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9E6" />
+      <stop offset="100%" stop-color="#D7CEE5" />
+    </linearGradient>
+    <linearGradient id="lavenderStem" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#5B6654" />
+      <stop offset="100%" stop-color="#929C8A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Square Cover Background -->
+  <rect width="600" height="600" rx="28" fill="url(#nightSky)" />
+
+  <!-- Subtle Paper Grain / Border -->
+  <rect x="24" y="24" width="552" height="552" rx="20" fill="none" stroke="#A69ABB" stroke-width="1.5" stroke-opacity="0.25" />
+
+  <!-- Stars & Constellations -->
+  <g fill="#FFF9E6" opacity="0.8">
+    <circle cx="120" cy="140" r="2.5" />
+    <circle cx="160" cy="110" r="1.5" />
+    <circle cx="210" cy="150" r="2" />
+    <circle cx="450" cy="130" r="2" />
+    <circle cx="480" cy="90" r="2.5" />
+    <circle cx="510" cy="160" r="1.5" />
+    <circle cx="140" cy="280" r="1.5" />
+    <circle cx="490" cy="290" r="2" />
+    <circle cx="300" cy="80" r="2.5" />
+    <!-- 4-point sparkle star -->
+    <path d="M 420 200 Q 420 215 405 215 Q 420 215 420 230 Q 420 215 435 215 Q 420 215 420 200 Z" fill="#D7CEE5" />
+    <path d="M 180 220 Q 180 230 170 230 Q 180 230 180 240 Q 180 230 190 230 Q 180 230 180 220 Z" fill="#D7CEE5" />
+  </g>
+
+  <!-- Glowing Crescent Moon -->
+  <path d="M 330 160 C 275 160, 230 205, 230 260 C 230 315, 275 360, 330 360 C 352 360, 372 353, 388 340 C 330 340, 285 295, 285 245 C 285 203, 310 168, 350 162 C 343 161, 337 160, 330 160 Z" fill="url(#moonGlow)" />
+
+  <!-- Botanical Lavender Florals -->
+  <!-- Stems -->
+  <path d="M 270 540 Q 280 430 300 340" stroke="url(#lavenderStem)" stroke-width="3.5" fill="none" stroke-linecap="round" />
+  <path d="M 240 540 Q 220 440 210 370" stroke="url(#lavenderStem)" stroke-width="3" fill="none" stroke-linecap="round" />
+  <path d="M 330 540 Q 360 450 380 370" stroke="url(#lavenderStem)" stroke-width="3" fill="none" stroke-linecap="round" />
+
+  <!-- Botanical Petals / Buds (Center Stem) -->
+  <g fill="#A69ABB">
+    <ellipse cx="292" cy="330" rx="9" ry="15" transform="rotate(-25 292 330)" />
+    <ellipse cx="308" cy="330" rx="9" ry="15" transform="rotate(25 308 330)" />
+    <ellipse cx="295" cy="360" rx="10" ry="17" transform="rotate(-25 295 360)" />
+    <ellipse cx="312" cy="360" rx="10" ry="17" transform="rotate(25 312 360)" />
+    <ellipse cx="290" cy="390" rx="11" ry="18" transform="rotate(-25 290 390)" />
+    <ellipse cx="310" cy="390" rx="11" ry="18" transform="rotate(25 310 390)" />
+    <ellipse cx="286" cy="420" rx="11" ry="18" transform="rotate(-25 286 420)" />
+    <ellipse cx="306" cy="420" rx="11" ry="18" transform="rotate(25 306 420)" />
+    <circle cx="300" cy="310" r="7" fill="#D7CEE5" />
+  </g>
+
+  <!-- Left Stem Petals -->
+  <g fill="#8676A0">
+    <ellipse cx="204" cy="365" rx="8" ry="14" transform="rotate(-30 204 365)" />
+    <ellipse cx="218" cy="365" rx="8" ry="14" transform="rotate(20 218 365)" />
+    <ellipse cx="210" cy="395" rx="9" ry="15" transform="rotate(-30 210 395)" />
+    <ellipse cx="225" cy="395" rx="9" ry="15" transform="rotate(20 225 395)" />
+    <circle cx="210" cy="348" r="6" fill="#BAACD1" />
+  </g>
+
+  <!-- Right Stem Petals -->
+  <g fill="#8676A0">
+    <ellipse cx="372" cy="365" rx="8" ry="14" transform="rotate(-20 372 365)" />
+    <ellipse cx="388" cy="365" rx="8" ry="14" transform="rotate(30 388 365)" />
+    <ellipse cx="365" cy="395" rx="9" ry="15" transform="rotate(-20 365 395)" />
+    <ellipse cx="382" cy="395" rx="9" ry="15" transform="rotate(30 382 395)" />
+    <circle cx="380" cy="348" r="6" fill="#BAACD1" />
+  </g>
+
+  <!-- Leaves -->
+  <path d="M 268 470 C 240 460, 230 440, 220 445 C 235 465, 255 475, 268 470 Z" fill="#75806D" />
+  <path d="M 334 470 C 362 460, 372 440, 382 445 C 367 465, 347 475, 334 470 Z" fill="#75806D" />
+
+  <!-- Cover Typography / Subtext -->
+  <text x="300" y="525" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="4" fill="#EBE6F2">LAVENDER BLOOM</text>
+  <text x="300" y="548" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="400" letter-spacing="2" fill="#BAACD1" opacity="0.8">CUMID POCKET DIARY</text>
+</svg>

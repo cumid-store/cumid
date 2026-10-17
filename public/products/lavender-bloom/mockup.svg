@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <filter id="diaryDropShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#252321" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="spiralCoilMetallic" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8C8782" />
+      <stop offset="35%" stop-color="#E5E4E2" />
+      <stop offset="70%" stop-color="#8C8782" />
+      <stop offset="100%" stop-color="#4D4844" />
+    </linearGradient>
+  </defs>
+
+  <!-- Warm Ivory Surface Backdrop -->
+  <rect width="600" height="600" fill="#FAF8F5" />
+
+  <!-- The Square Diary Body with Drop Shadow -->
+  <g filter="url(#diaryDropShadow)">
+    <!-- Back Cover Paper Edge Visible Behind -->
+    <rect x="122" y="108" width="360" height="364" rx="18" fill="#ECE7DE" stroke="#D5CBB9" stroke-width="1" />
+    <!-- Cream Paper Edge Layer -->
+    <rect x="120" y="105" width="360" height="364" rx="18" fill="#F7F4EF" stroke="#E4DDD0" stroke-width="1" />
+    <!-- Front Cover with Lavender Bloom Art -->
+    <g transform="translate(118, 102) scale(0.6)">
+      <!-- Embedded Lavender Bloom Cover Vector -->
+      <rect width="600" height="600" rx="28" fill="#1B1622" />
+      <rect x="24" y="24" width="552" height="552" rx="20" fill="none" stroke="#A69ABB" stroke-width="2" stroke-opacity="0.3" />
+      <!-- Stars -->
+      <circle cx="120" cy="140" r="3" fill="#FFF9E6" />
+      <circle cx="480" cy="120" r="3" fill="#FFF9E6" />
+      <circle cx="300" cy="80" r="3" fill="#FFF9E6" />
+      <!-- Moon -->
+      <path d="M 330 160 C 275 160, 230 205, 230 260 C 230 315, 275 360, 330 360 C 352 360, 372 353, 388 340 C 330 340, 285 295, 285 245 C 285 203, 310 168, 350 162 C 343 161, 337 160, 330 160 Z" fill="#FFF9E6" />
+      <!-- Lavender Stems -->
+      <path d="M 300 520 Q 300 420 300 330" stroke="#75806D" stroke-width="5" fill="none" />
+      <g fill="#A69ABB">
+        <ellipse cx="290" cy="330" rx="10" ry="18" transform="rotate(-25 290 330)" />
+        <ellipse cx="310" cy="330" rx="10" ry="18" transform="rotate(25 310 330)" />
+        <ellipse cx="290" cy="365" rx="12" ry="20" transform="rotate(-25 290 365)" />
+        <ellipse cx="310" cy="365" rx="12" ry="20" transform="rotate(25 310 365)" />
+        <ellipse cx="290" cy="400" rx="12" ry="20" transform="rotate(-25 290 400)" />
+        <ellipse cx="310" cy="400" rx="12" ry="20" transform="rotate(25 310 400)" />
+      </g>
+      <text x="300" y="515" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="600" letter-spacing="4" fill="#EBE6F2">LAVENDER BLOOM</text>
+    </g>
+  </g>
+
+  <!-- Top-Spiral Binding Coils (Along the upper horizontal edge) -->
+  <g>
+    <!-- Punch Holes on Cover -->
+    <g fill="#181716" opacity="0.65">
+      <circle cx="150" cy="114" r="5" />
+      <circle cx="180" cy="114" r="5" />
+      <circle cx="210" cy="114" r="5" />
+      <circle cx="240" cy="114" r="5" />
+      <circle cx="270" cy="114" r="5" />
+      <circle cx="300" cy="114" r="5" />
+      <circle cx="330" cy="114" r="5" />
+      <circle cx="360" cy="114" r="5" />
+      <circle cx="390" cy="114" r="5" />
+      <circle cx="420" cy="114" r="5" />
+      <circle cx="450" cy="114" r="5" />
+    </g>
+
+    <!-- 11 Spiral Wire Loops -->
+    <!-- Loop template: rx=4, ry=16, height=32 -->
+    <rect x="146" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="176" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="206" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="236" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="266" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="296" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="326" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="356" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="386" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="416" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+    <rect x="446" y="94" width="8" height="32" rx="4" fill="url(#spiralCoilMetallic)" />
+  </g>
+
+  <!-- Clear "Design preview" watermark pill badge -->
+  <g transform="translate(138, 430)">
+    <rect width="130" height="24" rx="12" fill="#252321" fill-opacity="0.85" />
+    <text x="65" y="16" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" letter-spacing="1" fill="#F7F4EF">DESIGN PREVIEW</text>
+  </g>
+</svg>

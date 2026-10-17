@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+  <!-- CUMID Compact "C" Symbol inspired by Top Spiral & Pocket Diary Page Corner -->
+  <defs>
+    <linearGradient id="spiralCoilGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A69ABB" />
+      <stop offset="100%" stop-color="#62537D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base Page / "C" Shape Outer Silhouette -->
+  <!-- Top edge has spiral punch indentations, curving down like an open C and folded page corner -->
+  <path d="M 85 24 
+           H 48 
+           C 30 24, 20 34, 20 52 
+           V 68 
+           C 20 86, 30 96, 48 96 
+           H 85 
+           C 91 96, 96 91, 96 85 
+           C 96 79, 91 74, 85 74 
+           H 50 
+           C 40 74, 38 70, 38 60 
+           C 38 50, 40 46, 50 46 
+           H 85 
+           C 91 46, 96 41, 96 35 
+           C 96 29, 91 24, 85 24 Z" 
+        fill="#252321" />
+
+  <!-- 3 Top-Spiral Rings along the upper horizontal stroke -->
+  <!-- Ring 1 -->
+  <rect x="42" y="14" width="7" height="22" rx="3.5" fill="url(#spiralCoilGrad)" />
+  <ellipse cx="45.5" cy="25" rx="1.5" ry="2" fill="#F7F4EF" opacity="0.8" />
+
+  <!-- Ring 2 -->
+  <rect x="58" y="14" width="7" height="22" rx="3.5" fill="url(#spiralCoilGrad)" />
+  <ellipse cx="61.5" cy="25" rx="1.5" ry="2" fill="#F7F4EF" opacity="0.8" />
+
+  <!-- Ring 3 -->
+  <rect x="74" y="14" width="7" height="22" rx="3.5" fill="url(#spiralCoilGrad)" />
+  <ellipse cx="77.5" cy="25" rx="1.5" ry="2" fill="#F7F4EF" opacity="0.8" />
+
+  <!-- Subtle folded corner notch at the bottom terminal -->
+  <path d="M 82 74 L 96 88 L 82 88 Z" fill="#A69ABB" opacity="0.3" />
+</svg>
