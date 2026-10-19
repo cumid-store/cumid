@@ -13,10 +13,10 @@ export const SITE = {
   currencySymbol: '₹',
 
   // Customer Contact Facts
-  whatsappNumber: '917023987458', // Standard international without punctuation
+  whatsappNumber: '919201871597', // Standard international without punctuation
   supportEmail: 'support@cumid.store',
-  whatsappDisplayNumber: '+91 7023987458',
-  whatsappBaseUrl: 'https://wa.me/917023987458',
+  whatsappDisplayNumber: '+91 9201871597',
+  whatsappBaseUrl: 'https://wa.me/919201871597',
 
   // Launch Status Announcement
   announcementText: 'Currently sold out · Enquire about the next batch on WhatsApp',
@@ -66,7 +66,7 @@ export const SITE = {
       { label: 'Journal & Stories', href: '/journal', isExternal: false },
       { label: 'Frequently Asked Questions', href: '/faq', isExternal: false },
       { label: 'Store Management (Admin)', href: '/admin', isExternal: false },
-      { label: 'Contact WhatsApp', href: 'https://wa.me/917023987458', isExternal: true },
+      { label: 'Contact WhatsApp', href: 'https://wa.me/919201871597', isExternal: true },
     ],
     legal: [
       { label: 'Privacy Policy', href: '/privacy' },

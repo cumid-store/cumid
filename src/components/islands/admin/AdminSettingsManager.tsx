@@ -74,7 +74,7 @@ export const AdminSettingsManager: React.FC = () => {
                 onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
                 className="w-full p-2.5 rounded-xl border border-charcoal-800/15 bg-ivory-200 font-mono"
               />
-              <p className="text-[11px] text-charcoal-500">Must include country code: +91 7023987458</p>
+              <p className="text-[11px] text-charcoal-500">Must include country code: +91 9201871597</p>
             </div>
 
             <div className="space-y-1">
