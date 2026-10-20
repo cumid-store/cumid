@@ -19,7 +19,7 @@ export const AccountView: React.FC = () => {
       return;
     }
 
-    if (new URLSearchParams(location.search).has('signin_error')) {
+    if (new URLSearchParams(location.search).has('signin_error') && !session) {
       setErrorMsg('Sign-in could not be completed. Please try again.');
     }
 
@@ -28,6 +28,13 @@ export const AccountView: React.FC = () => {
       setSession(session);
       setLoading(false);
       if (session) {
+        // Clear sign-in error since authentication succeeded
+        setErrorMsg(null);
+        if (typeof window !== 'undefined' && window.location.search.includes('signin_error')) {
+          const cleanUrl = new URL(window.location.href);
+          cleanUrl.searchParams.delete('signin_error');
+          window.history.replaceState(null, '', cleanUrl.pathname + (cleanUrl.search ? cleanUrl.search : ''));
+        }
         void initializeFavourites();
         // Proactively ensure tokens are written to document.cookie via @supabase/ssr
         if (session.access_token && session.refresh_token && supabase) {
@@ -47,6 +54,12 @@ export const AccountView: React.FC = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
+        setErrorMsg(null);
+        if (typeof window !== 'undefined' && window.location.search.includes('signin_error')) {
+          const cleanUrl = new URL(window.location.href);
+          cleanUrl.searchParams.delete('signin_error');
+          window.history.replaceState(null, '', cleanUrl.pathname + (cleanUrl.search ? cleanUrl.search : ''));
+        }
         void initializeFavourites();
       }
     });
@@ -202,7 +215,7 @@ export const AccountView: React.FC = () => {
         </div>
       )}
 
-      {errorMsg && (
+      {errorMsg && !session && (
         <div className="p-4 rounded-sm bg-red-50 border border-red-200 text-red-800 text-xs flex items-start gap-2.5">
           <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{errorMsg}</span>
