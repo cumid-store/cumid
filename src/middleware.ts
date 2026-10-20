@@ -17,6 +17,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  // During static site generation (build time), allow page HTML to prerender
+  if (context.isPrerendered) {
+    return next();
+  }
+
   // Cloudflare Pages / standard SSR compatible environment variable resolution
   const supabaseUrl =
     import.meta.env.PUBLIC_SUPABASE_URL ||

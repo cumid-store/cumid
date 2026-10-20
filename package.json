@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
-    "build:quick": "astro build",
+    "build": "astro check && astro build && node scripts/postbuild.mjs",
+    "build:quick": "astro build && node scripts/postbuild.mjs",
     "preview": "astro preview",
     "test": "playwright test",
     "test:ui": "playwright test --ui"

@@ -40,15 +40,31 @@ export const AdminLayout: React.FC<Props> = ({
 
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          setUserEmail(session.user.email || null);
-          if (isAllowedAdminEmail(session.user.email)) {
+        if (!session?.user) {
+          // If no active session, redirect to /account with return path
+          if (typeof window !== 'undefined') {
+            window.location.replace(`/account?redirect=${encodeURIComponent(window.location.pathname)}`);
+          }
+          setLoading(false);
+          return;
+        }
+
+        const email = session.user.email;
+        setUserEmail(email || null);
+
+        if (isAllowedAdminEmail(email)) {
+          setIsAdmin(true);
+        } else {
+          const profile = await getCurrentProfile();
+          if (profile?.role === 'admin') {
             setIsAdmin(true);
           } else {
-            const profile = await getCurrentProfile();
-            if (profile?.role === 'admin') {
-              setIsAdmin(true);
+            // If email is not in the allowlist, redirect to home page
+            if (typeof window !== 'undefined') {
+              window.location.replace('/');
             }
+            setLoading(false);
+            return;
           }
         }
       } catch (err) {
