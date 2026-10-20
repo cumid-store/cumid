@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { initializeFavourites, importGuestFavourites, clearAccountFavourites } from '../../lib/favourites';
-import { LogIn, LogOut, Trash2, Heart, ShieldAlert, CheckCircle2, User, Package } from 'lucide-react';
-import { supabase, isSupabaseConfigured, getLocalFavourites } from '../../lib/supabase';
+import { LogIn, LogOut, Trash2, Heart, ShieldAlert, ShieldCheck, CheckCircle2, User, Package, KeyRound } from 'lucide-react';
+import { supabase, isSupabaseConfigured, getLocalFavourites, isAllowedAdminEmail, ALLOWED_ADMIN_EMAILS } from '../../lib/supabase';
 
 export const AccountView: React.FC = () => {
   const [session, setSession] = useState<any>(null);
@@ -10,21 +10,39 @@ export const AccountView: React.FC = () => {
   const [deletionSuccess, setDeletionSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const isRedirectFromAdmin = urlParams.get('redirect')?.startsWith('/admin') || urlParams.get('from') === 'admin';
+
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
       setLoading(false);
       return;
     }
 
-    if (new URLSearchParams(location.search).has('signin_error')) setErrorMsg('Sign-in could not be completed. Please try again.');
+    if (new URLSearchParams(location.search).has('signin_error')) {
+      setErrorMsg('Sign-in could not be completed. Please try again.');
+    }
+
     // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setLoading(false);
       if (session) {
         void initializeFavourites();
+        // Proactively ensure tokens are written to document.cookie via @supabase/ssr
+        if (session.access_token && session.refresh_token && supabase) {
+          try {
+            await supabase.auth.setSession({
+              access_token: session.access_token,
+              refresh_token: session.refresh_token,
+            });
+          } catch {}
+        }
       }
-    }).catch(() => { setLoading(false); setErrorMsg('Account service is unavailable. Please try again later.'); });
+    }).catch(() => {
+      setLoading(false); 
+      setErrorMsg('Account service is unavailable. Please try again later.'); 
+    });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
@@ -43,7 +61,10 @@ export const AccountView: React.FC = () => {
     }
     setErrorMsg(null);
     try {
-      const redirectTo = `${window.location.origin}/auth/callback`;
+      const targetParam = urlParams.get('redirect');
+      const nextTarget = isRedirectFromAdmin ? '/admin' : (targetParam && targetParam.startsWith('/') && targetParam !== '/account' ? targetParam : '/shop');
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextTarget)}`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -55,6 +76,21 @@ export const AccountView: React.FC = () => {
     } catch (err: any) {
       setErrorMsg(err.message || 'Could not initiate Google sign-in.');
     }
+  };
+
+  const handleOpenAdmin = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (session?.access_token && session?.refresh_token && supabase) {
+      try {
+        await supabase.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        });
+      } catch (err) {
+        console.warn('CUMID: Error syncing session to cookies', err);
+      }
+    }
+    window.location.href = '/admin';
   };
 
   const handleSignOut = async () => {
@@ -76,10 +112,8 @@ export const AccountView: React.FC = () => {
     setErrorMsg(null);
 
     try {
-      // Call Supabase RPC to delete the account and cascading records
       const { error } = await supabase.rpc('delete_user_account');
       if (error) {
-        // Fallback: document manual deletion request if RPC is not provisioned
         throw new Error(
           'Automated self-service deletion is waiting for server RPC configuration. Please request deletion via WhatsApp (+91 9201871597) or sign out.'
         );
@@ -125,7 +159,7 @@ export const AccountView: React.FC = () => {
             </a>
             <a
               href="/account/orders"
-              className="btn-secondary gap-2 text-xs"
+              className="btn-secondary gap-2 text-xs ml-3"
             >
               <Package className="w-4 h-4 text-charcoal-700" />
               <span>My Orders</span>
@@ -138,8 +172,36 @@ export const AccountView: React.FC = () => {
     );
   }
 
+  const isAdmin = isAllowedAdminEmail(session?.user?.email);
+
   return (
     <div className="space-y-6">
+      {/* Admin Redirect Context Alert */}
+      {isRedirectFromAdmin && !session && (
+        <div className="p-4 rounded-sm bg-lavender-50 border border-lavender-200 text-lavender-900 text-xs flex items-start gap-2.5">
+          <KeyRound className="w-4 h-4 mt-0.5 text-lavender-700 shrink-0" />
+          <div>
+            <span className="font-semibold block mb-0.5 text-lavender-900">Administrator Sign-In Required</span>
+            <span className="text-charcoal-700">
+              You attempted to access the private Store Management area (/admin). Please sign in below using your authorized admin Google account.
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Non-admin attempting to access admin */}
+      {session && !isAdmin && isRedirectFromAdmin && (
+        <div className="p-4 rounded-sm bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+          <ShieldAlert className="w-4 h-4 mt-0.5 text-amber-700 shrink-0" />
+          <div>
+            <span className="font-semibold block mb-0.5">Admin Permissions Required</span>
+            <span className="text-amber-800 leading-relaxed">
+              Your logged-in Google account (<strong>{session.user?.email}</strong>) is not in the administrator allowlist. If you are an administrator, please sign out and sign in with an authorized email ({ALLOWED_ADMIN_EMAILS.join(', ')}).
+            </span>
+          </div>
+        </div>
+      )}
+
       {errorMsg && (
         <div className="p-4 rounded-sm bg-red-50 border border-red-200 text-red-800 text-xs flex items-start gap-2.5">
           <ShieldAlert className="w-4 h-4 mt-0.5 shrink-0" />
@@ -156,6 +218,27 @@ export const AccountView: React.FC = () => {
 
       {session ? (
         <div className="p-6 rounded-sm bg-ivory-100 border border-charcoal-800/15 space-y-6">
+          {/* Admin Banner if authorized */}
+          {isAdmin && (
+            <div className="p-4 rounded-sm bg-purple-50 border border-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 text-purple-900">
+                <ShieldCheck className="w-5 h-5 text-purple-700 shrink-0" />
+                <div>
+                  <h3 className="font-bold text-xs uppercase tracking-wider text-purple-900">Store Administrator Verified</h3>
+                  <p className="text-xs text-purple-800">You are authenticated with full access to store operations and catalogue management.</p>
+                </div>
+              </div>
+              <a
+                href="/admin"
+                onClick={handleOpenAdmin}
+                className="btn-primary text-xs shrink-0 bg-purple-800 hover:bg-purple-900 text-ivory-100 font-semibold gap-1.5"
+              >
+                <span>Open Admin Portal</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          )}
+
           <div className="flex items-center gap-4">
             {session.user.user_metadata?.avatar_url ? (
               <img
@@ -173,18 +256,34 @@ export const AccountView: React.FC = () => {
                 {session.user.user_metadata?.full_name || 'CUMID Reader'}
               </h2>
               <p className="text-xs text-charcoal-700">{session.user.email}</p>
-              <span className="inline-block mt-1 text-[11px] font-medium text-green-800 bg-green-100 px-2 py-0.5 rounded-full">
-                Google Authenticated
-              </span>
+              {isAdmin ? (
+                <span className="inline-block mt-1 text-[11px] font-semibold text-purple-900 bg-purple-100 border border-purple-200 px-2.5 py-0.5 rounded-full">
+                  Authorized Store Admin
+                </span>
+              ) : (
+                <span className="inline-block mt-1 text-[11px] font-medium text-green-800 bg-green-100 px-2 py-0.5 rounded-full">
+                  Google Authenticated
+                </span>
+              )}
             </div>
           </div>
 
           <div className="pt-4 border-t border-charcoal-800/10 flex flex-wrap items-center gap-3">
+            {isAdmin && (
+              <a
+                href="/admin"
+                onClick={handleOpenAdmin}
+                className="btn-primary text-xs gap-2 bg-lavender-700 hover:bg-lavender-800 text-ivory-100 font-semibold"
+              >
+                <ShieldCheck className="w-4 h-4 text-ivory-100" />
+                <span>Go to Admin Portal</span>
+              </a>
+            )}
             <a
               href="/account/orders"
-              className="btn-primary text-xs gap-2"
+              className="btn-secondary text-xs gap-2"
             >
-              <Package className="w-4 h-4 text-ivory-100" />
+              <Package className="w-4 h-4 text-charcoal-700" />
               <span>My Orders</span>
             </a>
             <a
@@ -236,7 +335,7 @@ export const AccountView: React.FC = () => {
           <div className="space-y-1">
             <h2 className="font-bold text-base text-charcoal-900">Sign in with Google</h2>
             <p className="text-xs text-charcoal-700 max-w-sm mx-auto">
-              Sign in to sync your saved favourite covers across your devices. Minimal permissions: email &amp; basic profile only.
+              Sign in with your Google account. Authorized administrators will immediately receive access to the Store Operations dashboard.
             </p>
           </div>
 
@@ -265,13 +364,10 @@ export const AccountView: React.FC = () => {
             </svg>
             <span>Continue with Google</span>
           </button>
-
-          <p className="text-[11px] text-charcoal-700/60 pt-2">
-            No password or credit card required. Guests can still enquire on WhatsApp.
-          </p>
         </div>
       )}
     </div>
   );
 };
+
 export default AccountView;

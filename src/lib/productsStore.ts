@@ -1,5 +1,6 @@
 import type { Product, CollectionSlug } from '../types/product';
 import { PRODUCTS } from '../data/products';
+import { supabase, isSupabaseConfigured } from './supabase';
 
 export interface EditableProduct {
   id: string;
@@ -122,4 +123,50 @@ export function getMergedStoreProducts(baseProducts: Product[] = PRODUCTS): Prod
 export function findProductBySlug(slug: string, baseProducts: Product[] = PRODUCTS): Product | undefined {
   const all = getMergedStoreProducts(baseProducts);
   return all.find((p) => p.slug === slug);
+}
+
+export async function syncProductToSupabase(product: EditableProduct): Promise<void> {
+  if (!isSupabaseConfigured || !supabase) return;
+  try {
+    const { error } = await supabase.from('products').upsert({
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      tagline: product.tagline,
+      short_description: product.shortDescription,
+      long_description: product.longDescription,
+      collection: product.collection,
+      collection_name: product.collectionName,
+      price_paise: product.pricePaise,
+      currency: 'INR',
+      is_published: product.isPublished,
+      is_sold_out: product.isSoldOut,
+      personality_note: product.tagline,
+      confirmed_specs: {
+        format: 'Square pocket diary',
+        binding: 'Spiral binding along top edge',
+        orientation: 'Top-flip notebook format',
+      },
+      updated_at: new Date().toISOString(),
+    });
+    if (!error && product.coverImageUrl) {
+      await supabase.from('product_images').upsert({
+        product_id: product.id,
+        src: product.coverImageUrl,
+        alt: `${product.name} cover`,
+        is_primary: true,
+      });
+    }
+  } catch (e) {
+    console.warn('Supabase sync warning:', e);
+  }
+}
+
+export async function deleteProductFromSupabase(id: string): Promise<void> {
+  if (!isSupabaseConfigured || !supabase) return;
+  try {
+    await supabase.from('products').delete().eq('id', id);
+  } catch (e) {
+    console.warn('Supabase delete warning:', e);
+  }
 }

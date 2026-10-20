@@ -8,6 +8,7 @@ import { logAdminAction } from '../../../lib/admin';
 import { formatPaiseToINR } from '../../../types/order';
 import AdminLayout from './AdminLayout';
 import type { CollectionSlug } from '../../../types/product';
+import { syncProductToSupabase, deleteProductFromSupabase } from '../../../lib/productsStore';
 
 // ── Helpers & Outside Components ─────────────────────────────────────────────
 
@@ -269,6 +270,8 @@ export const AdminProductsManager: React.FC = () => {
         return { ...p, pricePaise: newPaise, tagline: editTagline, hasUnpublishedChanges: true };
       });
       persistAll(next);
+      const updated = next.find((p) => p.id === id);
+      if (updated) void syncProductToSupabase(updated);
       return next;
     });
     setEditingId(null);
@@ -282,6 +285,8 @@ export const AdminProductsManager: React.FC = () => {
     setProducts((prev) => {
       const next = prev.map((p) => p.id === id ? { ...p, isSoldOut: !p.isSoldOut, hasUnpublishedChanges: true } : p);
       persistAll(next);
+      const updated = next.find((p) => p.id === id);
+      if (updated) void syncProductToSupabase(updated);
       return next;
     });
     void logAdminAction('toggle_sold_out', 'product', id);
@@ -291,6 +296,8 @@ export const AdminProductsManager: React.FC = () => {
     setProducts((prev) => {
       const next = prev.map((p) => p.id === id ? { ...p, isPublished: !p.isPublished, hasUnpublishedChanges: true } : p);
       persistAll(next);
+      const updated = next.find((p) => p.id === id);
+      if (updated) void syncProductToSupabase(updated);
       return next;
     });
     void logAdminAction('toggle_published', 'product', id);
@@ -303,6 +310,7 @@ export const AdminProductsManager: React.FC = () => {
       return next;
     });
     setConfirmDeleteId(null);
+    void deleteProductFromSupabase(id);
     void logAdminAction('delete_product', 'product', id);
   };
 
@@ -312,6 +320,7 @@ export const AdminProductsManager: React.FC = () => {
       setProducts((prev) => {
         const next = prev.map((p) => ({ ...p, hasUnpublishedChanges: false }));
         persistAll(next);
+        next.forEach((p) => void syncProductToSupabase(p));
         return next;
       });
       setIsPublishing(false);
@@ -412,6 +421,7 @@ export const AdminProductsManager: React.FC = () => {
       return next;
     });
 
+    void syncProductToSupabase(newProduct);
     void logAdminAction('add_product', 'product', newProduct.id, { name: newProduct.name });
     setForm(BLANK_FORM);
     setFormErrors({});

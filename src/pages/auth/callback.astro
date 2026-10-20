@@ -17,7 +17,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p class="text-xs text-charcoal-700">Connecting your Google account with CUMID favourites.</p>
 
     <script>
-      import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+      import { supabase, isSupabaseConfigured, isAllowedAdminEmail } from '../../lib/supabase';
 
       async function handleCallback() {
         if (!isSupabaseConfigured || !supabase) {
@@ -25,13 +25,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
-        const code = new URLSearchParams(location.search).get('code');
-        // Strip the one-time code before navigating, logging or loading third-party content.
+        const urlParams = new URLSearchParams(location.search);
+        const code = urlParams.get('code');
+        const nextUrl = urlParams.get('next') || urlParams.get('redirect');
+
+        // Strip the one-time code before navigating
         history.replaceState(null, '', '/auth/callback');
-        if (!code) { location.replace('/account?signin_error=1'); return; }
+        if (!code) { 
+          location.replace('/account?signin_error=1'); 
+          return; 
+        }
+
         try {
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
-          location.replace(error ? '/account?signin_error=1' : '/account');
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error || !data?.session) {
+            location.replace('/account?signin_error=1');
+            return;
+          }
+
+          const userEmail = data.session.user?.email;
+
+          // If specifically directed to /admin and user is an authorized admin
+          if (nextUrl === '/admin' && isAllowedAdminEmail(userEmail)) {
+            location.replace('/admin');
+            return;
+          }
+
+          if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/account') {
+            location.replace(nextUrl);
+            return;
+          }
+
+          // User request: after signin completed redirected to the shop page
+          location.replace('/shop');
         } catch {
           location.replace('/account?signin_error=1');
         }

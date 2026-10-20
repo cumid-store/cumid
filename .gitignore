@@ -8,6 +8,7 @@ audit-output.json
 build-audit.log
 test-audit.log
 .astro/
+.wrangler/
 
 # Environment files with secrets
 .env

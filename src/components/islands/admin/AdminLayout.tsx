@@ -3,7 +3,7 @@ import {
   LayoutDashboard, ShoppingBag, MessageSquare, Package, 
   Layers, Settings, ShieldAlert, LogIn, ExternalLink, ShieldCheck 
 } from 'lucide-react';
-import { supabase, isSupabaseConfigured, getCurrentProfile } from '../../../lib/supabase';
+import { supabase, isSupabaseConfigured, getCurrentProfile, isAllowedAdminEmail } from '../../../lib/supabase';
 
 interface Props {
   activeTab: 'overview' | 'orders' | 'enquiries' | 'products' | 'batches' | 'settings';
@@ -42,9 +42,13 @@ export const AdminLayout: React.FC<Props> = ({
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           setUserEmail(session.user.email || null);
-          const profile = await getCurrentProfile();
-          if (profile?.role === 'admin') {
+          if (isAllowedAdminEmail(session.user.email)) {
             setIsAdmin(true);
+          } else {
+            const profile = await getCurrentProfile();
+            if (profile?.role === 'admin') {
+              setIsAdmin(true);
+            }
           }
         }
       } catch (err) {

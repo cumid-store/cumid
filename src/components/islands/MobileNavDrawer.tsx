@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Heart, User, MessageCircle, ExternalLink } from 'lucide-react';
+import { Menu, X, Heart, User, LogIn, MessageCircle, ExternalLink, ShieldCheck } from 'lucide-react';
 import { SITE } from '../../config/site';
 import { initializeFavourites, snapshot } from '../../lib/favourites';
+import { supabase, isAllowedAdminEmail } from '../../lib/supabase';
 
 // Links only in the dropdown (Shop/Collections/Our Story are already in the inline bar)
 const DROPDOWN_LINKS = [
@@ -12,6 +13,8 @@ const DROPDOWN_LINKS = [
 export const MobileNavDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [favCount, setFavCount] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,6 +24,25 @@ export const MobileNavDrawer: React.FC = () => {
       setFavCount(list.length);
     };
     window.addEventListener('cumid:favourites-updated', handleFavChange);
+
+    // Check if user is authenticated and if admin
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setIsLoggedIn(Boolean(session?.user));
+        setIsAdmin(isAllowedAdminEmail(session?.user?.email));
+      }).catch(() => {});
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setIsLoggedIn(Boolean(session?.user));
+        setIsAdmin(isAllowedAdminEmail(session?.user?.email));
+      });
+
+      return () => {
+        window.removeEventListener('cumid:favourites-updated', handleFavChange);
+        subscription.unsubscribe();
+      };
+    }
+
     return () => window.removeEventListener('cumid:favourites-updated', handleFavChange);
   }, []);
 
@@ -89,11 +111,22 @@ export const MobileNavDrawer: React.FC = () => {
           {/* Divider */}
           <div className="mx-3 border-t border-charcoal-800/8 my-1" />
 
-          {/* Account links */}
+          {/* Account & Favourites links */}
           <div className="px-2 pb-1">
             <p className="px-2 py-1 text-[10px] uppercase tracking-widest font-semibold text-charcoal-700/50">
               Account
             </p>
+            {isAdmin && (
+              <a
+                href="/admin"
+                onClick={() => setIsOpen(false)}
+                role="menuitem"
+                className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-purple-900 bg-purple-50 hover:bg-purple-100 mb-1 transition-colors"
+              >
+                <ShieldCheck className="w-4 h-4 text-purple-700" />
+                Admin Portal
+              </a>
+            )}
             <a
               href="/account/favourites"
               onClick={() => setIsOpen(false)}
@@ -102,7 +135,7 @@ export const MobileNavDrawer: React.FC = () => {
             >
               <span className="flex items-center gap-2">
                 <Heart className="w-4 h-4 text-peach-700" />
-                Saved
+                Saved Favourites
               </span>
               {favCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-peach-300 text-peach-700">
@@ -116,8 +149,17 @@ export const MobileNavDrawer: React.FC = () => {
               role="menuitem"
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-charcoal-800 hover:bg-lavender-50 hover:text-lavender-700 transition-colors"
             >
-              <User className="w-4 h-4 text-lavender-700" />
-              Account & Sign-in
+              {isLoggedIn ? (
+                <>
+                  <User className="w-4 h-4 text-lavender-700" />
+                  <span>My Account</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4 text-lavender-700" />
+                  <span>Sign In</span>
+                </>
+              )}
             </a>
           </div>
 
