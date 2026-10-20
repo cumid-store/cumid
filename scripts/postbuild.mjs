@@ -7,13 +7,15 @@ const distRoot = path.resolve('dist');
 if (fs.existsSync(distClient)) {
   console.log('[postbuild] Ensuring static files exist at both dist/ and dist/client/ for Cloudflare Pages compatibility...');
   try {
-    fs.cpSync(distClient, distRoot, {
-      recursive: true,
-      force: true,
-      filter: (src) => !src.includes('node_modules'),
-    });
-    console.log('[postbuild] ✓ Successfully mirrored dist/client/ to dist/ for zero-config Cloudflare Pages deployments.');
+    const entries = fs.readdirSync(distClient);
+    for (const entry of entries) {
+      if (entry === 'client' || entry === 'server') continue;
+      const src = path.join(distClient, entry);
+      const dest = path.join(distRoot, entry);
+      fs.cpSync(src, dest, { recursive: true, force: true });
+    }
+    console.log('[postbuild] ✓ Successfully mirrored dist/client/ entries to dist/');
   } catch (err) {
-    console.warn('[postbuild] Warning copying files:', err);
+    console.warn('[postbuild] Notice during copy (safe to continue):', err);
   }
 }

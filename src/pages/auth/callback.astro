@@ -29,38 +29,50 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         const code = urlParams.get('code');
         const nextUrl = urlParams.get('next') || urlParams.get('redirect');
 
-        // Strip the one-time code before navigating
-        history.replaceState(null, '', '/auth/callback');
-        if (!code) { 
-          location.replace('/account?signin_error=1'); 
-          return; 
-        }
-
-        try {
-          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-          if (error || !data?.session) {
-            location.replace('/account?signin_error=1');
-            return;
-          }
-
-          const userEmail = data.session.user?.email;
-
-          // If specifically directed to /admin and user is an authorized admin
+        const navigateTarget = (userEmail?: string) => {
           if (nextUrl === '/admin' && isAllowedAdminEmail(userEmail)) {
             location.replace('/admin');
             return;
           }
-
           if (nextUrl && nextUrl.startsWith('/') && nextUrl !== '/account') {
             location.replace(nextUrl);
             return;
           }
-
-          // User request: after signin completed redirected to the shop page
           location.replace('/shop');
-        } catch {
-          location.replace('/account?signin_error=1');
+        };
+
+        // 1. Check if user already has an active session (e.g. auto-restored or token in hash)
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            navigateTarget(session.user.email);
+            return;
+          }
+        } catch {}
+
+        // 2. If code exists in query params, exchange it
+        if (code) {
+          try {
+            const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+            if (!error && data?.session?.user) {
+              navigateTarget(data.session.user.email);
+              return;
+            }
+          } catch (err) {
+            console.warn('CUMID: Code exchange note:', err);
+          }
         }
+
+        // 3. Re-verify session in case client processed PKCE in background
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) {
+            navigateTarget(session.user.email);
+            return;
+          }
+        } catch {}
+
+        location.replace('/account?signin_error=1');
       }
 
       handleCallback();
