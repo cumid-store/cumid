@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
+import ProductPrice from "./ProductPrice";
 export default function ProductCheckout({ productId }: { productId: string }) {
   const [product, setProduct] = useState<any>(null);
   useEffect(() => {
@@ -14,13 +15,8 @@ export default function ProductCheckout({ productId }: { productId: string }) {
   }, [productId]);
   return product ? (
     <div className="space-y-3">
-      <p>
-        {new Intl.NumberFormat("en-IN", {
-          style: "currency",
-          currency: "INR",
-        }).format(product.price_paise / 100)}{" "}
-        · Shipping shown at checkout
-      </p>
+      <ProductPrice price={product.price_paise / 100} />
+      <p className="text-xs">Shipping shown at checkout</p>
       <a
         className="btn-primary w-full"
         href={"/checkout?product=" + encodeURIComponent(productId)}

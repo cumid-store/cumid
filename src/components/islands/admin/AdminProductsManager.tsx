@@ -136,7 +136,7 @@ const BLANK_FORM: NewProductForm = {
   shortDescription: '',
   longDescription: '',
   coverImageUrl: '',
-  priceRupees: '',
+  priceRupees: '149',
   isSoldOut: true,
   isDesignPreview: true,
   availabilityStatus: 'SoldOut',

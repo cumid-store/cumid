@@ -2,6 +2,7 @@
 import type { Product } from '../types/product';
 import FavouritesButton from './islands/FavouritesButton';
 import DiaryMockup from './DiaryMockup.astro';
+import ProductPrice from './islands/ProductPrice';
 interface Props { product: Product; ctaPlacement?: string; }
 const { product } = Astro.props;
 ---
@@ -15,5 +16,6 @@ const { product } = Astro.props;
   <div class="product-meta"><span>{product.collectionName}</span><span>View availability</span></div>
   <h3><a href={`/products/${product.slug}`}>{product.name}</a></h3>
   <p>{product.tagline}</p>
+  <ProductPrice />
   <a class="product-details" href={`/products/${product.slug}`}>View cover &amp; enquire <span aria-hidden="true">↗</span></a>
 </article>

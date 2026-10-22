@@ -21,6 +21,8 @@ await build({
 const { verifyHmac, customer, links } =
   await import("../artifacts/tests/validation.mjs");
 const { handleApi } = await import("../artifacts/tests/api.mjs");
+await build({entryPoints:['src/lib/server/service-errors.ts'],outfile:'artifacts/tests/service-errors.mjs',bundle:true,platform:'node',format:'esm'});
+const {rethrowSetupError}=await import('../artifacts/tests/service-errors.mjs');
 let count = 0;
 const test = async (name, fn) => {
   await fn();
@@ -36,6 +38,11 @@ await test("Valid signature accepted; forged and changed payload rejected", asyn
     false,
   );
   assert.equal(await verifyHmac("payload", null, "test-secret"), false);
+});
+await test('Missing tables and functions produce a specific setup failure',()=>{
+ for(const code of ['PGRST205','PGRST202','42P01','42703'])assert.throws(()=>rethrowSetupError({code}),e=>e.code==='DATABASE_SETUP_REQUIRED'&&e.status===503);
+ assert.throws(()=>rethrowSetupError({code:'42501'}),e=>e.status===403&&e.code==='ACCESS_DENIED');
+ assert.throws(()=>rethrowSetupError({code:'PGRST116'}),e=>e.status===404);
 });
 const c = {
   name: "Test Buyer",

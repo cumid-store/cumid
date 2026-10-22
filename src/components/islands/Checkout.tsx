@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 import { supabase } from "../../lib/supabase";
 import { CONSENT_TEXT, TERMS_VERSION } from "../../config/commerce";
+import ProductPrice from "./ProductPrice";
 const money = (n: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(
     n / 100,
@@ -249,6 +250,10 @@ export default function Checkout() {
           {p && (
             <div className="notice">
               <strong>{p.name}</strong>
+              <ProductPrice
+                price={p.price_paise / 100}
+                mrp={p.mrp_paise ? p.mrp_paise / 100 : undefined}
+              />
               <p>{p.sale_description}</p>
               <p>Dispatch: {catalogue.settings.dispatch_note}</p>
               <p>
