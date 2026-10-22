@@ -37,40 +37,40 @@ ALTER TABLE public.favourites ENABLE ROW LEVEL SECURITY;
 
 -- 4. RLS Policies for Profiles Table
 -- Policy: Users can view only their own profile
-CREATE POLICY "Users can view own profile" 
-  ON public.profiles 
-  FOR SELECT 
+CREATE POLICY "Users can view own profile"
+  ON public.profiles
+  FOR SELECT
   USING (auth.uid() = id);
 
 -- Policy: Users can update only their own profile
-CREATE POLICY "Users can update own profile" 
-  ON public.profiles 
-  FOR UPDATE 
+CREATE POLICY "Users can update own profile"
+  ON public.profiles
+  FOR UPDATE
   USING (auth.uid() = id);
 
 -- Policy: Users can insert their own profile
-CREATE POLICY "Users can insert own profile" 
-  ON public.profiles 
-  FOR INSERT 
+CREATE POLICY "Users can insert own profile"
+  ON public.profiles
+  FOR INSERT
   WITH CHECK (auth.uid() = id);
 
 -- 5. RLS Policies for Favourites Table
 -- Policy: Users can view only their own favourites
-CREATE POLICY "Users can view own favourites" 
-  ON public.favourites 
-  FOR SELECT 
+CREATE POLICY "Users can view own favourites"
+  ON public.favourites
+  FOR SELECT
   USING (auth.uid() = user_id);
 
 -- Policy: Users can insert favourites only for their own user_id
-CREATE POLICY "Users can insert own favourites" 
-  ON public.favourites 
-  FOR INSERT 
+CREATE POLICY "Users can insert own favourites"
+  ON public.favourites
+  FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Policy: Users can delete only their own favourites
-CREATE POLICY "Users can delete own favourites" 
-  ON public.favourites 
-  FOR DELETE 
+CREATE POLICY "Users can delete own favourites"
+  ON public.favourites
+  FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 6. Trigger to automatically create a profile record upon OAuth signup
@@ -115,7 +115,7 @@ EXECUTE $step1$
 -- ==============================================================================
 
 -- 1. Upgrade profiles table with role and phone
-ALTER TABLE public.profiles 
+ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'customer' CHECK (role IN ('customer', 'admin')),
   ADD COLUMN IF NOT EXISTS phone TEXT;
 
@@ -297,95 +297,95 @@ ALTER TABLE public.admin_audit_log ENABLE ROW LEVEL SECURITY;
 
 -- Products RLS
 DROP POLICY IF EXISTS "Public can view published products" ON public.products;
-CREATE POLICY "Public can view published products" ON public.products FOR SELECT 
+CREATE POLICY "Public can view published products" ON public.products FOR SELECT
   USING (is_published = TRUE OR public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access to products" ON public.products;
-CREATE POLICY "Admin full access to products" ON public.products FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to products" ON public.products FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Product Images RLS
 DROP POLICY IF EXISTS "Public can view product images" ON public.product_images;
-CREATE POLICY "Public can view product images" ON public.product_images FOR SELECT 
+CREATE POLICY "Public can view product images" ON public.product_images FOR SELECT
   USING (TRUE);
 
 DROP POLICY IF EXISTS "Admin full access to product images" ON public.product_images;
-CREATE POLICY "Admin full access to product images" ON public.product_images FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to product images" ON public.product_images FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Batches RLS
 DROP POLICY IF EXISTS "Admin full access to batches" ON public.batches;
-CREATE POLICY "Admin full access to batches" ON public.batches FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to batches" ON public.batches FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Inventory RLS
 DROP POLICY IF EXISTS "Admin full access to inventory" ON public.inventory;
-CREATE POLICY "Admin full access to inventory" ON public.inventory FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to inventory" ON public.inventory FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Enquiries RLS: Public can submit preorders; Admin can manage all
 DROP POLICY IF EXISTS "Public can submit enquiries" ON public.enquiries;
-CREATE POLICY "Public can submit enquiries" ON public.enquiries FOR INSERT 
+CREATE POLICY "Public can submit enquiries" ON public.enquiries FOR INSERT
   WITH CHECK (TRUE);
 
 DROP POLICY IF EXISTS "Admin can view and update enquiries" ON public.enquiries;
-CREATE POLICY "Admin can view and update enquiries" ON public.enquiries FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin can view and update enquiries" ON public.enquiries FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Orders RLS: Customers can view only their own orders; Admin can manage all
 DROP POLICY IF EXISTS "Customers can view own orders" ON public.orders;
-CREATE POLICY "Customers can view own orders" ON public.orders FOR SELECT 
+CREATE POLICY "Customers can view own orders" ON public.orders FOR SELECT
   USING (auth.uid() = user_id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Admin full access to orders" ON public.orders;
-CREATE POLICY "Admin full access to orders" ON public.orders FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to orders" ON public.orders FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Order Items RLS
 DROP POLICY IF EXISTS "Customers can view items of own orders" ON public.order_items;
-CREATE POLICY "Customers can view items of own orders" ON public.order_items FOR SELECT 
+CREATE POLICY "Customers can view items of own orders" ON public.order_items FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM public.orders 
-      WHERE orders.id = order_items.order_id 
+      SELECT 1 FROM public.orders
+      WHERE orders.id = order_items.order_id
         AND (orders.user_id = auth.uid() OR public.is_admin())
     )
   );
 
 DROP POLICY IF EXISTS "Admin full access to order items" ON public.order_items;
-CREATE POLICY "Admin full access to order items" ON public.order_items FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to order items" ON public.order_items FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Order Events RLS
 DROP POLICY IF EXISTS "Customers can view events of own orders" ON public.order_events;
-CREATE POLICY "Customers can view events of own orders" ON public.order_events FOR SELECT 
+CREATE POLICY "Customers can view events of own orders" ON public.order_events FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM public.orders 
-      WHERE orders.id = order_events.order_id 
+      SELECT 1 FROM public.orders
+      WHERE orders.id = order_events.order_id
         AND (orders.user_id = auth.uid() OR public.is_admin())
     )
   );
 
 DROP POLICY IF EXISTS "Admin full access to order events" ON public.order_events;
-CREATE POLICY "Admin full access to order events" ON public.order_events FOR ALL 
-  USING (public.is_admin()) 
+CREATE POLICY "Admin full access to order events" ON public.order_events FOR ALL
+  USING (public.is_admin())
   WITH CHECK (public.is_admin());
 
 -- Admin Audit Log RLS
 DROP POLICY IF EXISTS "Admin can view audit logs" ON public.admin_audit_log;
-CREATE POLICY "Admin can view audit logs" ON public.admin_audit_log FOR SELECT 
+CREATE POLICY "Admin can view audit logs" ON public.admin_audit_log FOR SELECT
   USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Admin can insert audit logs" ON public.admin_audit_log;
-CREATE POLICY "Admin can insert audit logs" ON public.admin_audit_log FOR INSERT 
+CREATE POLICY "Admin can insert audit logs" ON public.admin_audit_log FOR INSERT
   WITH CHECK (public.is_admin());
 
 -- ==============================================================================

@@ -27,5 +27,5 @@ const steps = [
   ],
 ];
 const sql = `-- CUMID: complete missing Supabase setup. Run in the owner's Supabase SQL Editor.\n-- Adds missing modules, preserves existing order/payment snapshots, and sets diary price to Rs 149.\n-- Checkout stays disabled by default. No credentials are embedded. Safe to run again.\nBEGIN;\nDO $repair$ BEGIN\n${steps.map(([condition, source], i) => `IF ${condition} THEN\nEXECUTE $step${i}$\n${source}\n$step${i}$;\nEND IF;`).join("\n")}\nEND $repair$;\n${await read("20261022020000_diary_pricing.sql")}\nCOMMIT;\nNOTIFY pgrst, 'reload schema';\n`;
-await fs.writeFile("supabase/REPAIR_MISSING_SETUP.sql", sql);
+await fs.writeFile("supabase/REPAIR_MISSING_SETUP.sql", sql.replace(/[\t ]+$/gm,''));
 console.log("Created supabase/REPAIR_MISSING_SETUP.sql");
