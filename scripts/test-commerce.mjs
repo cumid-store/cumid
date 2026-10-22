@@ -71,6 +71,7 @@ await test("Dangerous and excessive links rejected", () => {
 });
 const env = {
   PUBLIC_SUPABASE_URL: "https://test.supabase.co",
+  PUBLIC_SUPABASE_ANON_KEY: "test-public-key",
   SUPABASE_SERVICE_ROLE_KEY: "test-service-key",
   PUBLIC_SITE_URL: "https://cumid.store",
   RAZORPAY_WEBHOOK_SECRET: "test-secret",

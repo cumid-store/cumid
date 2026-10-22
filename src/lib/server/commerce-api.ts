@@ -71,6 +71,19 @@ function database(env: Env) {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
+function candidateDatabase(env: Env, request: Request) {
+  if (!env.PUBLIC_SUPABASE_URL || !env.PUBLIC_SUPABASE_ANON_KEY)
+    throw new RequestError(
+      "Applications are temporarily unavailable. Please try again later.",
+      503,
+    );
+  return createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      headers: { Authorization: request.headers.get("authorization") || "" },
+    },
+  });
+}
 async function gateway(env: Env, path: string, payload?: unknown) {
   if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET)
     throw new RequestError("Payments are not open yet.", 503);
@@ -139,7 +152,12 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
       if (!origin || (origin !== allowed && origin !== url.origin))
         throw new RequestError("Request origin is not allowed.", 403);
     }
-    const db = database(env);
+    const candidateRoute = [
+      "careers/applications",
+      "careers/submissions",
+      "admin/careers",
+    ].includes(route);
+    const db = candidateRoute ? candidateDatabase(env, request) : database(env);
     if (route === "payments/webhook" && request.method === "POST") {
       const raw = new TextDecoder().decode(await bounded(request, 128000));
       if (
@@ -349,18 +367,20 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
       return json({ success: true });
     }
     if (route === "careers/applications" && request.method === "GET") {
-      return json(
-        check(
+      return json({
+        serverNow: new Date().toISOString(),
+        uploadsEnabled: Boolean(env.SUPABASE_SERVICE_ROLE_KEY),
+        applications: check(
           await db
             .from("career_applications")
             .select(
-              "id,name,role,status,created_at,career_submissions(id,title,notes,links,created_at,career_files(id,name,size,state))",
+              "id,name,role,status,created_at,task_opens_at,task_deadline,task_brief,career_submissions(id,title,notes,links,created_at,career_files(id,name,size,state))",
             )
             .eq("user_id", user.id)
             .order("created_at", { ascending: false })
             .limit(20),
         ),
-      );
+      });
     }
     if (route === "careers/applications" && request.method === "POST") {
       const input = await body(request);
@@ -368,25 +388,19 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         throw new RequestError(
           "Choose a role and accept the recruitment privacy notice.",
         );
-      const result = await db
-        .from("career_applications")
-        .insert({
-          user_id: user.id,
-          name: text(input.name, "name"),
-          email: user.email,
-          role: input.role,
-          introduction: text(input.introduction, "introduction", 2000),
-          links: links(input.links),
-          privacy_version: TERMS_VERSION,
-        })
-        .select("id,role,status")
-        .single();
-      if (result.error?.code === "23505")
+      const result = await db.rpc("apply_for_career", {
+        p_name: text(input.name, "name"),
+        p_role: input.role,
+        p_introduction: text(input.introduction, "introduction", 2000),
+        p_links: links(input.links),
+        p_version: TERMS_VERSION,
+      });
+      if (result.error)
         throw new RequestError(
-          "You have already applied for this role. Open the task portal to add work.",
-          409,
+          "We could not confirm your application. Your entries are still here. Check My applications before retrying, or contact support@cumid.store.",
+          503,
         );
-      return json(check(result), 201);
+      return json(check(result), result.data.created ? 201 : 200);
     }
     if (route === "careers/submissions" && request.method === "POST") {
       const input = await body(request);
@@ -408,7 +422,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
       });
       if (result.error)
         throw new RequestError(
-          "Could not add this submission. The maximum is 10 submissions per application.",
+          "Task submission is unavailable. Check your round opening time and deadline, and the limit of 10 submissions per application.",
           409,
         );
       return json(result.data, 201);
@@ -579,12 +593,30 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
           ].includes(input.status)
         )
           throw new RequestError("Invalid status.");
-        check(
-          await db
-            .from("career_applications")
-            .update({ status: input.status })
-            .eq("id", uuid(input.id)),
-        );
+        const window = input.round;
+        if (
+          window &&
+          (!Number.isFinite(Date.parse(window.opensAt)) ||
+            !Number.isFinite(Date.parse(window.deadline)) ||
+            Date.parse(window.deadline) <= Date.parse(window.opensAt) ||
+            Date.parse(window.deadline) <= Date.now())
+        )
+          throw new RequestError(
+            "Choose a valid opening time and a future deadline.",
+          );
+        const result = await db.rpc("manage_career_round", {
+          p_application: uuid(input.id),
+          p_status: input.status,
+          p_open: window?.opensAt || null,
+          p_deadline: window?.deadline || null,
+          p_brief: window ? text(window.brief, "task brief", 4000) : null,
+          p_update_window: Boolean(window),
+        });
+        if (result.error)
+          throw new RequestError(
+            "Could not save this round. Check the dates, task brief and your administrator access.",
+            409,
+          );
         return json({ saved: true });
       }
       if (route === "admin/file" && request.method === "GET") {

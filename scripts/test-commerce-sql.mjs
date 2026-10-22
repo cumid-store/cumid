@@ -2,14 +2,15 @@ import { PGlite } from "../artifacts/sql-test/node_modules/@electric-sql/pglite/
 import fs from "node:fs/promises";
 import assert from "node:assert/strict";
 const db = new PGlite();
-await db.exec(`CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role BYPASSRLS; CREATE SCHEMA auth; CREATE SCHEMA storage;
+const bootstrapSchema = `CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role BYPASSRLS; CREATE SCHEMA auth; CREATE SCHEMA storage;
 CREATE TABLE auth.users(id uuid PRIMARY KEY,email text,raw_user_meta_data jsonb DEFAULT '{}');
 CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql AS $$ SELECT nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
-CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$ SELECT current_user::text $$;
+CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$ SELECT coalesce(nullif(current_setting('request.jwt.claim.role',true),''),'service_role') $$;
 CREATE TABLE storage.buckets(id text PRIMARY KEY,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
 CREATE TABLE storage.objects(id uuid DEFAULT gen_random_uuid(),bucket_id text,name text,metadata jsonb DEFAULT '{}');
 GRANT USAGE ON SCHEMA public,auth TO authenticated,service_role;
-`);
+`;
+await db.exec(bootstrapSchema);
 for (const f of (await fs.readdir("supabase/migrations")).sort())
   await db.exec(await fs.readFile("supabase/migrations/" + f, "utf8"));
 const uid = "11111111-1111-4111-8111-111111111111",
@@ -135,6 +136,10 @@ const app = (
     [uid],
   )
 ).rows[0].id;
+await db.query(
+  "UPDATE career_applications SET status='task_sent',task_opens_at=now()-interval '1 hour',task_deadline=now()+interval '1 hour' WHERE id=$1",
+  [app],
+);
 const sub = (
   await db.query(
     "SELECT (create_career_submission($1,$2,'Test task','','[]')).id",
@@ -167,6 +172,133 @@ await test("File size and aggregate quota enforced in database", async () => {
   await assert.rejects(
     db.query("SELECT reserve_career_file($1,$2,'extra.bin',1)", [uid, sub]),
   );
+});
+await test("Deadline closes new task submissions and file reservations", async () => {
+  await db.query(
+    "UPDATE career_applications SET task_deadline=now()-interval '1 second' WHERE id=$1",
+    [app],
+  );
+  await assert.rejects(
+    db.query("SELECT create_career_submission($1,$2,'Late','','[]')", [
+      uid,
+      app,
+    ]),
+  );
+  await assert.rejects(
+    db.query("SELECT reserve_career_file($1,$2,'late.txt',1)", [uid, sub]),
+  );
+});
+await test("Scheduled task cannot be submitted before opening", async () => {
+  await db.query(
+    "UPDATE career_applications SET task_opens_at=now()+interval '1 hour',task_deadline=now()+interval '2 hours' WHERE id=$1",
+    [app],
+  );
+  await assert.rejects(
+    db.query("SELECT create_career_submission($1,$2,'Early','','[]')", [
+      uid,
+      app,
+    ]),
+  );
+});
+await db.exec(
+  `SET ROLE authenticated; SET request.jwt.claim.role='authenticated'; SET request.jwt.claim.sub='${uid}';`,
+);
+let applied;
+await test("Signed-in application saves and retry returns the same reference", async () => {
+  const q =
+    "SELECT apply_for_career('Candidate','Other','Introduction','[]','test') AS app";
+  applied = (await db.query(q)).rows[0].app;
+  const retry = (await db.query(q)).rows[0].app;
+  assert.equal(applied.created, true);
+  assert.equal(retry.created, false);
+  assert.equal(applied.id, retry.id);
+});
+await test("Candidate can see saved applications with RLS", async () => {
+  const rows = (
+    await db.query("SELECT id FROM career_applications WHERE id=$1", [
+      applied.id,
+    ])
+  ).rows;
+  assert.equal(rows.length, 1);
+});
+await test("Candidate cannot open their own round or forge a different user", async () => {
+  await assert.rejects(
+    db.query(
+      "SELECT manage_career_round($1,'task_sent',now(),now()+interval '1 day','Task',true)",
+      [applied.id],
+    ),
+  );
+  await assert.rejects(
+    db.query("SELECT create_career_submission($1,$2,'Spoof','','[]')", [
+      other,
+      app,
+    ]),
+  );
+});
+await db.exec(`SET request.jwt.claim.sub='${other}';`);
+await test("Other candidates cannot read an application or its history", async () => {
+  assert.equal(
+    (
+      await db.query("SELECT id FROM career_applications WHERE id=$1", [
+        applied.id,
+      ])
+    ).rows.length,
+    0,
+  );
+  assert.equal(
+    (
+      await db.query(
+        "SELECT id FROM career_submissions WHERE application_id=$1",
+        [app],
+      )
+    ).rows.length,
+    0,
+  );
+});
+await db.exec("RESET ROLE");
+await test("Owner can assign an open round and close it again", async () => {
+  await db.query("UPDATE profiles SET role='admin' WHERE id=$1", [other]);
+  await db.exec("SET ROLE authenticated");
+  await db.query(
+    "SELECT manage_career_round($1,'task_sent',now()-interval '1 minute',now()+interval '1 hour','Draw a cover',true)",
+    [applied.id],
+  );
+  assert.equal(
+    (
+      await db.query("SELECT status FROM career_applications WHERE id=$1", [
+        applied.id,
+      ])
+    ).rows[0].status,
+    "task_sent",
+  );
+  await db.query("SELECT manage_career_round($1,'closed')", [applied.id]);
+  assert.equal(
+    (
+      await db.query("SELECT status FROM career_applications WHERE id=$1", [
+        applied.id,
+      ])
+    ).rows[0].status,
+    "closed",
+  );
+  await db.exec("RESET ROLE");
+});
+await test("Combined careers-only setup works with missing recruitment tables", async () => {
+  const fresh = new PGlite();
+  await fresh.exec(bootstrapSchema);
+  for (const f of (await fs.readdir("supabase/migrations"))
+    .sort()
+    .filter((f) => f < "20261022000000"))
+    await fresh.exec(await fs.readFile("supabase/migrations/" + f, "utf8"));
+  await fresh.exec(await fs.readFile("supabase/CAREERS_SETUP.sql", "utf8"));
+  assert.equal(
+    (
+      await fresh.query(
+        "SELECT count(*)::int AS n FROM information_schema.columns WHERE table_name='career_applications' AND column_name='task_deadline'",
+      )
+    ).rows[0].n,
+    1,
+  );
+  await fresh.close();
 });
 console.log(`${tests} database transaction and permission tests passed.`);
 await db.close();
