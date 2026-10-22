@@ -95,7 +95,7 @@ interface EditableProduct {
   longDescription: string;
   coverImageUrl: string;
   isDesignPreview: boolean;
-  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly';
+  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly' | 'PreOrder';
   whatsappEnquiryEnabled: boolean;
   seoTitle: string;
   seoDescription: string;
@@ -114,7 +114,7 @@ interface NewProductForm {
   priceRupees: string;
   isSoldOut: boolean;
   isDesignPreview: boolean;
-  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly';
+  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly' | 'PreOrder';
   whatsappEnquiryEnabled: boolean;
   seoTitle: string;
   seoDescription: string;
@@ -728,10 +728,11 @@ export const AdminProductsManager: React.FC = () => {
                 <Field label="Availability Status">
                   <select
                     value={form.availabilityStatus}
-                    onChange={(e) => setField('availabilityStatus', e.target.value as 'SoldOut' | 'PreOrderEnquiryOnly')}
+                    onChange={(e) => setField('availabilityStatus', e.target.value as 'SoldOut' | 'PreOrderEnquiryOnly' | 'PreOrder')}
                     className={inputCls()}
                   >
                     <option value="SoldOut">Sold Out</option>
+                    <option value="PreOrder">Preorder open</option>
                     <option value="PreOrderEnquiryOnly">Pre-Order Enquiry Only</option>
                   </select>
                 </Field>
@@ -892,7 +893,7 @@ export const AdminProductsManager: React.FC = () => {
                         }`}
                         title="Click to toggle availability"
                       >
-                        {prod.isSoldOut ? 'Sold Out' : 'Ready Stock'}
+                        {prod.isSoldOut ? 'Sold Out' : 'Preorders open'}
                       </button>
 
                       <button

@@ -3,6 +3,7 @@ import { api } from "../../lib/api";
 import { supabase } from "../../lib/supabase";
 import { CONSENT_TEXT, TERMS_VERSION } from "../../config/commerce";
 import ProductPrice from "./ProductPrice";
+import PreorderForm from './PreorderForm';
 const money = (n: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(
     n / 100,
@@ -181,19 +182,7 @@ export default function Checkout() {
           <p>Order reference: {orderId}</p>
         </div>
       )}
-      {!catalogue && !error && <p>Loading checkout…</p>}
-      {catalogue && !catalogue.ready && (
-        <div className="notice">
-          <h2>Online checkout is opening soon.</h2>
-          <p>
-            We are finalising payment setup and delivery details. You can still
-            enquire about a diary.
-          </p>
-          <a className="btn-primary" href="https://wa.me/919201871597">
-            Enquire on WhatsApp
-          </a>
-        </div>
-      )}
+      {!catalogue?.ready && !orderId && <PreorderForm />}
       {catalogue?.ready && !signedIn && (
         <p className="notice">
           <a
@@ -255,7 +244,7 @@ export default function Checkout() {
                 mrp={p.mrp_paise ? p.mrp_paise / 100 : undefined}
               />
               <p>{p.sale_description}</p>
-              <p>Dispatch: {catalogue.settings.dispatch_note}</p>
+              <p>Delivery: {catalogue.settings.dispatch_note}</p>
               <p>
                 Diaries: {money(p.price_paise * quantity)} · Shipping:{" "}
                 {money(catalogue.settings.shipping_paise)}

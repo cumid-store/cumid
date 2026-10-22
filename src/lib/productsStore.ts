@@ -17,7 +17,7 @@ export interface EditableProduct {
   longDescription: string;
   coverImageUrl: string;
   isDesignPreview: boolean;
-  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly';
+  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly' | 'PreOrder';
   whatsappEnquiryEnabled: boolean;
   seoTitle: string;
   seoDescription: string;

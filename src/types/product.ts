@@ -1,7 +1,7 @@
 /**
  * CUMID Store — Product Type Definition
  * Adheres strictly to the verified business model:
- * - All products sold out at launch
+ * - Made-to-order availability is distinct from ready stock
  * - Nullable confirmed price
  * - Design preview flag
  * - Strictly confirmed specs (unknown specifications are omitted, never guessed)
@@ -40,8 +40,8 @@ export interface Product {
   confirmedSpecs: ConfirmedSpecifications;
   price: number | null; // Nullable; null means "Pricing will be confirmed on WhatsApp"
   currency: 'INR';
-  isSoldOut: boolean; // Currently true for all products
-  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly';
+  isSoldOut: boolean; // True only when preorders are unavailable
+  availabilityStatus: 'SoldOut' | 'PreOrderEnquiryOnly' | 'PreOrder';
   whatsappEnquiryEnabled: boolean;
   seoTitle: string;
   seoDescription: string;

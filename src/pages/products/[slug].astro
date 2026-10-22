@@ -118,7 +118,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
         <div class="py-5 border-y border-charcoal-800/15 space-y-2">
           <div class="flex items-center justify-between text-sm">
             <span class="text-charcoal-700 font-medium">Availability:</span>
-            <span class="text-[11px]">Check ordering options below</span>
+            <span class="text-[11px]">{product.isSoldOut ? 'Unavailable' : 'Preorders open · Made to order'}</span>
           </div>
           <div class="flex items-center justify-between text-sm pt-1 border-t border-charcoal-800/5">
             <span class="text-charcoal-700 font-medium">Price:</span>
@@ -130,7 +130,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
         <div class="p-4 rounded-sm bg-ivory-200 border-l border-charcoal-800/20 text-sm text-charcoal-700 leading-relaxed space-y-1">
           <p class="font-semibold text-charcoal-900">Preorder Notice:</p>
           <p>
-            Review the confirmed specifications and dispatch estimate before ordering. If online checkout is unavailable, enquire about the next batch. An enquiry does not reserve stock.
+            ₹149 per diary + ₹50 shipping per order. One diary totals ₹199. Delivery within 14 days of payment confirmation, including manufacturing and shipping. Confirm your PIN code and final specifications with us before payment.
           </p>
         </div>
 
@@ -142,6 +142,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
             product={product}
             ctaPlacement="product_detail"
             showFallbackCopy={true}
+            showQuantity={false}
           />
 
           <FavouritesButton

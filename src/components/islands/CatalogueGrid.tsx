@@ -105,7 +105,7 @@ export const CatalogueGrid: React.FC<Props> = ({
                 {product.collectionName}
               </span>
               <span className="badge-sold-out">
-                View availability
+                {product.isSoldOut ? 'Unavailable' : 'Preorders open'}
               </span>
             </div>
 
@@ -114,8 +114,9 @@ export const CatalogueGrid: React.FC<Props> = ({
             </h3>
             <p>{product.tagline}</p>
             <ProductPrice />
+            <p className="text-xs">₹50 shipping per order · 14-day delivery after payment confirmation</p>
             <a className="product-details" href={`/products/${product.slug}`}>
-              View cover &amp; enquire <span aria-hidden="true">↗</span>
+              View diary &amp; preorder <span aria-hidden="true">↗</span>
             </a>
           </article>
         );

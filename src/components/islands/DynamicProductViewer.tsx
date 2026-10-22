@@ -137,7 +137,7 @@ export const DynamicProductViewer: React.FC = () => {
             <div className="flex items-center justify-between text-sm">
               <span className="text-charcoal-700 font-medium">Availability:</span>
               <span className={product.isSoldOut ? 'badge-sold-out text-[11px]' : 'text-[11px] font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full'}>
-                {product.isSoldOut ? 'Currently Sold Out' : 'Ready Stock'}
+                {product.isSoldOut ? 'Currently Sold Out' : 'Preorders open'}
               </span>
             </div>
             <div className="flex items-center justify-between text-sm pt-1 border-t border-charcoal-800/5">
@@ -151,7 +151,7 @@ export const DynamicProductViewer: React.FC = () => {
           <div className="p-4 rounded-sm bg-ivory-200 border-l border-charcoal-800/20 text-sm text-charcoal-700 leading-relaxed space-y-1">
             <p className="font-semibold text-charcoal-900">Preorder Notice:</p>
             <p>
-              Send an enquiry for the next batch. An enquiry does not reserve stock or confirm an order.
+              ₹149 per diary + ₹50 shipping per order. Delivery within 14 days of payment confirmation. Send your preorder on WhatsApp; an order is confirmed after payment verification.
             </p>
           </div>
 
