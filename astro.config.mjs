@@ -7,7 +7,8 @@ import cloudflare from '@astrojs/cloudflare';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://cumid.store',
-  adapter: cloudflare(),
+  adapter: cloudflare({ imageService: 'passthrough' }),
+  session: false,
   outDir: process.env.CUMID_E2E === '1' ? './dist-e2e' : './dist',
   trailingSlash: 'never',
   server: { host: true, port: 4321 },

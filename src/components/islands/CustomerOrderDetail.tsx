@@ -105,6 +105,7 @@ export const CustomerOrderDetail: React.FC<Props> = ({ orderId }) => {
 
   return (
     <div className="space-y-8">
+      {order.paymentStatus && <div className="p-4 border border-charcoal-800/10 space-y-2"><p>Payment: {order.paymentStatus.replaceAll('_', ' ')}</p>{order.dispatchSnapshot && <p>Agreed dispatch: {order.dispatchSnapshot}</p>}{order.saleSnapshot && <p>{order.saleSnapshot}</p>}<a href={'/checkout?order='+order.id} className="underline">Check payment status</a></div>}
       {/* Top Bar with back link */}
       <div className="flex items-center justify-between pb-4 border-b border-charcoal-800/10">
         <a href="/account/orders" className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-700 hover:text-charcoal-900 transition-colors">

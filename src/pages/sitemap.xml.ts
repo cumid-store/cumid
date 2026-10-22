@@ -12,6 +12,7 @@ export const GET: APIRoute = async () => {
     '/how-preorders-work',
     '/faq',
     '/contact',
+    '/careers',
     '/journal',
     '/privacy',
     '/terms',

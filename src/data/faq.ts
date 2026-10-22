@@ -9,8 +9,8 @@ export const FAQ_ITEMS: FAQItem[] = [
   {
     id: 'why-sold-out',
     category: 'preorders',
-    question: 'Why are all pocket diaries marked as sold out?',
-    answer: 'No ready stock is available. These are proposed cover designs for our first batch. You can enquire on WhatsApp about confirmed specifications, pricing and future availability. A sold-out label here does not imply that a previous batch has already sold.',
+    question: 'How can I check which diaries are available?',
+    answer: 'Open a cover page for ordering options. Online ordering appears only when its price, specifications and batch allocation are confirmed. Otherwise you can enquire on WhatsApp. Design previews are not proof of ready stock.',
   },
   {
     id: 'how-enquiry-works',
@@ -28,7 +28,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     id: 'online-payments',
     category: 'payments',
     question: 'Can I pay online through this website?',
-    answer: 'No. This website does not collect payments. There are no credit/debit card forms, UPI links, or checkout gateways here. When a batch is ready for confirmed booking, payment instructions will be verified directly via our official WhatsApp channel.',
+    answer: 'When online checkout is open for a diary, you can pay through Razorpay after reviewing the full price, delivery details and purchase terms. If checkout is not open, use WhatsApp to enquire. Never share a UPI PIN or OTP with CUMID. An order is confirmed only after payment verification.',
   },
   {
     id: 'product-format',

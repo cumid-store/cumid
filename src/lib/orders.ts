@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 import type { Order, OrderStatus } from '../types/order';
+import { api } from './api';
 
 const LOCAL_DEMO_ORDERS_KEY = 'cumid_demo_orders_v1';
 
@@ -95,7 +96,7 @@ function saveLocalOrders(orders: Order[]): void {
  */
 export async function getCustomerOrders(userId?: string): Promise<Order[]> {
   if (!isSupabaseConfigured || !supabase || !userId) {
-    return getLocalOrders();
+    return [];
   }
 
   try {
@@ -115,7 +116,7 @@ export async function getCustomerOrders(userId?: string): Promise<Order[]> {
     return data.map(mapDbOrderToModel);
   } catch (err) {
     console.warn('Supabase getCustomerOrders fallback note:', err);
-    return getLocalOrders();
+    throw new Error('Orders could not be loaded. Please try again.');
   }
 }
 
@@ -124,8 +125,7 @@ export async function getCustomerOrders(userId?: string): Promise<Order[]> {
  */
 export async function getOrderById(orderId: string): Promise<Order | null> {
   if (!isSupabaseConfigured || !supabase) {
-    const local = getLocalOrders();
-    return local.find((o) => o.id === orderId || o.orderNumber === orderId) || null;
+    return null;
   }
 
   try {
@@ -136,15 +136,14 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
         items:order_items(*),
         events:order_events(*)
       `)
-      .or(`id.eq.${orderId},order_number.eq.${orderId}`)
+      .eq(/^[\da-f]{8}-[\da-f-]{27}$/i.test(orderId) ? 'id' : 'order_number', orderId)
       .single();
 
     if (error) throw error;
     return mapDbOrderToModel(data);
   } catch (err) {
     console.warn('Supabase getOrderById fallback note:', err);
-    const local = getLocalOrders();
-    return local.find((o) => o.id === orderId || o.orderNumber === orderId) || null;
+    return null;
   }
 }
 
@@ -394,50 +393,9 @@ export async function updateOrderTracking(
 /**
  * Customer: Request order cancellation or help
  */
-export async function requestOrderCancellation(
-  orderId: string,
-  reason: string
-): Promise<{ success: boolean; error?: string }> {
-  if (!isSupabaseConfigured || !supabase) {
-    const orders = getLocalOrders();
-    const idx = orders.findIndex((o) => o.id === orderId);
-    if (idx !== -1) {
-      orders[idx].cancellationReason = reason;
-      orders[idx].events = orders[idx].events || [];
-      orders[idx].events.push({
-        id: `ev-${Date.now()}`,
-        orderId,
-        eventType: 'cancellation_requested',
-        description: `Customer requested cancellation: ${reason}`,
-        createdAt: new Date().toISOString(),
-      });
-      saveLocalOrders(orders);
-      return { success: true };
-    }
-    return { success: false, error: 'Order not found.' };
-  }
-
-  try {
-    const { error } = await supabase
-      .from('orders')
-      .update({
-        cancellation_reason: reason,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', orderId);
-
-    if (error) throw error;
-
-    await supabase.from('order_events').insert({
-      order_id: orderId,
-      event_type: 'cancellation_requested',
-      description: `Customer requested cancellation: ${reason}`,
-    });
-
-    return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Could not submit cancellation request.' };
-  }
+export async function requestOrderCancellation(orderId: string, reason: string): Promise<{ success: boolean; error?: string }> {
+  try { await api('orders/cancellation', { orderId, reason }); return { success: true }; }
+  catch (error: any) { return { success: false, error: error.message || 'Could not record cancellation request.' }; }
 }
 
 function mapDbOrderToModel(data: any): Order {
@@ -450,6 +408,9 @@ function mapDbOrderToModel(data: any): Order {
     customerEmail: data.customer_email,
     shippingAddress: data.shipping_address,
     status: data.status,
+    paymentStatus: data.payment_status,
+    dispatchSnapshot: data.dispatch_snapshot,
+    saleSnapshot: data.sale_snapshot,
     subtotalPaise: Number(data.subtotal_paise || 0),
     shippingPaise: Number(data.shipping_paise || 0),
     totalPaise: Number(data.total_paise || 0),

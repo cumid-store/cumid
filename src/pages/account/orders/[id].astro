@@ -4,12 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import CustomerOrderDetail from '../../../components/islands/CustomerOrderDetail';
 import { SITE } from '../../../config/site';
 
-export function getStaticPaths() {
-  return [
-    { params: { id: 'demo-ord-001' } },
-    { params: { id: 'CMD-2026-0042' } },
-  ];
-}
+export const prerender = false;
 
 const { id } = Astro.params;
 

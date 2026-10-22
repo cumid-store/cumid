@@ -13,7 +13,6 @@ interface Props {
 export const CatalogueGrid: React.FC<Props> = ({
   initialProducts,
   collectionSlug,
-  collectionName,
   isFeatured = false,
 }) => {
   const [products, setProducts] = useState<Product[]>(() => {
@@ -103,10 +102,9 @@ export const CatalogueGrid: React.FC<Props> = ({
             <div className="product-meta">
               <span>
                 {product.collectionName}
-                {product.price ? ` • ₹${product.price}` : ''}
               </span>
               <span className="badge-sold-out">
-                {product.isSoldOut ? 'Sold Out' : 'Ready Stock'}
+                View availability
               </span>
             </div>
 

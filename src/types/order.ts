@@ -46,6 +46,9 @@ export interface Order {
   customerEmail?: string | null;
   shippingAddress?: ShippingAddress | null;
   status: OrderStatus;
+  paymentStatus?: string;
+  dispatchSnapshot?: string;
+  saleSnapshot?: string;
   subtotalPaise: number;
   shippingPaise: number;
   totalPaise: number;

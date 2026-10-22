@@ -75,7 +75,7 @@ export const AccountView: React.FC = () => {
     setErrorMsg(null);
     try {
       const targetParam = urlParams.get('redirect');
-      const nextTarget = isRedirectFromAdmin ? '/admin' : (targetParam && targetParam.startsWith('/') && targetParam !== '/account' ? targetParam : '/shop');
+      const nextTarget = isRedirectFromAdmin ? '/admin' : (targetParam && /^\/(?!\/)/.test(targetParam) && !targetParam.includes('\\') && targetParam !== '/account' ? targetParam : '/shop');
       const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextTarget)}`;
 
       const { error } = await supabase.auth.signInWithOAuth({
