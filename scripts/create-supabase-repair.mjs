@@ -6,6 +6,7 @@ const read = async (name) =>
     "",
   );
 const initial = await read("20261017000000_cumid_init.sql");
+const accountHardening = await read("20261017010000_harden_account_functions.sql");
 const store = await read("20261017000001_store_management.sql");
 const checkout = await read("20261022000000_checkout_careers.sql");
 const split = checkout.indexOf("CREATE TABLE public.career_applications");
@@ -27,5 +28,17 @@ const steps = [
   ],
 ];
 const sql = `-- CUMID: complete missing Supabase setup. Run in the owner's Supabase SQL Editor.\n-- Adds missing modules, preserves existing order/payment snapshots, and sets diary price to Rs 149.\n-- Checkout stays disabled by default. No credentials are embedded. Safe to run again.\nBEGIN;\nDO $repair$ BEGIN\n${steps.map(([condition, source], i) => `IF ${condition} THEN\nEXECUTE $step${i}$\n${source}\n$step${i}$;\nEND IF;`).join("\n")}\nEND $repair$;\n${await read("20261022020000_diary_pricing.sql")}\nCOMMIT;\nNOTIFY pgrst, 'reload schema';\n`;
-await fs.writeFile("supabase/REPAIR_MISSING_SETUP.sql", sql.replace(/[\t ]+$/gm,''));
+// Existing projects need account hardening too. Reapply the column grants last:
+// the older account migration grants table-wide UPDATE, which must not expose role.
+const hardenedSql = sql.replace("END $repair$;", () => `END $repair$;
+${accountHardening}
+REVOKE INSERT, UPDATE ON public.profiles FROM authenticated;
+GRANT UPDATE (display_name, avatar_url, phone, updated_at) ON public.profiles TO authenticated;
+ALTER FUNCTION public.is_admin() SET search_path = '';
+DO $secure$ BEGIN
+IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+ REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon, authenticated;
+END IF;
+END $secure$;`);
+await fs.writeFile("supabase/REPAIR_MISSING_SETUP.sql", hardenedSql.replace(/[\t ]+$/gm,''));
 console.log("Created supabase/REPAIR_MISSING_SETUP.sql");
