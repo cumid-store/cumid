@@ -1,57 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { SITE } from '../config/site';
-
-const breadcrumbs = [
-  { label: 'Returns & Cancellations', href: '/returns-cancellations' },
-];
+import { TERMS_VERSION } from '../config/commerce';
 ---
-
-<BaseLayout
-  title="Returns & Cancellations Policy | CUMID Stationery"
-  description="Returns, damaged item replacement, and preorder cancellation policy for CUMID pocket diaries."
-  canonicalUrl={`${SITE.canonicalUrl}/returns-cancellations`}
->
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-    <Breadcrumbs items={breadcrumbs} />
-
-    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
-      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
-        Customer Protection
-      </span>
-      <h1 class="text-3xl sm:text-4xl font-semibold text-charcoal-900 tracking-tight">
-        Returns &amp; Cancellations
-      </h1>
-      <p class="text-xs text-charcoal-700/70">
-        Market: India · Last Meaningful Update: October 15, 2026
-      </p>
-    </header>
-
-    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
-      
-      <!-- Current Status -->
-      <div class="p-4 rounded-sm bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
-        <strong class="font-bold text-charcoal-900 block">Enquiry-Only Status:</strong>
-        <p>
-          All designs are currently sold out. This website accepts enquiries and does not collect payments. Sending an enquiry creates no order or financial commitment. For any existing order or payment concern, please contact us on WhatsApp.
-        </p>
-      </div>
-
-      <h2 class="text-xl font-bold text-charcoal-900">1. Preorder Cancellations</h2>
-      <p>
-        An enquiry sent via WhatsApp carries no financial commitment. You are under no obligation to finalize an order. If you decide not to proceed with a preorder after discussing batch timelines, simply inform us on WhatsApp.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">2. Future Confirmed Orders</h2>
-      <p>Before you place an order, we will share the confirmed specifications, total price, dispatch estimate and applicable cancellation, return and refund terms. Those terms are not yet finalised for the proposed first batch.</p>
-      <p>If you have a concern about a confirmed purchase, contact us with your order reference. This page does not limit any applicable consumer rights.</p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">3. Support Channel</h2>
-      <p>
-        For any questions regarding cancellations or quality concerns, reach out directly to our customer support desk on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong>.
-      </p>
-
-    </div>
-  </div>
-</BaseLayout>
+<BaseLayout title="Returns & Cancellations | CUMID" description="Returns & Cancellations for CUMID diary purchases and services."><article class="max-w-3xl mx-auto px-5 py-12 space-y-7"><header><h1 class="text-4xl mb-4">Returns & Cancellations</h1><p class="text-sm">Effective 22 October 2026 · Version {TERMS_VERSION} · India</p></header>
+<section class="space-y-3"><h2 class="text-xl font-semibold">No change-of-mind returns</h2><p class="leading-relaxed">We do not accept returns or exchanges because you changed your mind, no longer need the item or prefer another design. Review confirmed specifications and artwork before ordering. Minor colour or texture differences caused by screens and printing are explained before payment.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Defective, damaged or incorrect goods</h2><p class="leading-relaxed">Contact support if your diary arrives damaged or defective, has the wrong design, or materially differs from the agreed description. We assess an appropriate replacement, repair or refund in line with applicable law. The no-change-of-mind policy does not remove these rights. Late or undelivered orders are handled according to applicable law and the agreed delivery terms.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Reporting a problem</h2><p class="leading-relaxed">Email support@cumid.store or WhatsApp +91 9201871597 with your order reference, a description and photos if reasonably available. Report visible issues promptly, preferably within 7 days, to help us investigate. This requested period does not extinguish statutory rights or later-discovered defects. An unboxing video is not mandatory. Keep the item and packaging until we confirm the next steps.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Return arrangements</h2><p class="leading-relaxed">Do not send a parcel to an unconfirmed address. If a return is needed for an accepted defect, damage or wrong-item claim, we arrange or cover reasonable return shipping. We explain the remedy and collection instructions first. Ordinary wear, misuse or damage caused after delivery is not a manufacturing defect.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Cancellation</h2><p class="leading-relaxed">An unpaid enquiry can be withdrawn at any time. For a paid order, request cancellation promptly using the reference. We confirm whether production or dispatch has begun. Restrictions for personalised work must be disclosed and accepted before payment. We do not impose undisclosed cancellation charges. If we cannot fulfil an order, we refund the unfulfilled purchase.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Refunds</h2><p class="leading-relaxed">Approved refunds go to the original payment method through the gateway, unless a lawful alternative is agreed. We aim to initiate an approved refund within 5 business days and provide a reference; the provider or bank controls subsequent credit time. Contact support if a promised refund has not arrived. Statutory deadlines take precedence. We do not deduct an undisclosed gateway fee from an eligible refund.</p></section>
+<p class="text-sm"><a class="underline" href="/terms">Terms</a> · <a class="underline" href="/returns-cancellations">Returns</a> · <a class="underline" href="/shipping">Shipping</a> · <a class="underline" href="/privacy">Privacy</a></p></article></BaseLayout>

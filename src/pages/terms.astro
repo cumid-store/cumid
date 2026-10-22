@@ -1,85 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { SITE } from '../config/site';
-
-const breadcrumbs = [
-  { label: 'Terms & Conditions', href: '/terms' },
-];
+import { TERMS_VERSION } from '../config/commerce';
 ---
-
-<BaseLayout
-  title="Terms & Conditions | CUMID Stationery"
-  description="Terms of service and preorder enquiry rules for CUMID (cumid.store). Clarifies enquiry-only status, zero website payments, and batch purchasing terms."
-  canonicalUrl={`${SITE.canonicalUrl}/terms`}
->
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-    <Breadcrumbs items={breadcrumbs} />
-
-    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
-      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
-        Terms of Service &amp; Preorders
-      </span>
-      <h1 class="text-3xl sm:text-4xl font-semibold text-charcoal-900 tracking-tight">
-        Terms &amp; Conditions
-      </h1>
-      <p class="text-xs text-charcoal-700/70">
-        Last Meaningful Update: October 15, 2026 · Market: India
-      </p>
-    </header>
-
-    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
-      
-      <h2 class="text-xl font-bold text-charcoal-900">1. Acceptance of Terms</h2>
-      <p>
-        By accessing or using the website <strong>https://cumid.store</strong> ("the Website"), you agree to these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">2. Current Launch Mode: Preorder Enquiries Only</h2>
-      <p>
-        The Website operates currently as a design catalog and preorder enquiry portal.
-      </p>
-      <ul class="list-disc pl-5 space-y-2 text-xs sm:text-sm">
-        <li><strong>All Products Sold Out:</strong> All candidate diary designs listed on the website are currently out of stock or in design preview.</li>
-        <li><strong>Enquiry is Not an Order:</strong> Clicking "Enquire about preorder on WhatsApp" or sending a message to our WhatsApp does NOT constitute a binding contract, stock reservation, or finalized purchase order.</li>
-        <li><strong>Zero Online Payments:</strong> We do not collect payments, credit/debit card numbers, UPI handles, or banking credentials through this website. Any future transaction will be confirmed directly with verified instructions on our official WhatsApp.</li>
-      </ul>
-
-      <h2 class="text-xl font-bold text-charcoal-900">3. Product Descriptions &amp; Design Previews</h2>
-      <p>
-        Cover graphics labelled "Design preview" represent creative artwork mockups. They illustrate the visual concept and top-spiral pocket format. Confirmed paper weight (GSM), exact millimetre dimensions, sheet counts, and cover finishes are confirmed by the brand owner prior to batch production and shared during WhatsApp consultation.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">4. User Conduct &amp; Account Responsibility</h2>
-      <p>
-        If you create an optional customer account via Google sign-in:
-      </p>
-      <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
-        <li>You are responsible for maintaining the security of your Google credentials.</li>
-        <li>You agree not to use automated bots, scrapers, or reverse-engineering tools to compromise our servers or Supabase database.</li>
-        <li>You may terminate your account at any time through our self-service deletion control.</li>
-      </ul>
-
-      <h2 class="text-xl font-bold text-charcoal-900">5. Intellectual Property</h2>
-      <p>
-        All original artwork, illustrations, typography, logos (including the CUMID wordmark and spiral "C" symbol), and editorial articles published on cumid.store are the intellectual property of CUMID and protected under Indian copyright law. Unauthorized copying, reproduction, or commercial resale of cover designs is strictly prohibited.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">6. Limitation of Liability</h2>
-      <p>
-        While we strive for accurate information, CUMID provides the website on an "as is" and "as available" basis. We are not liable for transient network disruptions, third-party platform downtime (such as WhatsApp, Cloudflare, or Supabase), or unforeseen manufacturing delays prior to order confirmation.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">7. Governing Law &amp; Jurisdiction</h2>
-      <p>
-        These Terms shall be governed by and construed in accordance with the laws of the Republic of India. Any disputes arising out of the use of this website shall be subject to the exclusive jurisdiction of the competent courts in India.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">8. Contact for Legal Notices</h2>
-      <p>
-        For inquiries regarding these Terms, contact our customer channel via WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong>.
-      </p>
-
-    </div>
-  </div>
-</BaseLayout>
+<BaseLayout title="Terms & Conditions | CUMID" description="Terms & Conditions for CUMID diary purchases and services."><article class="max-w-3xl mx-auto px-5 py-12 space-y-7"><header><h1 class="text-4xl mb-4">Terms & Conditions</h1><p class="text-sm">Effective 22 October 2026 · Version {TERMS_VERSION} · India</p></header>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Ordering from CUMID</h2><p class="leading-relaxed">You must be at least 18 to order; a parent or guardian may order in their own name. An enquiry does not reserve stock or create a paid order. An order is confirmed after payment verification and an order reference. Review the confirmed product details, total price, delivery scope and dispatch estimate before paying.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Catalogue colour and texture</h2><p class="leading-relaxed">Catalogue artwork and digital mockups are illustrative. Screens, lighting, paper, ink and print batches can cause minor colour, texture and finish variations. Such minor variations alone do not qualify for a change-of-mind return. This notice does not excuse damage, defects, a wrong design or a material difference from the agreed description. We will not substitute a materially different product without your agreement.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Prices and payments</h2><p class="leading-relaxed">Checkout shows the item total, shipping and full amount payable, inclusive of applicable taxes. Razorpay processes payments when checkout is enabled. We never ask for your UPI PIN, card PIN or OTP. A screenshot or bank debit alone is not confirmation; we verify payment with the provider. If debited without confirmation, contact support with your reference before paying again. Duplicate successful charges will be investigated and refunded as applicable.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Delivery and cancellation</h2><p class="leading-relaxed">The checkout dispatch estimate describes when the parcel leaves us, not its arrival date. We will communicate material delays and applicable cancellation or refund options. Provide an accurate address and reachable phone. We explain and seek agreement to any additional delivery charge before applying it. Read the Shipping and Returns policies linked below. We do not offer change-of-mind returns, but remedies required by consumer law remain available. If we cannot fulfil an order, we refund the unfulfilled purchase.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Recorded acceptance</h2><p class="leading-relaxed">Checkout requires an unticked acceptance checkbox and your typed full name. We record the accepted wording, policy version, timestamp and order details as an acknowledgement. This is not a government-certified digital signature. Later website changes do not retrospectively change the terms accepted for your order.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Accounts and intellectual property</h2><p class="leading-relaxed">Use accurate details and keep your sign-in secure. Do not submit malware, unlawful content, impersonations or work you have no right to share. Rights in original CUMID artwork remain with the relevant rights holders. Buying a diary does not grant a licence to commercially reproduce its cover.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Recruitment and submitted work</h2><p class="leading-relaxed">Applying is not an employment offer. Scope, compensation, location and duration must be agreed before an engagement. There is no application fee. Applicants retain ownership of submitted work and permit CUMID to review it for recruitment. Commercial use requires a separate agreement. Do not submit confidential third-party information; keep your own copy of your work. The portal is not an archival service.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Responsibility and disputes</h2><p class="leading-relaxed">We take reasonable care over the website and fulfilment, but third-party services can be interrupted. Nothing excludes liability or consumer rights that cannot lawfully be excluded. Indian law applies, with access to competent courts and consumer forums as provided by law. These terms do not prevent a lawful complaint.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Contact and grievance handling</h2><p class="leading-relaxed">Email support@cumid.store or WhatsApp +91 9201871597 with your order reference and concern. Seller and grievance-contact details are displayed at enabled checkout. We aim to acknowledge complaints within 48 hours and resolve them within one month, or within an applicable statutory timeline. Do not send payment credentials or unnecessary identity documents.</p></section>
+<p class="text-sm"><a class="underline" href="/terms">Terms</a> · <a class="underline" href="/returns-cancellations">Returns</a> · <a class="underline" href="/shipping">Shipping</a> · <a class="underline" href="/privacy">Privacy</a></p></article></BaseLayout>

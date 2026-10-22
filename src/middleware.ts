@@ -1,4 +1,4 @@
-import { defineMiddleware } from 'astro:middleware';
+import { defineMiddleware, sequence } from 'astro:middleware';
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -9,7 +9,7 @@ const ALLOWED_ADMIN_EMAILS: readonly string[] = [
   'sumitkatiyar3655@gmail.com',
 ];
 
-export const onRequest = defineMiddleware(async (context, next) => {
+const authenticate = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
 
   // Rule 1: Only run this check on routes starting with /admin
@@ -59,11 +59,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const { data: userData } = await supabase.auth.getUser();
   if (userData?.user) {
     user = userData.user;
-  } else {
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (sessionData?.session?.user) {
-      user = sessionData.session.user;
-    }
   }
 
   // Rule 2: If there is no active Supabase session, redirect to /account
@@ -90,3 +85,23 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   return next();
 });
+
+const protectResponse = defineMiddleware(async (context, next) => {
+  const response = await next();
+  if (context.isPrerendered) return response;
+  const headers = new Headers(response.headers);
+  headers.set('Cache-Control', 'private, no-store');
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Robots-Tag', 'noindex, nofollow');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('X-Frame-Options', 'DENY');
+  if (!headers.get('Content-Type')?.includes('text/html')) return new Response(response.body,{status:response.status,headers});
+  const html = await response.text();
+  const hashes = await Promise.all([...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(m=>! /\bsrc\s*=/.test(m[1])&&m[2].trim()).map(async m=>{
+    const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(m[2]));
+    return "'sha256-"+btoa(String.fromCharCode(...new Uint8Array(digest)))+"'";
+  }));
+  headers.set('Content-Security-Policy',`default-src 'self'; script-src 'self' ${hashes.join(' ')} https://static.cloudflareinsights.com https://www.googletagmanager.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com https://www.google-analytics.com https://region1.google-analytics.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me`);
+  return new Response(html,{status:response.status,headers});
+});
+export const onRequest = sequence(protectResponse, authenticate);

@@ -6,7 +6,7 @@ import {
 import { supabase, isSupabaseConfigured, getCurrentProfile, isAllowedAdminEmail } from '../../../lib/supabase';
 
 interface Props {
-  activeTab: 'overview' | 'orders' | 'enquiries' | 'products' | 'batches' | 'settings';
+  activeTab: 'overview' | 'orders' | 'enquiries' | 'products' | 'batches' | 'settings' | 'careers' | 'commerce';
   title: string;
   subtitle?: string;
   children: React.ReactNode;
@@ -150,6 +150,8 @@ export const AdminLayout: React.FC<Props> = ({
     { id: 'products', label: 'Products', href: '/admin/products', icon: Package },
     { id: 'batches', label: 'Production Batches', href: '/admin/batches', icon: Layers },
     { id: 'settings', label: 'Settings', href: '/admin/settings', icon: Settings },
+    { id: 'careers', label: 'Careers & Tasks', href: '/admin/careers', icon: MessageSquare },
+    { id: 'commerce', label: 'Checkout Setup', href: '/admin/commerce', icon: Settings },
   ];
 
   return (

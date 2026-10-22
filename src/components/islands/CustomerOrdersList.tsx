@@ -19,6 +19,7 @@ const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: a
 export const CustomerOrdersList: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -31,8 +32,8 @@ export const CustomerOrdersList: React.FC = () => {
         }
       }
 
-      const list = await getCustomerOrders(currentUserId);
-      setOrders(list);
+      try { setOrders(await getCustomerOrders(currentUserId)); }
+      catch (err: any) { setError(err.message); }
       setLoading(false);
     }
     void load();
@@ -47,6 +48,7 @@ export const CustomerOrdersList: React.FC = () => {
     );
   }
 
+  if (error) return <p role="alert">{error}</p>;
   if (orders.length === 0) {
     return (
       <div className="py-16 text-center space-y-4 max-w-md mx-auto p-8 rounded-3xl bg-ivory-100 border border-charcoal-800/10">
@@ -56,7 +58,7 @@ export const CustomerOrdersList: React.FC = () => {
         <div className="space-y-1">
           <h2 className="text-lg font-bold text-charcoal-900">No orders placed yet</h2>
           <p className="text-xs text-charcoal-700 leading-relaxed">
-            All orders are arranged following an enquiry on WhatsApp. Once pricing and production batch details are confirmed, your agreed order will appear here.
+            Sign in with the account used at checkout. Confirmed orders and agreed WhatsApp orders appear here.
           </p>
         </div>
         <div className="pt-2">

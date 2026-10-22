@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import StructuredData from '../../components/StructuredData.astro';
 import WhatsAppPreorderButton from '../../components/islands/WhatsAppPreorderButton';
 import FavouritesButton from '../../components/islands/FavouritesButton';
+import ProductCheckout from '../../components/islands/ProductCheckout';
 import ProductCard from '../../components/ProductCard.astro';
 import DiaryMockup from '../../components/DiaryMockup.astro';
 import { PRODUCTS } from '../../data/products';
@@ -116,11 +117,11 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
         <div class="py-5 border-y border-charcoal-800/15 space-y-2">
           <div class="flex items-center justify-between text-sm">
             <span class="text-charcoal-700 font-medium">Availability:</span>
-            <span class="badge-sold-out text-[11px]">Currently Sold Out</span>
+            <span class="text-[11px]">Check ordering options below</span>
           </div>
           <div class="flex items-center justify-between text-sm pt-1 border-t border-charcoal-800/5">
             <span class="text-charcoal-700 font-medium">Price:</span>
-            <span class="text-charcoal-900 font-semibold italic">Ask on WhatsApp</span>
+            <span class="text-charcoal-900 font-semibold">Confirmed in ordering options below</span>
           </div>
         </div>
 
@@ -128,12 +129,13 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
         <div class="p-4 rounded-sm bg-ivory-200 border-l border-charcoal-800/20 text-sm text-charcoal-700 leading-relaxed space-y-1">
           <p class="font-semibold text-charcoal-900">Preorder Notice:</p>
           <p>
-            No ready stock is available. Send an enquiry for the next batch. An enquiry does not reserve stock or confirm an order.
+            Review the confirmed specifications and dispatch estimate before ordering. If online checkout is unavailable, enquire about the next batch. An enquiry does not reserve stock.
           </p>
         </div>
 
         <!-- CTA Action Buttons (WhatsApp Preorder + Favourites) -->
         <div class="space-y-3 pt-2">
+          <ProductCheckout productId={product.id} client:load />
           <WhatsAppPreorderButton
             client:load
             product={product}

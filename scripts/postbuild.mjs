@@ -1,21 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const distClient = path.resolve('dist/client');
-const distRoot = path.resolve('dist');
-
-if (fs.existsSync(distClient)) {
-  console.log('[postbuild] Ensuring static files exist at both dist/ and dist/client/ for Cloudflare Pages compatibility...');
-  try {
-    const entries = fs.readdirSync(distClient);
-    for (const entry of entries) {
-      if (entry === 'client' || entry === 'server') continue;
-      const src = path.join(distClient, entry);
-      const dest = path.join(distRoot, entry);
-      fs.cpSync(src, dest, { recursive: true, force: true });
-    }
-    console.log('[postbuild] ✓ Successfully mirrored dist/client/ entries to dist/');
-  } catch (err) {
-    console.warn('[postbuild] Notice during copy (safe to continue):', err);
-  }
+const root = path.resolve(process.env.CUMID_E2E === '1' ? 'dist-e2e' : 'dist');
+const config = path.join(root, 'server/wrangler.json');
+if (!fs.existsSync(config) || !fs.existsSync(path.join(root, 'client/checkout/index.html'))) {
+  throw new Error('Incomplete Worker build. Payments require both dist/client and dist/server.');
 }
+const worker = JSON.parse(fs.readFileSync(config, 'utf8'));
+if (!worker.main || !worker.assets?.run_worker_first?.includes('/api/*')) throw new Error('Worker API routing missing.');
+console.log('[postbuild] Worker and static assets verified. Deploy with wrangler deploy --config dist/server/wrangler.json.');

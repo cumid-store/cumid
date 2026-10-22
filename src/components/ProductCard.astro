@@ -12,7 +12,7 @@ const { product } = Astro.props;
     </a>
     <div class="product-save"><FavouritesButton client:visible productId={product.id} productName={product.name} iconOnly={true} /></div>
   </div>
-  <div class="product-meta"><span>{product.collectionName}</span><span class="badge-sold-out">Sold Out</span></div>
+  <div class="product-meta"><span>{product.collectionName}</span><span>View availability</span></div>
   <h3><a href={`/products/${product.slug}`}>{product.name}</a></h3>
   <p>{product.tagline}</p>
   <a class="product-details" href={`/products/${product.slug}`}>View cover &amp; enquire <span aria-hidden="true">↗</span></a>

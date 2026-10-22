@@ -5,8 +5,9 @@
 
 export const LAUNCH_CONFIG = {
   /**
-   * STRICT SAFETY RULE: No online payments in this launch.
-   * If true, disables any checkout, card/UPI handling, or fake purchase flows.
+   * Legacy catalogue default only. The checkout API is authoritative:
+   * commerce_settings.enabled + confirmed products + server gateway configuration.
+   * Never use a public/browser flag to authorise payments.
    */
   ALLOW_PURCHASES: false,
 

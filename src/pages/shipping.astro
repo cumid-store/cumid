@@ -1,67 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { SITE } from '../config/site';
-
-const breadcrumbs = [
-  { label: 'Shipping & Delivery', href: '/shipping' },
-];
+import { TERMS_VERSION } from '../config/commerce';
 ---
-
-<BaseLayout
-  title="Shipping & Delivery Policy | CUMID Stationery"
-  description="Shipping information and batch delivery terms for CUMID pocket diaries across India."
-  canonicalUrl={`${SITE.canonicalUrl}/shipping`}
->
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-    <Breadcrumbs items={breadcrumbs} />
-
-    <header class="space-y-3 pb-6 border-b border-charcoal-800/10">
-      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
-        Delivery Information
-      </span>
-      <h1 class="text-3xl sm:text-4xl font-semibold text-charcoal-900 tracking-tight">
-        Shipping &amp; Delivery Policy
-      </h1>
-      <p class="text-xs text-charcoal-700/70">
-        Market: India (INR) · Last Meaningful Update: October 15, 2026
-      </p>
-    </header>
-
-    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base leading-relaxed space-y-6">
-      
-      <!-- Launch Mode Notice -->
-      <div class="p-4 rounded-sm bg-ivory-100 border border-charcoal-800/10 text-xs text-charcoal-700 space-y-1">
-        <strong class="font-bold text-charcoal-900 block">Launch Status Notice:</strong>
-        <p>
-          CUMID currently operates on an enquiry-only preorder basis. No orders are currently in transit, and no courier charges are collected through this storefront.
-        </p>
-      </div>
-
-      <h2 class="text-xl font-bold text-charcoal-900">1. Geographic Delivery Coverage</h2>
-      <p>
-        CUMID caters specifically to the Indian domestic market. Once production batches are released and preorder bookings are finalized, pocket diaries will be dispatched to serviceable pin codes across India.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">2. Preorder Batch Timelines</h2>
-      <p>
-        Because we operate in intentional, small-batch runs:
-      </p>
-      <ul class="list-disc pl-5 space-y-2 text-xs sm:text-sm">
-        <li><strong>Estimated Production:</strong> Production schedules are communicated individually during your WhatsApp consultation based on current batch volume.</li>
-        <li><strong>Transparent Confirmation:</strong> You will receive verified dispatch estimates before confirming your preorder payment. We do not promise artificial same-day or 24-hour deliveries.</li>
-      </ul>
-
-      <h2 class="text-xl font-bold text-charcoal-900">3. Packaging Standards</h2>
-      <p>
-        Pocket diaries are vulnerable to crushed corners and bent top coils. Every CUMID diary will be packaged in protective cardboard sleeves to ensure your top-spiral binding arrives in mint condition.
-      </p>
-
-      <h2 class="text-xl font-bold text-charcoal-900">4. Shipping Queries &amp; Pin Code Verification</h2>
-      <p>
-        If you have questions regarding deliverability to your specific town or city in India, message our customer desk on WhatsApp at <strong>{SITE.whatsappDisplayNumber}</strong>.
-      </p>
-
-    </div>
-  </div>
-</BaseLayout>
+<BaseLayout title="Shipping & Delivery | CUMID" description="Shipping & Delivery for CUMID diary purchases and services."><article class="max-w-3xl mx-auto px-5 py-12 space-y-7"><header><h1 class="text-4xl mb-4">Shipping & Delivery</h1><p class="text-sm">Effective 22 October 2026 · Version {TERMS_VERSION} · India</p></header>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Delivery scope</h2><p class="leading-relaxed">We deliver only to Indian states enabled at checkout. Enter a complete address and PIN code. We may contact you to resolve courier serviceability before fulfilment. If we cannot deliver an accepted order, we explain the issue and refund it if a suitable alternative is not agreed.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Charges and timing</h2><p class="leading-relaxed">The shipping charge and dispatch estimate are shown before payment and recorded with your order. Dispatch means when the parcel leaves us; arrival depends on the destination and courier. A preorder may require production time. Do not assume immediate dispatch from a catalogue image.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Tracking and delays</h2><p class="leading-relaxed">Tracking is added once available from the courier. We communicate material delays, revised estimates and applicable cancellation or refund options. Contact support@cumid.store with your order reference for a lost, delayed or undelivered parcel.</p></section>
+<section class="space-y-3"><h2 class="text-xl font-semibold">Address changes and delivery issues</h2><p class="leading-relaxed">Contact us before dispatch if an address needs correction. Changes after dispatch may not be possible. Any proposed extra shipping charge is explained before it is agreed. Report a parcel marked delivered but not received promptly so we can investigate; tracking status alone does not prevent a legitimate claim.</p></section>
+<p class="text-sm"><a class="underline" href="/terms">Terms</a> · <a class="underline" href="/returns-cancellations">Returns</a> · <a class="underline" href="/shipping">Shipping</a> · <a class="underline" href="/privacy">Privacy</a></p></article></BaseLayout>

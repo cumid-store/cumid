@@ -19,7 +19,7 @@ export const SITE = {
   whatsappBaseUrl: 'https://wa.me/919201871597',
 
   // Launch Status Announcement
-  announcementText: 'Currently sold out · Enquire about the next batch on WhatsApp',
+  announcementText: 'Pocket diaries with personality · Check availability or enquire on WhatsApp',
   heroHeadline: 'Small diaries. A little more you.',
   heroSubcopy: 'Pocket-sized ideas, personality-filled covers, and space for whatever’s on your mind.',
 
@@ -47,6 +47,7 @@ export const SITE = {
     { label: 'Our Story', href: '/about' },
     { label: 'Journal', href: '/journal' },
     { label: 'FAQ', href: '/faq' },
+    { label: 'Careers', href: '/careers' },
   ],
 
   // Footer Navigation
@@ -60,6 +61,9 @@ export const SITE = {
       { label: 'Originals Collection', href: '/collections/originals' },
     ],
     info: [
+      { label: 'Checkout', href: '/checkout', isExternal: false },
+      { label: 'Careers & Internships', href: '/careers', isExternal: false },
+      { label: 'Submit a Task', href: '/careers/tasks', isExternal: false },
       { label: 'How Preorders Work', href: '/how-preorders-work', isExternal: false },
       { label: 'My Orders', href: '/account/orders', isExternal: false },
       { label: 'About CUMID', href: '/about', isExternal: false },
