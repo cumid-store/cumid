@@ -1,14 +1,15 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-const base = "http://127.0.0.1:4335";
+const base = process.env.CUMID_QA_URL || "http://127.0.0.1:4335";
 await fs.mkdir("artifacts/commerce-qa", { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 const denied = await page.request.get(base + "/api/checkout/catalogue");
-assert.equal(denied.status(), 503);
+assert.equal(denied.status(), 200);
+assert.equal((await denied.json()).mode, "whatsapp");
 const admin = await page.request.get(base + "/admin/careers", {
   maxRedirects: 0,
 });

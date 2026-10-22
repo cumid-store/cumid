@@ -12,7 +12,7 @@ export const COLLECTIONS: Record<string, Collection> = {
     themeColor: '#75806D',
     accentBg: '#F4F6F3',
     metaTitle: 'Floral Pocket Diaries | CUMID Stationery',
-    metaDescription: 'Explore CUMID square pocket diaries with top-spiral binding featuring floral artwork, botanical illustrations, and twilight petals. All designs currently sold out — preorder enquiry on WhatsApp.',
+    metaDescription: 'Explore CUMID square pocket diaries with top-spiral binding featuring floral artwork, botanical illustrations, and twilight petals. Preorders open at ₹149 + ₹50 shipping per order, with 14-day delivery after payment confirmation.',
   },
   cute: {
     id: 'cute',

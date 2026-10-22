@@ -44,6 +44,16 @@ await test('Missing tables and functions produce a specific setup failure',()=>{
  assert.throws(()=>rethrowSetupError({code:'42501'}),e=>e.status===403&&e.code==='ACCESS_DENIED');
  assert.throws(()=>rethrowSetupError({code:'PGRST116'}),e=>e.status===404);
 });
+await test('Public preorder catalogue works without payment secrets',async()=>{
+ const response=await handleApi(new Request('https://cumid.store/api/checkout/catalogue'),{});
+ assert.equal(response.status,200);
+ const catalogue=await response.json();
+ assert.equal(catalogue.ready,false);
+ assert.equal(catalogue.mode,'whatsapp');
+ assert.equal(catalogue.settings.shipping_paise,5000);
+ assert.equal(catalogue.products.length,13);
+ assert.ok(catalogue.products.every(p=>p.price_paise===14900 && !p.available && p.preorder_available));
+});
 const c = {
   name: "Test Buyer",
   signedName: "Test Buyer",
@@ -113,7 +123,7 @@ await test("Unconfigured services fail closed", async () => {
   assert.equal(
     (
       await handleApi(
-        new Request("https://cumid.store/api/checkout/catalogue"),
+        new Request("https://cumid.store/api/checkout/status"),
         {},
       )
     ).status,

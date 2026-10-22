@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../config/site';
+import { PREORDER } from '../config/preorder';
 import type { Product } from '../types/product';
 import type { JournalArticle } from '../types/journal';
 
@@ -61,7 +62,12 @@ if (type === 'website') {
     category: product.collectionName,
     ...(product.price !== null ? { offers: {
       '@type': 'Offer', price: product.price, priceCurrency: product.currency,
-      availability: 'https://schema.org/OutOfStock',
+      availability: product.isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/PreOrder',
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: PREORDER.shippingRupees, currency: 'INR' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IN' },
+      },
       url: `${SITE.canonicalUrl}/products/${product.slug}`,
       itemCondition: 'https://schema.org/NewCondition',
     } } : {}),

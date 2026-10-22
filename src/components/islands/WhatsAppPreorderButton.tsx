@@ -3,6 +3,7 @@ import { MessageCircle, Copy, Check, Mail, Plus, Minus } from 'lucide-react';
 import { trackEvent } from '../../lib/analytics';
 import { logPreorderEnquiry } from '../../lib/enquiries';
 import { SITE } from '../../config/site';
+import { preorderMessage } from '../../config/preorder';
 
 interface Props {
   product: {
@@ -28,9 +29,8 @@ export const WhatsAppPreorderButton: React.FC<Props> = ({
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const canonicalProductUrl = `${SITE.canonicalUrl}/products/${product.slug}`;
   const quantityText = quantity === 1 ? '1 diary' : `${quantity} diaries`;
-  const messageText = `Hi CUMID! I’m interested in ${quantityText} of the ${product.name} diary, reference ${product.id}. Please share the confirmed price, specifications and next-batch availability. Product: ${canonicalProductUrl}`;
+  const messageText = preorderMessage(product, quantity);
   const whatsappUrl = `${SITE.whatsappBaseUrl}?text=${encodeURIComponent(messageText)}`;
 
   const handleClick = () => {
@@ -91,7 +91,7 @@ export const WhatsAppPreorderButton: React.FC<Props> = ({
       {/* Optional Quantity Selector */}
       {showQuantity && (
         <div className="flex items-center justify-between p-3 rounded-2xl bg-ivory-100 border border-charcoal-800/10">
-          <span className="text-xs font-semibold text-charcoal-900">Enquiry Quantity:</span>
+          <span className="text-xs font-semibold text-charcoal-900">Quantity:</span>
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -129,7 +129,7 @@ export const WhatsAppPreorderButton: React.FC<Props> = ({
         id={`whatsapp-preorder-${product.id.toLowerCase()}`}
       >
         <MessageCircle className="w-5 h-5 shrink-0" aria-hidden="true" />
-        <span>Enquire about preorder on WhatsApp</span>
+        <span>{showQuantity ? 'Preorder on WhatsApp' : 'Questions? Chat on WhatsApp'}</span>
       </a>
 
       {showFallbackCopy && (

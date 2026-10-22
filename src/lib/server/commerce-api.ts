@@ -1,5 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { DIARY_PRICING } from "../../config/pricing";
+import { PREORDER } from '../../config/preorder';
+import { PRODUCTS } from '../../data/products';
 import { rethrowSetupError } from "./service-errors";
 import {
   TERMS_VERSION,
@@ -160,6 +162,21 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
       "careers/submissions",
       "admin/careers",
     ].includes(route);
+    // Public browsing and WhatsApp preorders work without privileged database
+    // credentials. This response never authorises a payment or creates an order.
+    if (route === 'checkout/catalogue' && request.method === 'GET' &&
+        (!env.SUPABASE_SERVICE_ROLE_KEY || !env.RAZORPAY_KEY_ID ||
+         !env.RAZORPAY_KEY_SECRET || !env.RAZORPAY_WEBHOOK_SECRET)) {
+      return json({
+        ready: false, mode: 'whatsapp', preordersOpen: true,
+        settings: { shipping_paise: PREORDER.shippingPaise, delivery_note: PREORDER.deliveryText },
+        products: PRODUCTS.filter(p => !p.isSoldOut).map(p => ({
+          id: p.id, name: p.name, slug: p.slug,
+          price_paise: DIARY_PRICING.salePaise, mrp_paise: DIARY_PRICING.mrpPaise,
+          preorder_available: true, available: false,
+        })),
+      });
+    }
     const db = candidateRoute ? candidateDatabase(env, request) : database(env);
     if (route === "payments/webhook" && request.method === "POST") {
       const raw = new TextDecoder().decode(await bounded(request, 128000));

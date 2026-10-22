@@ -108,7 +108,7 @@ export const FavouritesList: React.FC = () => {
                 </p>
 
                 <div className="pt-1 flex items-center gap-2">
-                  <span className="badge-sold-out text-[10px] py-0.5 px-2">Sold Out</span>
+                  <span className="badge-sold-out text-[10px] py-0.5 px-2">{product.isSoldOut ? 'Unavailable' : 'Preorders open'}</span>
                   <span className="text-[11px] text-charcoal-700/80 italic">Top-spiral pocket format</span>
                 </div>
               </div>

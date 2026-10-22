@@ -1,108 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { SITE } from '../config/site';
-
-const breadcrumbs = [
-  { label: 'How Preorders Work', href: '/how-preorders-work' },
-];
 ---
-
-<BaseLayout
-  title="How Preorders & Enquiries Work | CUMID Stationery"
-  description="Learn how CUMID diary enquiries, confirmed ordering, secure payments and delivery estimates work."
-  canonicalUrl={`${SITE.canonicalUrl}/how-preorders-work`}
->
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
-    
-    <Breadcrumbs items={breadcrumbs} />
-
-    <header class="space-y-4">
-      <span class="text-xs font-semibold tracking-wider uppercase text-lavender-700">
-        Preorder Guide
-      </span>
-      <h1 class="text-4xl sm:text-5xl font-semibold text-charcoal-900 tracking-tight">
-        How Preorders Work at CUMID
-      </h1>
-      <p class="text-base sm:text-lg text-charcoal-700 leading-relaxed">
-        Everything you need to know about our batch preorder enquiries, pricing confirmation, and payment safety.
-      </p>
-    </header>
-
-    <!-- Key Safety Notice -->
-    <div class="p-6 rounded-sm bg-amber-50/80 border border-amber-200 text-amber-950 text-xs sm:text-sm leading-relaxed space-y-2">
-      <h2 class="font-bold text-sm text-amber-900">Important Launch Notice:</h2>
-      <ul class="list-disc pl-5 space-y-1">
-        <li>Catalogue artwork may be a <strong>design preview</strong>. Confirmed ordering options appear on each product page.</li>
-        <li>Sending a WhatsApp enquiry <strong>does not reserve stock</strong> or automatically create a purchase order.</li>
-        <li>When checkout is enabled, review the full price, specifications, dispatch estimate and terms before paying through Razorpay. Otherwise, enquire on WhatsApp.</li>
-      </ul>
-    </div>
-
-    <!-- Step by Step Journey -->
-    <div class="space-y-8">
-      <h2 class="text-2xl font-bold text-charcoal-900">
-        The 3-Step Enquiry Journey
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-sm bg-ivory-100 border border-charcoal-800/10 space-y-3">
-          <div class="w-10 h-10 rounded-sm bg-charcoal-800 text-ivory-100 flex items-center justify-center font-bold text-sm">
-            1
-          </div>
-          <h3 class="font-bold text-base text-charcoal-900">Explore &amp; Select</h3>
-          <p class="text-xs text-charcoal-700 leading-relaxed">
-            Browse our catalogue across Floral, Cute, Hinglish, Cars &amp; Jets, and Originals themes. Pick the design that fits your journaling habits.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-sm bg-ivory-100 border border-charcoal-800/10 space-y-3">
-          <div class="w-10 h-10 rounded-sm bg-lavender-700 text-ivory-100 flex items-center justify-center font-bold text-sm">
-            2
-          </div>
-          <h3 class="font-bold text-base text-charcoal-900">Send WhatsApp Enquiry</h3>
-          <p class="text-xs text-charcoal-700 leading-relaxed">
-            Clicking the preorder button opens a pre-composed message with the product name and unique ID directly to our WhatsApp (+91 9201871597).
-          </p>
-        </div>
-
-        <div class="p-6 rounded-sm bg-ivory-100 border border-charcoal-800/10 space-y-3">
-          <div class="w-10 h-10 rounded-sm bg-peach-700 text-ivory-100 flex items-center justify-center font-bold text-sm">
-            3
-          </div>
-          <h3 class="font-bold text-base text-charcoal-900">Personal Confirmation</h3>
-          <p class="text-xs text-charcoal-700 leading-relaxed">
-            We confirm the final price, verified paper weight/dimensions, and estimated dispatch dates before you decide to proceed with an order.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Why WhatsApp -->
-    <div class="prose prose-charcoal text-charcoal-800 text-sm sm:text-base space-y-4">
-      <h2 class="text-2xl font-bold text-charcoal-900">Why do we accept preorders through WhatsApp?</h2>
-      <p>
-        We’re preparing our first batch. WhatsApp lets us discuss your chosen design and share confirmed prices and materials before taking an order.
-      </p>
-      <p>
-        You can ask any questions regarding page ruling, coil feel, or gifting options before making a commitment.
-      </p>
-    </div>
-
-    <!-- CTA -->
-    <div class="pt-6 border-t border-charcoal-800/10 flex flex-col sm:flex-row gap-4">
-      <a href="/shop" class="btn-primary text-xs text-center">
-        Explore candidate covers &rarr;
-      </a>
-      <a
-        href={SITE.whatsappBaseUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn-secondary text-xs text-center"
-      >
-        Chat on WhatsApp ({SITE.whatsappDisplayNumber})
-      </a>
-    </div>
-
-  </div>
+<BaseLayout title="How Preorders Work | CUMID" description="Preorder a CUMID pocket diary for ₹149 plus ₹50 shipping per order. Delivery within 14 days of payment confirmation.">
+  <article class="max-w-3xl mx-auto px-5 py-12 space-y-8">
+    <header class="space-y-4"><p class="eyebrow">Made for your next thought</p><h1 class="text-4xl">Your diary, in three steps.</h1><p>₹149 per diary. ₹50 shipping per order. Delivery within 14 days of payment confirmation.</p></header>
+    <section class="space-y-3"><h2 class="text-2xl">1. Choose your cover</h2><p>Explore our floral, cute, Hinglish, car, jet and original cover designs. Our current catalogue is open for preorders. These diaries are made to order, with square pocket pages and spiral binding along the top.</p><p class="text-sm">Images are digital cover previews. We share final dimensions, paper and page count before payment.</p></section>
+    <section class="space-y-3"><h2 class="text-2xl">2. Review your preorder</h2><p>Click Preorder this diary, choose your quantity and enter your name and delivery PIN code. Review your total and purchase terms. One diary totals ₹199 including shipping; two total ₹348.</p><p>Continue on WhatsApp and send the prepared message to +91 9201871597. No account is needed. Opening WhatsApp alone does not send the message or confirm an order.</p></section>
+    <section class="space-y-3"><h2 class="text-2xl">3. Confirm and receive</h2><p>We confirm your specifications, delivery serviceability, full address and payment instructions in WhatsApp. After payment is verified, we issue your order reference. Your diary is delivered within 14 calendar days of payment confirmation, including manufacturing and shipping.</p><p>We share tracking when your parcel is dispatched. If there is a material delay, we contact you with the revised timeline and applicable cancellation or refund options.</p></section>
+    <p>Never share your UPI PIN or OTP. Questions? Email <a class="underline" href="mailto:support@cumid.store">support@cumid.store</a>.</p>
+    <div class="flex flex-wrap gap-4"><a class="btn-primary" href="/shop">Choose a cover</a><a class="btn-secondary" href="/checkout">Start a preorder</a></div>
+    <p class="text-sm"><a class="underline" href="/shipping">Shipping</a> · <a class="underline" href="/returns-cancellations">Returns &amp; cancellations</a> · <a class="underline" href="/terms">Terms</a></p>
+  </article>
 </BaseLayout>

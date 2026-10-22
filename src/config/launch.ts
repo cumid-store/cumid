@@ -12,9 +12,9 @@ export const LAUNCH_CONFIG = {
   ALLOW_PURCHASES: false,
 
   /**
-   * Global launch status: all products are sold out and preorders are enquiry-only.
+   * Catalogue designs are available as made-to-order WhatsApp preorders.
    */
-  CATALOG_SOLD_OUT: true,
+  CATALOG_SOLD_OUT: false,
 
   /**
    * Preorder enquiry via WhatsApp enabled.
@@ -25,7 +25,7 @@ export const LAUNCH_CONFIG = {
    * Whether to display price on public cards or require WhatsApp confirmation.
    * By rule: "Do not invent prices or discounts... Price only if confirmed, otherwise: Pricing will be confirmed on WhatsApp"
    */
-  PRICE_DISPLAY_MODE: 'enquiry_confirmation_required' as const,
+  PRICE_DISPLAY_MODE: 'confirmed' as const,
 
   /**
    * Supabase integration status

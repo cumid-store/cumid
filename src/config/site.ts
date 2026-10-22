@@ -3,6 +3,8 @@
  * Single source of truth for business facts, routing, WhatsApp parameters, and meta.
  */
 
+import { preorderMessage } from './preorder';
+
 export const SITE = {
   name: 'CUMID',
   tagline: 'Small diaries. A little more you.',
@@ -19,7 +21,7 @@ export const SITE = {
   whatsappBaseUrl: 'https://wa.me/919201871597',
 
   // Launch Status Announcement
-  announcementText: 'Pocket diaries with personality · Check availability or enquire on WhatsApp',
+  announcementText: 'Preorders open · ₹149 + ₹50 shipping per order · 14-day delivery',
   heroHeadline: 'Small diaries. A little more you.',
   heroSubcopy: 'Pocket-sized ideas, personality-filled covers, and space for whatever’s on your mind.',
 
@@ -61,7 +63,7 @@ export const SITE = {
       { label: 'Originals Collection', href: '/collections/originals' },
     ],
     info: [
-      { label: 'Checkout', href: '/checkout', isExternal: false },
+      { label: 'Preorder', href: '/checkout', isExternal: false },
       { label: 'Careers & Internships', href: '/careers', isExternal: false },
       { label: 'Submit a Task', href: '/careers/tasks', isExternal: false },
       { label: 'How Preorders Work', href: '/how-preorders-work', isExternal: false },
@@ -82,14 +84,9 @@ export const SITE = {
   },
 } as const;
 
-/**
- * Builds the exact safe WhatsApp preorder link for a product.
- * Template:
- * "Hi CUMID! I’m interested in the [PRODUCT NAME] diary, reference [PRODUCT ID]. Please share the confirmed price, specifications and next-batch availability. Product: [CANONICAL PRODUCT URL]"
- */
+/** Build a preorder draft with confirmed price, shipping and delivery terms. */
 export function buildProductWhatsAppUrl(product: { name: string; id: string; slug: string }): string {
-  const canonicalProductUrl = `${SITE.canonicalUrl}/products/${product.slug}`;
-  const message = `Hi CUMID! I’m interested in the ${product.name} diary, reference ${product.id}. Please share the confirmed price, specifications and next-batch availability. Product: ${canonicalProductUrl}`;
+  const message = preorderMessage(product);
   return `${SITE.whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
 }
 
@@ -97,6 +94,6 @@ export function buildProductWhatsAppUrl(product: { name: string; id: string; slu
  * Builds the generic general WhatsApp enquiry URL.
  */
 export function buildGeneralWhatsAppUrl(context: string = 'preorder enquiry'): string {
-  const message = `Hi CUMID! I’m visiting cumid.store and would like to enquire about your next batch of pocket diaries (${context}).`;
+  const message = `Hi CUMID! I’m visiting cumid.store and would like to preorder your pocket diaries at ₹149 each plus ₹50 shipping per order, with delivery within 14 days of payment confirmation (${context}).`;
   return `${SITE.whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
 }
