@@ -311,6 +311,8 @@ await test('Full repair creates missing services and can be run twice',async()=>
  await repair.exec(sql);await repair.exec(sql);
  for(const table of ['profiles','products','commerce_settings','career_applications','orders'])assert.ok((await repair.query('SELECT to_regclass($1) AS name',['public.'+table])).rows[0].name);
  assert.equal((await repair.query('SELECT enabled FROM commerce_settings')).rows[0].enabled,false);
+ assert.equal((await repair.query("SELECT has_column_privilege('authenticated','public.profiles','role','UPDATE') AS allowed")).rows[0].allowed,false);
+ assert.equal((await repair.query("SELECT has_function_privilege('anon','public.handle_new_user()','EXECUTE') AS allowed")).rows[0].allowed,false);
  await repair.close();
 });
 await test('Full repair preserves an existing careers-only setup',async()=>{

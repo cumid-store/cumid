@@ -651,6 +651,36 @@ GRANT EXECUTE ON FUNCTION public.manage_career_round(uuid,text,timestamptz,times
 $step4$;
 END IF;
 END $repair$;
+-- Apply after initial migration, including on already-provisioned projects.
+ALTER FUNCTION public.handle_new_user() SET search_path = '';
+REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM PUBLIC, anon, authenticated;
+CREATE OR REPLACE FUNCTION public.delete_user_account()
+RETURNS VOID LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+DECLARE
+  caller UUID := auth.uid();
+BEGIN
+  IF caller IS NULL OR auth.role() IS DISTINCT FROM 'authenticated' THEN
+    RAISE EXCEPTION 'Authentication required' USING ERRCODE = '42501';
+  END IF;
+  DELETE FROM auth.users WHERE id = caller;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Account no longer exists' USING ERRCODE = '42501';
+  END IF;
+END;
+$$;
+REVOKE EXECUTE ON FUNCTION public.delete_user_account() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
+REVOKE ALL ON public.profiles, public.favourites FROM anon;
+GRANT SELECT, INSERT, UPDATE ON public.profiles TO authenticated;
+GRANT SELECT, INSERT, DELETE ON public.favourites TO authenticated;
+REVOKE INSERT, UPDATE ON public.profiles FROM authenticated;
+GRANT UPDATE (display_name, avatar_url, phone, updated_at) ON public.profiles TO authenticated;
+ALTER FUNCTION public.is_admin() SET search_path = '';
+DO $secure$ BEGIN
+IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+ REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon, authenticated;
+END IF;
+END $secure$;
 
 -- Owner-confirmed selling price and MRP: ₹149 and ₹200 per diary.
 -- MRP is the shared published value in src/config/pricing.ts.
