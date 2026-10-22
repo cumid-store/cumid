@@ -1,0 +1,17 @@
+# Careers submission and timed-round fix
+
+The recruitment table was absent from the supplied Supabase project's API when checked on 22 October 2026 (`PGRST205`). Code cannot save an application until the database exists.
+
+1. Open your Supabase project → SQL Editor. Run `supabase/CAREERS_SETUP.sql` once. It creates missing recruitment tables and the private file bucket, then adds application acknowledgement, ownership rules and timed rounds. It requires the existing account `profiles` table. It does not modify catalogue, payment or order data. If the previous careers database already exists, it skips its initial creation. If the new timed-round migration is already applied, do not rerun this initial setup; use migrations in the normal way.
+2. Deploy this branch through the existing Cloudflare Worker build. Keep the current public Supabase build variables. Applications, task links and recruitment administration now authenticate using the public key plus the user's session and database permissions. A server service-role key is still needed for the existing optional direct file-upload/download endpoints. When it is unavailable, candidates are directed to Drive links.
+3. Sign in with the owner's Google account. Ensure that owner's existing `profiles.role` is `admin` using the Supabase dashboard. Do not give that role to candidates. The existing admin email allowlist also applies to admin-page access.
+4. Submit a test application. The form should show a visible confirmation and reference; the saved application appears in the task portal immediately. Retrying the same role returns its existing reference. An unsuccessful or uncertain request preserves the form and asks the candidate to check their saved applications. No local-only success is shown.
+5. In `/admin/careers`, set the candidate's task instructions, opening time and future deadline. Dates entered there are IST. Save using “Open / schedule task round”. Candidates see waiting, scheduled, open or expired states, with the deadline and countdown for an open round. No deadline is fabricated automatically. Setting the status to Closed stops further submissions. The admin can extend a deadline by saving a new future time.
+
+The database enforces opening and deadline checks for both task records and file reservations. A client clock change cannot bypass them. Task history remains visible after closing. Requests already accepted before the deadline may finish their in-flight transfer afterwards; a new request after the deadline is rejected. Refresh applications or refocus the tab to pick up admin changes. Time passing closes an open form automatically.
+
+The new migration is `supabase/migrations/20261022010000_careers_feedback_rounds.sql` for projects that already applied the prior careers schema. `CAREERS_SETUP.sql` is the combined careers-only setup for a project whose recruitment tables are missing.
+
+Deploy from the included release folder with `npx wrangler deploy --config dist/server/wrangler.json`, or use the unchanged Git build workflow. Static asset upload alone cannot serve authenticated APIs.
+
+Validation: local PostgreSQL tests cover real persistence, retry acknowledgement, row-level visibility, ownership, scheduled/expired deadlines and file limits. Browser QA uses mocked service responses to check feedback and navigation. Production database changes require the owner's Supabase access and were not performed with the publishable key.

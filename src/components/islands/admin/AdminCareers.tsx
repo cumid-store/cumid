@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../lib/api";
+import { careerRequest as api } from "../../../lib/careers";
 import { supabase } from "../../../lib/supabase";
 import AdminLayout from "./AdminLayout";
+const istInput = (value?: string) =>
+  new Date(Date.parse(value || new Date().toISOString()) + 330 * 60000)
+    .toISOString()
+    .slice(0, 16);
 export default function AdminCareers() {
   const [items, setItems] = useState<any[]>([]),
     [error, setError] = useState(""),
     [page, setPage] = useState(0),
     [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(""),
+    [saving, setSaving] = useState(false);
   async function load() {
     setLoading(true);
     try {
@@ -45,6 +51,11 @@ export default function AdminCareers() {
       subtitle="Private recruitment inbox"
     >
       <div className="commerce-form">
+        {message && (
+          <p role="status" className="notice">
+            {message}
+          </p>
+        )}
         {error && (
           <p role="alert" className="notice">
             {error}
@@ -103,6 +114,80 @@ export default function AdminCareers() {
                   ))}
                 </select>
               </label>
+              <form
+                className="task"
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  setSaving(true);
+                  setError("");
+                  setMessage("");
+                  const form = new FormData(event.currentTarget);
+                  try {
+                    await api("admin/careers", {
+                      id: a.id,
+                      status: "task_sent",
+                      round: {
+                        opensAt: new Date(
+                          String(form.get("opens")) + ":00+05:30",
+                        ).toISOString(),
+                        deadline: new Date(
+                          String(form.get("deadline")) + ":00+05:30",
+                        ).toISOString(),
+                        brief: form.get("brief"),
+                      },
+                    });
+                    setMessage(
+                      "Task round saved. The candidate can see the instructions and deadline in their task portal.",
+                    );
+                    await load();
+                  } catch (err: any) {
+                    setError(err.message);
+                  } finally {
+                    setSaving(false);
+                  }
+                }}
+              >
+                <h3 className="font-semibold">Timed task round</h3>
+                <label>
+                  Task instructions
+                  <textarea
+                    name="brief"
+                    maxLength={4000}
+                    required
+                    defaultValue={a.task_brief || ""}
+                  />
+                </label>
+                <div className="form-grid">
+                  <label>
+                    Opens (IST)
+                    <input
+                      name="opens"
+                      type="datetime-local"
+                      required
+                      defaultValue={istInput(a.task_opens_at)}
+                    />
+                  </label>
+                  <label>
+                    Deadline (IST)
+                    <input
+                      name="deadline"
+                      type="datetime-local"
+                      required
+                      defaultValue={
+                        a.task_deadline ? istInput(a.task_deadline) : ""
+                      }
+                    />
+                  </label>
+                </div>
+                <p className="small">
+                  The deadline is enforced on the server for links and file
+                  uploads. Choose Closed above to stop the round early. Extend
+                  the deadline here if needed.
+                </p>
+                <button type="submit" className="btn-primary" disabled={saving}>
+                  {saving ? "Saving round…" : "Open / schedule task round"}
+                </button>
+              </form>
               {a.career_submissions.map((s: any) => (
                 <div className="task" key={s.id}>
                   <strong>{s.title}</strong>

@@ -43,21 +43,20 @@ const session = {
     user_metadata: {},
   },
 };
-await page
-  .context()
-  .addCookies([
-    {
-      name: "sb-jurjpvvgrqymawyttogv-auth-token",
-      value:
-        "base64-" + Buffer.from(JSON.stringify(session)).toString("base64url"),
-      domain: "127.0.0.1",
-      path: "/",
-    },
-  ]);
+await page.context().addCookies([
+  {
+    name: "sb-jurjpvvgrqymawyttogv-auth-token",
+    value:
+      "base64-" + Buffer.from(JSON.stringify(session)).toString("base64url"),
+    domain: "127.0.0.1",
+    path: "/",
+  },
+]);
 await page.route("https://jurjpvvgrqymawyttogv.supabase.co/**", (r) =>
   r.fulfill({ json: session.user }),
 );
 let applications = [],
+  failNextApplication = true,
   uploaded = 0,
   createdOrder = null;
 await page.route("**/api/careers/**", async (r) => {
@@ -65,6 +64,16 @@ await page.route("**/api/careers/**", async (r) => {
     u = new URL(req.url());
   if (u.pathname.endsWith("/applications")) {
     if (req.method() === "POST") {
+      if (failNextApplication) {
+        failNextApplication = false;
+        return r.fulfill({
+          status: 503,
+          json: {
+            error:
+              "We could not confirm your application. Your entries are still here.",
+          },
+        });
+      }
       const d = req.postDataJSON();
       assert.equal(d.consent, true);
       applications = [
@@ -78,7 +87,13 @@ await page.route("**/api/careers/**", async (r) => {
       ];
       return r.fulfill({ json: applications[0] });
     }
-    return r.fulfill({ json: applications });
+    return r.fulfill({
+      json: {
+        applications,
+        uploadsEnabled: true,
+        serverNow: new Date().toISOString(),
+      },
+    });
   }
   if (u.pathname.endsWith("/submissions")) {
     const d = req.postDataJSON();
@@ -102,10 +117,41 @@ await page
   .getByRole("button", { name: "Send application", exact: true })
   .click();
 await page
+  .getByRole("alert")
+  .filter({ hasText: "We could not confirm" })
+  .waitFor();
+assert.equal(
+  await page.locator("input[name=name]").inputValue(),
+  "Test Candidate",
+);
+assert.equal(
+  await page.locator("textarea[name=introduction]").inputValue(),
+  "I enjoy drawing and would like to help design diary covers.",
+);
+await page
+  .getByRole("button", { name: "Send application", exact: true })
+  .click();
+await page
   .getByRole("status")
   .filter({ hasText: "Application received" })
   .waitFor();
 await page.goto(base + "/careers/tasks");
+await page
+  .getByText("Your application is saved. No task round is currently open", {
+    exact: false,
+  })
+  .waitFor();
+assert.equal(
+  await page.getByRole("button", { name: "Submit task", exact: true }).count(),
+  0,
+);
+applications[0].status = "task_sent";
+applications[0].task_opens_at = new Date(Date.now() - 60000).toISOString();
+applications[0].task_deadline = new Date(Date.now() + 3600000).toISOString();
+applications[0].task_brief = "Draw two cover concepts.";
+await page
+  .getByRole("button", { name: "Refresh applications", exact: true })
+  .click();
 await page.locator("input[name=title]").fill("Cover artwork");
 await page
   .locator("textarea[name=links]")
@@ -128,6 +174,18 @@ await page
   .filter({ hasText: "Your task has been submitted" })
   .waitFor();
 assert.equal(uploaded, 2);
+applications[0].task_deadline = new Date(Date.now() - 1000).toISOString();
+await page
+  .getByRole("button", { name: "Refresh applications", exact: true })
+  .click();
+await page
+  .getByText("New submissions are disabled.", { exact: false })
+  .waitFor();
+assert.equal(
+  await page.getByRole("button", { name: "Submit task", exact: true }).count(),
+  0,
+);
+applications[0].task_deadline = new Date(Date.now() + 3600000).toISOString();
 const catalogue = {
   ready: true,
   testMode: true,
@@ -224,6 +282,6 @@ await page.screenshot({
 });
 assert.deepEqual(errors, []);
 console.log(
-  "PASS Worker fails closed, private admin redirect, guest sign-in, application submission, arbitrary multi-file upload, checkout consent gating, mocked payment confirmation, mobile overflow, no page errors.",
+  "PASS Visible failure with form preserved, retry success, application-to-task sync, waiting/open/expired rounds, multi-file upload, checkout regression, mobile layout and no page errors.",
 );
 await browser.close();
