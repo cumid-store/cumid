@@ -305,5 +305,21 @@ await test('All diary prices become 149 without rewriting agreed order totals', 
  assert.equal((await db.query('SELECT count(*)::int AS n FROM products WHERE price_paise<>14900 OR price_paise IS NULL')).rows[0].n,0);
  assert.equal(Number((await db.query('SELECT total_paise FROM orders WHERE id=$1',[oid])).rows[0].total_paise),10000);
 });
+await test('Full repair creates missing services and can be run twice',async()=>{
+ const repair=new PGlite();await repair.exec(bootstrapSchema);
+ const sql=await fs.readFile('supabase/REPAIR_MISSING_SETUP.sql','utf8');
+ await repair.exec(sql);await repair.exec(sql);
+ for(const table of ['profiles','products','commerce_settings','career_applications','orders'])assert.ok((await repair.query('SELECT to_regclass($1) AS name',['public.'+table])).rows[0].name);
+ assert.equal((await repair.query('SELECT enabled FROM commerce_settings')).rows[0].enabled,false);
+ await repair.close();
+});
+await test('Full repair preserves an existing careers-only setup',async()=>{
+ const repair=new PGlite();await repair.exec(bootstrapSchema);
+ for(const f of (await fs.readdir('supabase/migrations')).sort().filter(f=>f<'20261022000000'))await repair.exec(await fs.readFile('supabase/migrations/'+f,'utf8'));
+ await repair.exec(await fs.readFile('supabase/CAREERS_SETUP.sql','utf8'));
+ await repair.exec(await fs.readFile('supabase/REPAIR_MISSING_SETUP.sql','utf8'));
+ assert.equal((await repair.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_name='career_applications' AND column_name='task_deadline'")).rows[0].n,1);
+ await repair.close();
+});
 console.log(`${tests} database transaction and permission tests passed.`);
 await db.close();

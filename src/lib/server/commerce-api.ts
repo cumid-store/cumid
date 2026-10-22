@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import { DIARY_PRICING } from '../../config/pricing';
+import { DIARY_PRICING } from "../../config/pricing";
+import { rethrowSetupError } from "./service-errors";
 import {
   TERMS_VERSION,
   CONSENT_TEXT,
@@ -26,6 +27,7 @@ const json = (data: unknown, status = 200) =>
     },
   });
 function check(result: any) {
+  rethrowSetupError(result.error);
   if (result.error) throw new Error("Database operation failed");
   return result.data;
 }
@@ -221,7 +223,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         termsVersion: TERMS_VERSION,
         products: products.map((p: any) => ({
           ...p,
-            mrp_paise: DIARY_PRICING.mrpPaise,
+          mrp_paise: DIARY_PRICING.mrpPaise,
           available:
             p.checkout_enabled &&
             !p.is_sold_out &&
@@ -278,6 +280,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         p_consent: CONSENT_TEXT,
         p_expected_total: input.expectedTotal,
       });
+      rethrowSetupError(result.error);
       if (result.error)
         throw new RequestError(
           "Checkout could not start. Check availability and delivery state, or contact support if you have already tried several times.",
@@ -361,6 +364,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         p_order: uuid(input.orderId),
         p_reason: text(input.reason, "cancellation reason", 1000),
       });
+      rethrowSetupError(result.error);
       if (result.error)
         throw new RequestError(
           "Unable to record this request. Contact support with your order reference.",
@@ -397,6 +401,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         p_links: links(input.links),
         p_version: TERMS_VERSION,
       });
+      rethrowSetupError(result.error);
       if (result.error)
         throw new RequestError(
           "We could not confirm your application. Your entries are still here. Check My applications before retrying, or contact support@cumid.store.",
@@ -422,6 +427,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         p_notes: text(input.notes || "", "notes", 2000, 0),
         p_links: links(input.links),
       });
+      rethrowSetupError(result.error);
       if (result.error)
         throw new RequestError(
           "Task submission is unavailable. Check your round opening time and deadline, and the limit of 10 submissions per application.",
@@ -447,6 +453,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         p_name: filename,
         p_size: bytes.length,
       });
+      rethrowSetupError(reserved.error);
       if (reserved.error)
         throw new RequestError(
           "Upload allowance reached or submission unavailable. Add a Drive folder/file link instead.",
@@ -614,6 +621,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
           p_brief: window ? text(window.brief, "task brief", 4000) : null,
           p_update_window: Boolean(window),
         });
+        rethrowSetupError(result.error);
         if (result.error)
           throw new RequestError(
             "Could not save this round. Check the dates, task brief and your administrator access.",
@@ -648,15 +656,21 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
     throw new RequestError("Not found.", 404);
   } catch (error) {
     if (error instanceof RequestError)
-      return json({ error: error.message }, error.status);
+      return json({ error: error.message, code: error.code }, error.status);
+    const reference = crypto.randomUUID();
     console.error(
       "CUMID API request failed:",
       error instanceof Error ? error.name : "UnknownError",
+      reference,
     );
     return json(
       {
         error:
-          "The service could not complete this request. Please try again later or contact support@cumid.store.",
+          "We could not confirm this request. Check your saved applications or orders before retrying. Contact support@cumid.store with reference " +
+          reference +
+          ".",
+        code: "REQUEST_UNCONFIRMED",
+        reference,
       },
       503,
     );
