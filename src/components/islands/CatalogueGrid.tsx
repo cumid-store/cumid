@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProductPrice from './ProductPrice';
 import type { Product } from '../../types/product';
 import { getMergedStoreProducts } from '../../lib/productsStore';
 import { FavouritesButton } from './FavouritesButton';
@@ -112,6 +113,7 @@ export const CatalogueGrid: React.FC<Props> = ({
               <a href={`/products/${product.slug}`}>{product.name}</a>
             </h3>
             <p>{product.tagline}</p>
+            <ProductPrice />
             <a className="product-details" href={`/products/${product.slug}`}>
               View cover &amp; enquire <span aria-hidden="true">↗</span>
             </a>

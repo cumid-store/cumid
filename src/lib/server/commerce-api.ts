@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { DIARY_PRICING } from '../../config/pricing';
 import {
   TERMS_VERSION,
   CONSENT_TEXT,
@@ -220,6 +221,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         termsVersion: TERMS_VERSION,
         products: products.map((p: any) => ({
           ...p,
+            mrp_paise: DIARY_PRICING.mrpPaise,
           available:
             p.checkout_enabled &&
             !p.is_sold_out &&

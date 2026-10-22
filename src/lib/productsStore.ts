@@ -1,5 +1,6 @@
 import type { Product, CollectionSlug } from '../types/product';
 import { PRODUCTS } from '../data/products';
+import { DIARY_PRICING } from '../config/pricing';
 import { supabase, isSupabaseConfigured } from './supabase';
 
 export interface EditableProduct {
@@ -55,7 +56,7 @@ export function getAdminProductOverrides(): Record<string, Partial<EditableProdu
 }
 
 export function adminProductToStoreProduct(ap: EditableProduct): Product {
-  const priceInRupees = ap.pricePaise != null ? Math.round(ap.pricePaise / 100) : null;
+  const priceInRupees = ap.pricePaise != null ? Math.round(ap.pricePaise / 100) : DIARY_PRICING.saleRupees;
   const coverSrc = ap.coverImageUrl || '/products/kal-se-productive/cover.webp';
   return {
     id: ap.id,
@@ -137,7 +138,7 @@ export async function syncProductToSupabase(product: EditableProduct): Promise<v
       long_description: product.longDescription,
       collection: product.collection,
       collection_name: product.collectionName,
-      price_paise: product.pricePaise,
+      price_paise: product.pricePaise ?? DIARY_PRICING.salePaise,
       currency: 'INR',
       is_published: product.isPublished,
       is_sold_out: product.isSoldOut,

@@ -1,3 +1,4 @@
+import { DIARY_PRICING } from '../config/pricing';
 import type { Product } from '../types/product';
 
 export const PRODUCTS: Product[] = [
@@ -23,7 +24,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -65,7 +66,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -107,7 +108,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -149,7 +150,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -186,7 +187,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -223,7 +224,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -265,7 +266,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -297,7 +298,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -329,7 +330,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -361,7 +362,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -393,7 +394,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -425,7 +426,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",
@@ -457,7 +458,7 @@ export const PRODUCTS: Product[] = [
       "binding": "Spiral binding along top edge",
       "orientation": "Top-flip notebook format"
     },
-    "price": null,
+    "price": DIARY_PRICING.saleRupees,
     "currency": "INR",
     "isSoldOut": true,
     "availabilityStatus": "SoldOut",

@@ -5,6 +5,7 @@ import StructuredData from '../../components/StructuredData.astro';
 import WhatsAppPreorderButton from '../../components/islands/WhatsAppPreorderButton';
 import FavouritesButton from '../../components/islands/FavouritesButton';
 import ProductCheckout from '../../components/islands/ProductCheckout';
+import ProductPrice from '../../components/islands/ProductPrice';
 import ProductCard from '../../components/ProductCard.astro';
 import DiaryMockup from '../../components/DiaryMockup.astro';
 import { PRODUCTS } from '../../data/products';
@@ -121,7 +122,7 @@ const relevantFaqs = FAQ_ITEMS.filter((f) => f.category === 'preorders' || f.cat
           </div>
           <div class="flex items-center justify-between text-sm pt-1 border-t border-charcoal-800/5">
             <span class="text-charcoal-700 font-medium">Price:</span>
-            <span class="text-charcoal-900 font-semibold">Confirmed in ordering options below</span>
+            <ProductPrice />
           </div>
         </div>
 

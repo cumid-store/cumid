@@ -300,5 +300,10 @@ await test("Combined careers-only setup works with missing recruitment tables", 
   );
   await fresh.close();
 });
+await test('All diary prices become 149 without rewriting agreed order totals', async()=>{
+ await db.exec(await fs.readFile('supabase/migrations/20261022020000_diary_pricing.sql','utf8'));
+ assert.equal((await db.query('SELECT count(*)::int AS n FROM products WHERE price_paise<>14900 OR price_paise IS NULL')).rows[0].n,0);
+ assert.equal(Number((await db.query('SELECT total_paise FROM orders WHERE id=$1',[oid])).rows[0].total_paise),10000);
+});
 console.log(`${tests} database transaction and permission tests passed.`);
 await db.close();
