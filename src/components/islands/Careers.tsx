@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { careerRequest as api, roundState, roundDate } from "../../lib/careers";
 import { supabase } from "../../lib/supabase";
 import { CAREER_ROLES } from "../../config/commerce";
+import { CAREER_TASKS } from "../../data/careerTasks";
 
 const parseLinks = (s: FormDataEntryValue | null) =>
   String(s || "")
@@ -35,6 +36,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
   const [clockOffset, setClockOffset] = useState(0);
   const [selectedId, setSelectedId] = useState("");
   const [syncError, setSyncError] = useState("");
+  const [activeTaskPreview, setActiveTaskPreview] = useState<string>("Content & social media");
 
   const feedback = useRef<HTMLDivElement>(null);
   const refreshVersion = useRef(0);
@@ -93,6 +95,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
 
   const openApps = applications.filter((a) => roundState(a, now) === "open");
   const selected = openApps.find((a) => a.id === selectedId) || openApps[0];
+  const selectedTaskDef = selected ? CAREER_TASKS[selected.role] : null;
 
   const invalid = () => {
     setMessage("");
@@ -247,27 +250,67 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
           {!applications.length && !syncError ? (
             <p className="notice">
               No application is linked to this account yet.{" "}
-              <a href="/careers">Apply here first</a>. If you applied by email
-              or WhatsApp, use this short form once to connect your application.
+              <a href="/careers">Apply here first</a>.
             </p>
           ) : applications.length ? (
             <>
               {openApps.length > 0 ? (
                 <>
                   <div className="notice">
-                    <strong>Task round open</strong>
-                    <p>Deadline: {roundDate(selected.task_deadline)}</p>
-                    <p role="timer" aria-live="off">
-                      Time remaining:{" "}
+                    <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                      <strong className="text-lg">🎯 Task Round Open: {selected.role}</strong>
+                      <span className="text-sm font-semibold px-2.5 py-1 bg-stone-200 dark:bg-stone-800 rounded">
+                        Deadline: {roundDate(selected.task_deadline)}
+                      </span>
+                    </div>
+
+                    <p role="timer" aria-live="off" className="font-mono text-base font-bold my-2 text-stone-800 dark:text-stone-100">
+                      ⏳ Time remaining:{" "}
                       {formatRemaining(
                         Math.max(0, Date.parse(selected.task_deadline) - now),
                       )}
                     </p>
+
+                    {/* Detailed Task Guidelines */}
+                    {selectedTaskDef && (
+                      <div className="task mt-4 text-left border-l-4 border-stone-600 pl-4 py-2 bg-stone-100 dark:bg-stone-900/60 rounded">
+                        <h3 className="font-semibold text-base mb-1">{selectedTaskDef.title}</h3>
+                        <p className="small mb-3 text-stone-600 dark:text-stone-400">{selectedTaskDef.subtitle}</p>
+
+                        <div className="mb-3">
+                          <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Objective:</strong>
+                          <p className="text-sm mt-0.5">{selectedTaskDef.objective}</p>
+                        </div>
+
+                        <div className="mb-3">
+                          <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Detailed Instructions:</strong>
+                          <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                            {selectedTaskDef.instructions.map((ins, i) => (
+                              <li key={i}>{ins}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Expected Deliverables:</strong>
+                          <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                            {selectedTaskDef.deliverables.map((del, i) => (
+                              <li key={i}>{del}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+
                     {selected.task_brief && (
-                      <p className="whitespace-pre-wrap">{selected.task_brief}</p>
+                      <div className="task mt-3 text-left bg-stone-50 dark:bg-stone-900/40 p-3 rounded border border-stone-200 dark:border-stone-800">
+                        <strong className="text-xs uppercase tracking-wider block text-stone-500 mb-1">Additional Notes from Team:</strong>
+                        <p className="whitespace-pre-wrap text-sm">{selected.task_brief}</p>
+                      </div>
                     )}
                   </div>
-                  <form onSubmit={submit}>
+
+                  <form onSubmit={submit} className="mt-6">
                     <label>
                       Your application
                       <select
@@ -283,36 +326,44 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                         ))}
                       </select>
                     </label>
+
                     <label>
                       Task name / title
                       <input
                         name="title"
                         required
                         maxLength={160}
-                        placeholder="e.g. Design Concepts / Instagram Reel / Code Submission"
+                        placeholder={
+                          selected.role === "Content & social media"
+                            ? "e.g. CUMID Brand Reel (Concept & Drive Link)"
+                            : "e.g. Pocket Diary Cover Art / Feature Submission"
+                        }
                       />
                     </label>
+
                     <label>
                       Links to your work
                       <textarea
                         name="links"
                         required
-                        placeholder={"One link per line, e.g.:\nhttps://drive.google.com/...\nhttps://github.com/...\nhttps://www.figma.com/..."}
+                        placeholder={"One HTTPS link per line, e.g.:\nhttps://drive.google.com/...\nhttps://github.com/...\nhttps://www.figma.com/..."}
                         maxLength={12000}
                         rows={4}
                       />
                     </label>
                     <p className="small">
-                      Share links to your work (Google Drive, Figma, GitHub, Notion, Loom, or website). If sharing a private Google Drive or Figma file, make sure anyone with the link can view or share view access with support@cumid.store.
+                      Share viewable links to your work (Google Drive, Figma, GitHub, Notion, Loom, or YouTube). If sharing a Google Drive video or folder, make sure 'Anyone with the link can view' is enabled. No file uploads needed!
                     </p>
+
                     <label>
-                      A short note (optional)
+                      Notes & walkthrough details (optional)
                       <textarea
                         name="notes"
                         maxLength={2000}
-                        placeholder="Add any notes, walkthrough details, or comments for the reviewers..."
+                        placeholder="Explain your approach, hook rationale, caption + audio suggestions, or tech choices..."
                       />
                     </label>
+
                     <button className="btn-primary" disabled={busy}>
                       {busy ? "Saving your work…" : "Submit task work"}
                     </button>
@@ -341,10 +392,21 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                             ? "This round is closed."
                             : `Task round open until ${roundDate(a.task_deadline)}.`}
                   </p>
+
+                  {/* Task Instructions preview */}
+                  {CAREER_TASKS[a.role] && (
+                    <div className="task my-2 text-left">
+                      <strong className="block text-xs uppercase tracking-wider text-stone-500 mb-1">
+                        Task Brief ({a.role}): {CAREER_TASKS[a.role].title}
+                      </strong>
+                      <p className="text-sm">{CAREER_TASKS[a.role].objective}</p>
+                    </div>
+                  )}
+
                   {a.task_brief && (
-                    <div className="task my-2">
-                      <strong className="block mb-1 text-sm">Task Instructions:</strong>
-                      <p className="whitespace-pre-wrap">{a.task_brief}</p>
+                    <div className="task my-2 text-left">
+                      <strong className="block mb-1 text-xs uppercase tracking-wider text-stone-500">Admin Instructions:</strong>
+                      <p className="whitespace-pre-wrap text-sm">{a.task_brief}</p>
                     </div>
                   )}
                   <small>Application: {a.id}</small>
@@ -386,70 +448,135 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
           ) : null}
         </>
       ) : (
-        <form onSubmit={apply} onInvalidCapture={invalid}>
-          {applications.length > 0 && (
-            <div className="notice">
-              <strong>Your saved applications</strong>
-              {applications.map((a) => (
-                <p key={a.id}>
-                  {a.role} — {a.status.replaceAll("_", " ")} · Reference: {a.id}
-                </p>
+        <>
+          <form onSubmit={apply} onInvalidCapture={invalid}>
+            {applications.length > 0 && (
+              <div className="notice">
+                <strong>Your saved applications</strong>
+                {applications.map((a) => (
+                  <p key={a.id}>
+                    {a.role} — {a.status.replaceAll("_", " ")} · Reference: {a.id}
+                  </p>
+                ))}
+                <a href="/careers/tasks">View your task round →</a>
+              </div>
+            )}
+            <label>
+              Your name
+              <input name="name" required maxLength={100} autoComplete="name" />
+            </label>
+            <label>
+              Where would you like to help?
+              <select
+                name="role"
+                required
+                onChange={(e) => {
+                  if (e.target.value && CAREER_TASKS[e.target.value]) {
+                    setActiveTaskPreview(e.target.value);
+                  }
+                }}
+              >
+                <option value="">Choose an area</option>
+                {CAREER_ROLES.map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Tell us a little about you
+              <textarea
+                name="introduction"
+                required
+                maxLength={2000}
+                placeholder="What do you enjoy making or doing? What would you like to work on at CUMID?"
+              />
+            </label>
+            <label>
+              Portfolio / CV / Work links (optional)
+              <textarea
+                name="links"
+                maxLength={12000}
+                placeholder="One HTTPS link per line"
+              />
+            </label>
+            <p className="small">
+              No long cover letter needed. We use the email from your Google
+              account. Share view access with support@cumid.store for private
+              links.
+            </p>
+            <label className="check">
+              <input name="consent" type="checkbox" required />
+              <span>
+                I am 18 or older. I agree that CUMID may use my application and
+                submitted work to assess my application and contact me about it. I
+                have read the{" "}
+                <a href="/privacy#recruitment" target="_blank">
+                  recruitment privacy notice
+                </a>
+                .
+              </span>
+            </label>
+            <button className="btn-primary" disabled={busy}>
+              {busy ? "Sending…" : "Send application"}
+            </button>
+            <a href="/careers/tasks">Already applied? Submit your task</a>
+          </form>
+
+          {/* Detailed Task Instructions Guide for Applicants */}
+          <div className="mt-12 text-left border-t border-stone-200 dark:border-stone-800 pt-8">
+            <h2 className="text-xl font-bold mb-2">📋 Task Round Guidelines by Role</h2>
+            <p className="small mb-4 text-stone-600 dark:text-stone-400">
+              When your application is selected, you will be invited to complete a short, focused task round. Below are the detailed instructions and deliverables for each role:
+            </p>
+
+            <div className="flex gap-2 flex-wrap mb-4">
+              {CAREER_ROLES.map((role) => (
+                <button
+                  type="button"
+                  key={role}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                    activeTaskPreview === role
+                      ? "bg-stone-800 text-white dark:bg-stone-100 dark:text-stone-900"
+                      : "bg-stone-200 text-stone-700 dark:bg-stone-800 dark:text-stone-300"
+                  }`}
+                  onClick={() => setActiveTaskPreview(role)}
+                >
+                  {role}
+                </button>
               ))}
-              <a href="/careers/tasks">View your task round →</a>
             </div>
-          )}
-          <label>
-            Your name
-            <input name="name" required maxLength={100} autoComplete="name" />
-          </label>
-          <label>
-            Where would you like to help?
-            <select name="role" required>
-              <option value="">Choose an area</option>
-              {CAREER_ROLES.map((r) => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Tell us a little about you
-            <textarea
-              name="introduction"
-              required
-              maxLength={2000}
-              placeholder="What do you enjoy making or doing? What would you like to work on at CUMID?"
-            />
-          </label>
-          <label>
-            Portfolio / CV / Work links (optional)
-            <textarea
-              name="links"
-              maxLength={12000}
-              placeholder="One HTTPS link per line"
-            />
-          </label>
-          <p className="small">
-            No long cover letter needed. We use the email from your Google
-            account. Share view access with support@cumid.store for private
-            links.
-          </p>
-          <label className="check">
-            <input name="consent" type="checkbox" required />
-            <span>
-              I am 18 or older. I agree that CUMID may use my application and
-              submitted work to assess my application and contact me about it. I
-              have read the{" "}
-              <a href="/privacy#recruitment" target="_blank">
-                recruitment privacy notice
-              </a>
-              .
-            </span>
-          </label>
-          <button className="btn-primary" disabled={busy}>
-            {busy ? "Sending…" : "Send application"}
-          </button>
-          <a href="/careers/tasks">Already applied? Submit your task</a>
-        </form>
+
+            {CAREER_TASKS[activeTaskPreview] && (
+              <div className="notice p-5 bg-stone-100 dark:bg-stone-900 rounded-lg">
+                <h3 className="font-bold text-base mb-1">{CAREER_TASKS[activeTaskPreview].title}</h3>
+                <p className="small text-stone-600 dark:text-stone-400 mb-3">{CAREER_TASKS[activeTaskPreview].subtitle}</p>
+
+                <div className="mb-3">
+                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Objective:</strong>
+                  <p className="text-sm mt-0.5">{CAREER_TASKS[activeTaskPreview].objective}</p>
+                </div>
+
+                <div className="mb-3">
+                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Instructions:</strong>
+                  <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                    {CAREER_TASKS[activeTaskPreview].instructions.map((ins, i) => (
+                      <li key={i}>{ins}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Deliverables to Link:</strong>
+                  <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                    {CAREER_TASKS[activeTaskPreview].deliverables.map((del, i) => (
+                      <li key={i}>{del}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

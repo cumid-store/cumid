@@ -80,7 +80,7 @@ DECLARE
   added boolean := false;
 BEGIN
   IF u IS NULL THEN RAISE EXCEPTION 'Sign in to apply'; END IF;
-  IF p_role NOT IN('Design & illustration','Content & social media','Web development','Marketing & sales','Operations & sourcing','Other') THEN
+  IF p_role NOT IN('Design & illustration','Content & social media','Web development','Marketing & sales') THEN
     RAISE EXCEPTION 'Invalid role';
   END IF;
   IF length(trim(p_name)) NOT BETWEEN 1 AND 100 OR length(trim(p_introduction)) NOT BETWEEN 1 AND 2000 OR length(p_role) > 80 OR jsonb_typeof(p_links) <> 'array' OR jsonb_array_length(p_links) > 10 THEN

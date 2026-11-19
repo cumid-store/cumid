@@ -38,7 +38,7 @@ RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_tem
 DECLARE u uuid:=auth.uid(); a public.career_applications; added boolean:=false;
 BEGIN
  IF u IS NULL THEN RAISE EXCEPTION 'Sign in to apply'; END IF;
- IF p_role NOT IN('Design & illustration','Content & social media','Web development','Marketing & sales','Operations & sourcing','Other') THEN RAISE EXCEPTION 'Invalid role'; END IF;
+ IF p_role NOT IN('Design & illustration','Content & social media','Web development','Marketing & sales') THEN RAISE EXCEPTION 'Invalid role'; END IF;
  IF length(trim(p_name)) NOT BETWEEN 1 AND 100 OR length(trim(p_introduction)) NOT BETWEEN 1 AND 2000 OR length(p_role)>80 OR jsonb_typeof(p_links)<>'array' OR jsonb_array_length(p_links)>10 THEN RAISE EXCEPTION 'Invalid application'; END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(p_links) v WHERE jsonb_typeof(v)<>'string' OR (v#>>'{}')!~'^https://') THEN RAISE EXCEPTION 'Use HTTPS links'; END IF;
  INSERT INTO public.career_applications(user_id,name,email,role,introduction,links,privacy_version)

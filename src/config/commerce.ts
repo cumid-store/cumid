@@ -6,8 +6,6 @@ export const CAREER_ROLES = [
   "Content & social media",
   "Web development",
   "Marketing & sales",
-  "Operations & sourcing",
-  "Other",
 ] as const;
 export const MAX_FILE_BYTES = 2 * 1024 * 1024;
 export const MAX_APPLICATION_BYTES = 6 * 1024 * 1024;
