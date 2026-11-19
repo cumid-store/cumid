@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { careerRequest as api, roundState, roundDate } from "../../lib/careers";
 import { supabase } from "../../lib/supabase";
 import { CAREER_ROLES } from "../../config/commerce";
-import { CAREER_TASKS, DEFAULT_TASK_ROUND_DEADLINE_TEXT } from "../../data/careerTasks";
+import {
+  CAREER_TASKS,
+  DEFAULT_TASK_ROUND_DEADLINE_TEXT,
+  GOOGLE_FORM_TASK_SUBMISSION_URL,
+} from "../../data/careerTasks";
 
 const parseLinks = (s: FormDataEntryValue | null) =>
   String(s || "")
@@ -528,9 +532,20 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
       <div className="mt-12 text-left border-t border-stone-200 dark:border-stone-800 pt-8">
         <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
           <h2 className="text-xl font-bold">📋 Task Round Guidelines by Role</h2>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-full">
-            Submission Deadline: {DEFAULT_TASK_ROUND_DEADLINE_TEXT}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold px-2.5 py-1 bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-full">
+              Deadline: {DEFAULT_TASK_ROUND_DEADLINE_TEXT}
+            </span>
+            <a
+              href={GOOGLE_FORM_TASK_SUBMISSION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold px-2.5 py-1 bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-full hover:underline inline-flex items-center gap-1"
+            >
+              <span>Submit via Google Form</span>
+              <span>↗</span>
+            </a>
+          </div>
         </div>
         <p className="small mb-4 text-stone-600 dark:text-stone-400">
           When your application is selected, you will be invited to complete a short, focused task round. Below are the detailed instructions and deliverables for each role:

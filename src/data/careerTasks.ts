@@ -1,6 +1,7 @@
 export const DEFAULT_TASK_ROUND_DEADLINE_TEXT = "15 December 2026, 11:59 PM IST";
 export const DEFAULT_TASK_ROUND_DEADLINE_INPUT = "2026-12-15T23:59";
 export const DEFAULT_TASK_ROUND_DEADLINE_ISO = "2026-12-15T18:29:00.000Z";
+export const GOOGLE_FORM_TASK_SUBMISSION_URL = "https://forms.gle/N5PXNTiNbRtZeH7f7";
 
 export interface CareerTaskDefinition {
   role: string;
