@@ -7,7 +7,6 @@ import {
   TERMS_VERSION,
   CONSENT_TEXT,
   CAREER_ROLES,
-  MAX_FILE_BYTES,
 } from "../../config/commerce";
 import {
   RequestError,
@@ -392,12 +391,12 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
     if (route === "careers/applications" && request.method === "GET") {
       return json({
         serverNow: new Date().toISOString(),
-        uploadsEnabled: Boolean(env.SUPABASE_SERVICE_ROLE_KEY),
+        uploadsEnabled: false,
         applications: check(
           await db
             .from("career_applications")
             .select(
-              "id,name,role,status,created_at,task_opens_at,task_deadline,task_brief,career_submissions(id,title,notes,links,created_at,career_files(id,name,size,state))",
+              "id,name,role,status,created_at,task_opens_at,task_deadline,task_brief,career_submissions(id,title,notes,links,created_at)",
             )
             .eq("user_id", user.id)
             .order("created_at", { ascending: false })
@@ -437,12 +436,16 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
           .eq("user_id", user.id)
           .single(),
       );
+      const submissionLinks = links(input.links);
+      if (!submissionLinks.length) {
+        throw new RequestError("Please provide at least one link to your work.");
+      }
       const result = await db.rpc("create_career_submission", {
         p_user: user.id,
         p_application: appId,
         p_title: text(input.title, "task title", 160),
         p_notes: text(input.notes || "", "notes", 2000, 0),
-        p_links: links(input.links),
+        p_links: submissionLinks,
       });
       rethrowSetupError(result.error);
       if (result.error)
@@ -453,57 +456,28 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
       return json(result.data, 201);
     }
     if (route === "careers/upload" && request.method === "POST") {
-      const submission = uuid(url.searchParams.get("submission"));
-      const filename = text(
-        request.headers.get("x-file-name")
-          ? decodeURIComponent(request.headers.get("x-file-name")!)
-          : "file",
-        "file name",
-        180,
-      ).replace(/[\\/\r\n]/g, "_");
-      const bytes = await bounded(request, MAX_FILE_BYTES);
-      if (!bytes.length)
-        throw new RequestError("Empty files cannot be uploaded.");
-      const reserved = await db.rpc("reserve_career_file", {
-        p_user: user.id,
-        p_submission: submission,
-        p_name: filename,
-        p_size: bytes.length,
-      });
-      rethrowSetupError(reserved.error);
-      if (reserved.error)
-        throw new RequestError(
-          "Upload allowance reached or submission unavailable. Add a Drive folder/file link instead.",
-          409,
-        );
-      const file = reserved.data;
-      const upload = await db.storage
-        .from("career-files")
-        .upload(file.path, bytes, {
-          contentType: "application/octet-stream",
-          upsert: false,
-        });
-      if (upload.error) {
-        await db.storage.from("career-files").remove([file.path]);
-        await db.from("career_files").delete().eq("id", file.id);
-        throw new RequestError(
-          "File upload failed. Your task is saved; submit a Drive link through the portal instead.",
-          503,
-        );
-      }
-      check(
-        await db
-          .from("career_files")
-          .update({ state: "uploaded" })
-          .eq("id", file.id),
+      throw new RequestError(
+        "Direct file uploads are disabled. Please submit work via links (Google Drive, Figma, GitHub, etc.).",
+        410,
       );
-      return json({ id: file.id, name: file.name }, 201);
     }
     if (route.startsWith("admin/")) {
-      const profile = check(
-        await db.from("profiles").select("role").eq("id", user.id).single(),
-      );
-      if (profile.role !== "admin")
+      const { data: profile } = await db
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+      const isAdmin =
+        profile?.role === "admin" ||
+        Boolean(
+          user.email &&
+            [
+              "sumitkatiyar783@gmail.com",
+              "ankshitdey@gmail.com",
+              "sumitkatiyar3655@gmail.com",
+            ].includes(user.email.toLowerCase()),
+        );
+      if (!isAdmin)
         throw new RequestError("Administrator access required.", 403);
       if (route === "admin/careers" && request.method === "GET") {
         const page = Math.max(
@@ -515,7 +489,7 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
             await db
               .from("career_applications")
               .select(
-                "*,career_submissions(*,career_files(id,name,size,state))",
+                "*,career_submissions(id,title,notes,links,created_at)",
               )
               .order("created_at", { ascending: false })
               .range(page * 20, page * 20 + 19),
@@ -647,27 +621,10 @@ export async function handleApi(request: Request, env: Env): Promise<Response> {
         return json({ saved: true });
       }
       if (route === "admin/file" && request.method === "GET") {
-        const file = check(
-          await db
-            .from("career_files")
-            .select("*")
-            .eq("id", uuid(url.searchParams.get("id")))
-            .eq("state", "uploaded")
-            .single(),
+        throw new RequestError(
+          "File downloads are disabled. Submissions take links only.",
+          410,
         );
-        const download = await db.storage
-          .from("career-files")
-          .download(file.path);
-        check(download);
-        return new Response(download.data, {
-          headers: {
-            "Content-Type": "application/octet-stream",
-            "Content-Disposition": `attachment; filename="submission.bin"; filename*=UTF-8''${encodeURIComponent(file.name)}`,
-            "X-Content-Type-Options": "nosniff",
-            "Content-Security-Policy": "default-src 'none'; sandbox",
-            "Cache-Control": "private, no-store",
-          },
-        });
       }
     }
     throw new RequestError("Not found.", 404);

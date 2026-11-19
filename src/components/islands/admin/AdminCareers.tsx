@@ -1,18 +1,28 @@
 import { useEffect, useState } from "react";
 import { careerRequest as api } from "../../../lib/careers";
-import { supabase } from "../../../lib/supabase";
 import AdminLayout from "./AdminLayout";
-const istInput = (value?: string) =>
-  new Date(Date.parse(value || new Date().toISOString()) + 330 * 60000)
-    .toISOString()
-    .slice(0, 16);
+
+const istInput = (value?: string) => {
+  const d = new Date(Date.parse(value || new Date().toISOString()) + 330 * 60000);
+  return d.toISOString().slice(0, 16);
+};
+
+const toIstIso = (val: string) => {
+  const clean = val.trim();
+  if (!clean) return "";
+  const parts = clean.split(":");
+  const withSecs = parts.length === 2 ? `${clean}:00` : clean;
+  return new Date(`${withSecs}+05:30`).toISOString();
+};
+
 export default function AdminCareers() {
-  const [items, setItems] = useState<any[]>([]),
-    [error, setError] = useState(""),
-    [page, setPage] = useState(0),
-    [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(""),
-    [saving, setSaving] = useState(false);
+  const [items, setItems] = useState<any[]>([]);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [saving, setSaving] = useState(false);
+
   async function load() {
     setLoading(true);
     try {
@@ -24,31 +34,16 @@ export default function AdminCareers() {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     void load();
   }, [page]);
-  async function download(id: string, name: string) {
-    try {
-      const { data } = await supabase!.auth.getSession();
-      const r = await fetch("/api/admin/file?id=" + id, {
-        headers: { Authorization: "Bearer " + data.session?.access_token },
-      });
-      if (!r.ok) throw Error("Download failed.");
-      const url = URL.createObjectURL(await r.blob());
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
-    } catch (e: any) {
-      setError(e.message);
-    }
-  }
+
   return (
     <AdminLayout
       activeTab="careers"
       title="Applications & tasks"
-      subtitle="Private recruitment inbox"
+      subtitle="Recruitment portal & task round manager"
     >
       <div className="commerce-form">
         {message && (
@@ -62,10 +57,9 @@ export default function AdminCareers() {
           </p>
         )}
         <p className="small">
-          Files are untrusted candidate uploads. Download only when needed; do
-          not run executable files. Work is submitted for evaluation, not
-          automatic commercial use.
+          Candidate work is submitted via links (Drive, Figma, GitHub, etc.) to keep database operations fast, reliable, and strictly free tier.
         </p>
+
         {loading ? (
           <p>Loading applications…</p>
         ) : (
@@ -74,19 +68,35 @@ export default function AdminCareers() {
               <h2>
                 {a.name} · {a.role}
               </h2>
-              <a href={"mailto:" + a.email}>{a.email}</a>
-              <p>{a.introduction}</p>
-              <ul>
-                {a.links.map((l: string) => (
-                  <li key={l}>
-                    <a href={l} rel="noopener noreferrer" target="_blank">
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <label>
-                Status
+              <a href={"mailto:" + a.email} className="text-sm underline block mb-2">
+                {a.email}
+              </a>
+              <p className="whitespace-pre-wrap">{a.introduction}</p>
+
+              {a.links && a.links.length > 0 && (
+                <div className="my-2">
+                  <strong className="text-xs uppercase tracking-wider block text-stone-500">
+                    Portfolio / Links:
+                  </strong>
+                  <ul className="space-y-1 my-1">
+                    {a.links.map((l: string) => (
+                      <li key={l}>
+                        <a
+                          href={l}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          className="underline break-all inline-flex items-center gap-1"
+                        >
+                          <span>🔗</span> <span>{l}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <label className="mt-4">
+                Application Status
                 <select
                   value={a.status}
                   onChange={async (e) => {
@@ -95,6 +105,7 @@ export default function AdminCareers() {
                         id: a.id,
                         status: e.target.value,
                       });
+                      setMessage("Application status updated.");
                       await load();
                     } catch (err: any) {
                       setError(err.message);
@@ -114,8 +125,9 @@ export default function AdminCareers() {
                   ))}
                 </select>
               </label>
+
               <form
-                className="task"
+                className="task mt-4"
                 onSubmit={async (event) => {
                   event.preventDefault();
                   setSaving(true);
@@ -123,21 +135,35 @@ export default function AdminCareers() {
                   setMessage("");
                   const form = new FormData(event.currentTarget);
                   try {
+                    const opensRaw = String(form.get("opens") || "");
+                    const deadlineRaw = String(form.get("deadline") || "");
+                    const brief = String(form.get("brief") || "").trim();
+
+                    if (!brief) throw new Error("Please enter task instructions.");
+                    if (!opensRaw || !deadlineRaw)
+                      throw new Error("Please specify opening time and deadline.");
+
+                    const opensIso = toIstIso(opensRaw);
+                    const deadlineIso = toIstIso(deadlineRaw);
+
+                    if (Date.parse(deadlineIso) <= Date.parse(opensIso)) {
+                      throw new Error("Deadline must be after opening time.");
+                    }
+                    if (Date.parse(deadlineIso) <= Date.now()) {
+                      throw new Error("Deadline must be in the future.");
+                    }
+
                     await api("admin/careers", {
                       id: a.id,
                       status: "task_sent",
                       round: {
-                        opensAt: new Date(
-                          String(form.get("opens")) + ":00+05:30",
-                        ).toISOString(),
-                        deadline: new Date(
-                          String(form.get("deadline")) + ":00+05:30",
-                        ).toISOString(),
-                        brief: form.get("brief"),
+                        opensAt: opensIso,
+                        deadline: deadlineIso,
+                        brief,
                       },
                     });
                     setMessage(
-                      "Task round saved. The candidate can see the instructions and deadline in their task portal.",
+                      "Task round saved! The candidate can now view instructions and submit work links in their portal.",
                     );
                     await load();
                   } catch (err: any) {
@@ -147,13 +173,15 @@ export default function AdminCareers() {
                   }
                 }}
               >
-                <h3 className="font-semibold">Timed task round</h3>
+                <h3 className="font-semibold text-base mb-2">Timed task round</h3>
                 <label>
                   Task instructions
                   <textarea
                     name="brief"
                     maxLength={4000}
                     required
+                    rows={4}
+                    placeholder="Enter clear instructions, requirements, deliverables, and submission expectations..."
                     defaultValue={a.task_brief || ""}
                   />
                 </label>
@@ -180,45 +208,51 @@ export default function AdminCareers() {
                   </label>
                 </div>
                 <p className="small">
-                  The deadline is enforced on the server for links and file
-                  uploads. Choose Closed above to stop the round early. Extend
-                  the deadline here if needed.
+                  The deadline is enforced on the server for link submissions. Choose Closed above to stop the round early, or extend the deadline here if needed.
                 </p>
                 <button type="submit" className="btn-primary" disabled={saving}>
                   {saving ? "Saving round…" : "Open / schedule task round"}
                 </button>
               </form>
-              {a.career_submissions.map((s: any) => (
-                <div className="task" key={s.id}>
-                  <strong>{s.title}</strong>
-                  <p>{s.notes}</p>
-                  <ul>
-                    {s.links.map((l: string) => (
-                      <li key={l}>
-                        <a href={l} target="_blank" rel="noopener noreferrer">
-                          {l}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                  {s.career_files
-                    .filter((f: any) => f.state === "uploaded")
-                    .map((f: any) => (
-                      <p key={f.id}>
-                        <button
-                          onClick={() => download(f.id, f.name)}
-                          className="underline"
-                        >
-                          Download {f.name}
-                        </button>{" "}
-                        ({Math.ceil(f.size / 1024)} KB)
+
+              {a.career_submissions && a.career_submissions.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="font-semibold text-sm uppercase tracking-wider text-stone-600 mb-2">
+                    Candidate Submissions ({a.career_submissions.length}):
+                  </h4>
+                  {a.career_submissions.map((s: any) => (
+                    <div className="task mb-3" key={s.id}>
+                      <strong>{s.title}</strong>
+                      {s.notes && <p className="my-1">{s.notes}</p>}
+                      <p className="small">
+                        Submitted:{" "}
+                        {new Date(s.created_at).toLocaleString("en-IN", {
+                          timeZone: "Asia/Kolkata",
+                        })}{" "}
+                        IST
                       </p>
-                    ))}
+                      <ul className="mt-2 space-y-1">
+                        {s.links?.map((l: string) => (
+                          <li key={l}>
+                            <a
+                              href={l}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline break-all inline-flex items-center gap-1.5"
+                            >
+                              <span>🔗</span> <span>{l}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </article>
           ))
         )}
+
         {!loading && !items.length && <p>No applications on this page.</p>}
         <div className="actions">
           <button

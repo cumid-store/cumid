@@ -34,7 +34,10 @@ export function links(value: unknown): string[] {
   if (!Array.isArray(value) || value.length > 10)
     throw new RequestError("Use at most 10 links.");
   return value.map((v) => {
-    const raw = text(v, "link", 1500);
+    let raw = text(v, "link", 1500);
+    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(raw)) {
+      raw = `https://${raw}`;
+    }
     let u: URL;
     try {
       u = new URL(raw);

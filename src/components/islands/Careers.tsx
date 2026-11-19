@@ -1,33 +1,49 @@
 import React, { useEffect, useState, useRef } from "react";
-import { uploadCareerFile } from "../../lib/api";
 import { careerRequest as api, roundState, roundDate } from "../../lib/careers";
 import { supabase } from "../../lib/supabase";
-import { CAREER_ROLES, MAX_FILES, MAX_FILE_BYTES } from "../../config/commerce";
+import { CAREER_ROLES } from "../../config/commerce";
+
 const parseLinks = (s: FormDataEntryValue | null) =>
   String(s || "")
-    .split(/\r?\n/)
-    .map((s) => s.trim())
-    .filter(Boolean);
+    .split(/[\r\n]+/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(l) ? l : `https://${l}`));
+
+function formatRemaining(ms: number) {
+  if (ms <= 0) return "00h 00m 00s (Deadline reached)";
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (n: number) => String(n).padStart(2, "0");
+  if (days > 0) {
+    return `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+  }
+  return `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+}
+
 export default function Careers({ portal = false }: { portal?: boolean }) {
-  const [signedIn, setSignedIn] = useState(false),
-    [loading, setLoading] = useState(true),
-    [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [message, setMessage] = useState(""),
-    [applications, setApplications] = useState<any[]>([]),
-    [now, setNow] = useState(Date.now()),
-    [clockOffset, setClockOffset] = useState(0),
-    [selectedId, setSelectedId] = useState(""),
-    [uploadsEnabled, setUploadsEnabled] = useState(false),
-    [syncError, setSyncError] = useState("");
-  const feedback = useRef<HTMLDivElement>(null),
-    refreshVersion = useRef(0);
+  const [signedIn, setSignedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [applications, setApplications] = useState<any[]>([]);
+  const [now, setNow] = useState(Date.now());
+  const [clockOffset, setClockOffset] = useState(0);
+  const [selectedId, setSelectedId] = useState("");
+  const [syncError, setSyncError] = useState("");
+
+  const feedback = useRef<HTMLDivElement>(null);
+  const refreshVersion = useRef(0);
+
   async function refresh() {
     const version = ++refreshVersion.current;
     const result = await api("careers/applications");
     if (version !== refreshVersion.current) return;
-    setApplications(Array.isArray(result) ? result : result.applications);
-    setUploadsEnabled(result.uploadsEnabled === true);
+    setApplications(Array.isArray(result) ? result : result.applications || []);
     if (result.serverNow) {
       const offset = Date.parse(result.serverNow) - Date.now();
       setClockOffset(offset);
@@ -35,14 +51,17 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
     }
     setSyncError("");
   }
+
   useEffect(() => {
     if (error || message)
       feedback.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [error, message]);
+
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now() + clockOffset), 1000);
     return () => clearInterval(timer);
   }, [clockOffset]);
+
   useEffect(() => {
     async function load() {
       try {
@@ -57,6 +76,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
     }
     void load();
   }, []);
+
   useEffect(() => {
     if (!signedIn) return;
     const sync = () => {
@@ -70,14 +90,17 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
       document.removeEventListener("visibilitychange", sync);
     };
   }, [signedIn]);
+
   const openApps = applications.filter((a) => roundState(a, now) === "open");
   const selected = openApps.find((a) => a.id === selectedId) || openApps[0];
+
   const invalid = () => {
     setMessage("");
     setError(
       "Please complete the required fields and tick the consent checkbox before sending.",
     );
   };
+
   async function apply(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -125,6 +148,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
       setBusy(false);
     }
   }
+
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -132,39 +156,27 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
     setBusy(true);
     const form = event.currentTarget;
     const data = new FormData(form);
-    const files = data
-      .getAll("files")
-      .filter((f): f is File => f instanceof File && f.size > 0);
     try {
-      if (
-        files.length > MAX_FILES ||
-        files.some((f) => f.size > MAX_FILE_BYTES)
-      )
-        throw new Error(
-          "Use up to 3 files, at most 2 MB each. For larger files or any other format, paste a Drive folder/file link.",
-        );
       const externalLinks = parseLinks(data.get("links"));
-      if (!externalLinks.length && !files.length)
-        throw new Error("Add a file or at least one Drive / work link.");
-      const submission = await api("careers/submissions", {
+      if (!externalLinks.length) {
+        throw new Error(
+          "Please add at least one link to your work (e.g. Google Drive, Figma, GitHub, Notion).",
+        );
+      }
+      if (externalLinks.length > 10) {
+        throw new Error("You can submit up to 10 links per submission.");
+      }
+      const title = String(data.get("title") || "").trim();
+      if (!title) {
+        throw new Error("Please enter a task name or title.");
+      }
+      await api("careers/submissions", {
         applicationId: data.get("applicationId"),
-        title: data.get("title"),
-        notes: data.get("notes"),
+        title,
+        notes: String(data.get("notes") || "").trim(),
         links: externalLinks,
       });
-      const failed: string[] = [];
-      for (const file of files) {
-        try {
-          await uploadCareerFile(submission.id, file);
-        } catch {
-          failed.push(file.name);
-        }
-      }
-      setMessage(
-        failed.length
-          ? `Task saved. These files did not upload: ${failed.join(", ")}. Submit their Drive links as a follow-up below.`
-          : "Your task has been submitted. Thank you!",
-      );
+      setMessage("Your task work has been submitted successfully. Thank you!");
       form.reset();
       await refresh().catch(() =>
         setSyncError(
@@ -177,7 +189,9 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
       setBusy(false);
     }
   }
+
   if (loading) return <p>Loading…</p>;
+
   return (
     <div className="commerce-form">
       <div ref={feedback} tabIndex={-1}>
@@ -213,6 +227,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
           </div>
         )}
       </div>
+
       {!signedIn ? (
         <div className="notice">
           <h2>One sign-in. Everything in one place.</h2>
@@ -244,21 +259,13 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                     <p>Deadline: {roundDate(selected.task_deadline)}</p>
                     <p role="timer" aria-live="off">
                       Time remaining:{" "}
-                      {new Date(
+                      {formatRemaining(
                         Math.max(0, Date.parse(selected.task_deadline) - now),
-                      )
-                        .toISOString()
-                        .slice(11, 19)}
-                      {Date.parse(selected.task_deadline) - now >= 86400000
-                        ? " (+ " +
-                          Math.floor(
-                            (Date.parse(selected.task_deadline) - now) /
-                              86400000,
-                          ) +
-                          " days)"
-                        : ""}
+                      )}
                     </p>
-                    <p className="whitespace-pre-wrap">{selected.task_brief}</p>
+                    {selected.task_brief && (
+                      <p className="whitespace-pre-wrap">{selected.task_brief}</p>
+                    )}
                   </div>
                   <form onSubmit={submit}>
                     <label>
@@ -277,56 +284,37 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                       </select>
                     </label>
                     <label>
-                      Task name
+                      Task name / title
                       <input
                         name="title"
                         required
                         maxLength={160}
-                        placeholder="e.g. Instagram launch concepts"
+                        placeholder="e.g. Design Concepts / Instagram Reel / Code Submission"
                       />
                     </label>
                     <label>
-                      Drive folder / file links
+                      Links to your work
                       <textarea
                         name="links"
-                        placeholder="One HTTPS link per line"
+                        required
+                        placeholder={"One link per line, e.g.:\nhttps://drive.google.com/...\nhttps://github.com/...\nhttps://www.figma.com/..."}
                         maxLength={12000}
+                        rows={4}
                       />
                     </label>
                     <p className="small">
-                      Drive links are preferred. Share view access with
-                      support@cumid.store, or use “Anyone with the link” only if
-                      you are comfortable doing so. We do not need edit access.
-                      Any file format can be shared this way.
+                      Share links to your work (Google Drive, Figma, GitHub, Notion, Loom, or website). If sharing a private Google Drive or Figma file, make sure anyone with the link can view or share view access with support@cumid.store.
                     </p>
-                    <label>
-                      Or attach small files
-                      <input
-                        type="file"
-                        name="files"
-                        multiple
-                        disabled={!uploadsEnabled}
-                      />
-                    </label>
-                    <p className="small">
-                      Up to 3 files per submission, 2 MB each. Total upload
-                      allowance: 6 MB per application. All formats are accepted
-                      as downloads. For larger work, use Drive links. Keep your
-                      own copy.
-                    </p>
-                    {!uploadsEnabled && (
-                      <p className="small">
-                        Direct uploads are currently unavailable. Submit Drive
-                        file or folder links above; all file formats can be
-                        shared that way.
-                      </p>
-                    )}
                     <label>
                       A short note (optional)
-                      <textarea name="notes" maxLength={2000} />
+                      <textarea
+                        name="notes"
+                        maxLength={2000}
+                        placeholder="Add any notes, walkthrough details, or comments for the reviewers..."
+                      />
                     </label>
                     <button className="btn-primary" disabled={busy}>
-                      {busy ? "Saving your work…" : "Submit task"}
+                      {busy ? "Saving your work…" : "Submit task work"}
                     </button>
                   </form>
                 </>
@@ -336,6 +324,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                   this account. Check the status and timings below.
                 </p>
               )}
+
               <h2 className="mt-10">Your applications & work</h2>
               {applications.map((a) => (
                 <article key={a.id}>
@@ -353,37 +342,42 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                             : `Task round open until ${roundDate(a.task_deadline)}.`}
                   </p>
                   {a.task_brief && (
-                    <p className="whitespace-pre-wrap">{a.task_brief}</p>
+                    <div className="task my-2">
+                      <strong className="block mb-1 text-sm">Task Instructions:</strong>
+                      <p className="whitespace-pre-wrap">{a.task_brief}</p>
+                    </div>
                   )}
                   <small>Application: {a.id}</small>
+
                   {a.career_submissions?.map((s: any) => (
                     <div className="task" key={s.id}>
                       <strong>{s.title}</strong>
-                      <p>{s.notes}</p>
+                      {s.notes && <p>{s.notes}</p>}
                       <small>
-                        {new Date(s.created_at).toLocaleDateString("en-IN")}
+                        Submitted on{" "}
+                        {new Date(s.created_at).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </small>
-                      <ul>
-                        {s.links.map((link: string) => (
+                      <ul className="mt-2 space-y-1">
+                        {s.links?.map((link: string) => (
                           <li key={link}>
                             <a
                               href={link}
                               target="_blank"
                               rel="noopener noreferrer"
+                              className="break-all inline-flex items-center gap-1.5 underline"
                             >
-                              {link}
+                              <span>🔗</span>
+                              <span>{link}</span>
                             </a>
                           </li>
                         ))}
                       </ul>
-                      {s.career_files?.map((f: any) => (
-                        <p key={f.id}>
-                          {f.name} —{" "}
-                          {f.state === "uploaded"
-                            ? "uploaded"
-                            : "upload incomplete; use a Drive link"}
-                        </p>
-                      ))}
                     </div>
                   ))}
                 </article>
@@ -401,7 +395,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
                   {a.role} — {a.status.replaceAll("_", " ")} · Reference: {a.id}
                 </p>
               ))}
-              <a href="/careers/tasks">View your task round</a>
+              <a href="/careers/tasks">View your task round →</a>
             </div>
           )}
           <label>
@@ -427,7 +421,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
             />
           </label>
           <label>
-            Portfolio / CV / Drive links (optional)
+            Portfolio / CV / Work links (optional)
             <textarea
               name="links"
               maxLength={12000}
@@ -437,7 +431,7 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
           <p className="small">
             No long cover letter needed. We use the email from your Google
             account. Share view access with support@cumid.store for private
-            Drive links.
+            links.
           </p>
           <label className="check">
             <input name="consent" type="checkbox" required />
