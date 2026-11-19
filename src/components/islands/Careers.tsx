@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { careerRequest as api, roundState, roundDate } from "../../lib/careers";
 import { supabase } from "../../lib/supabase";
 import { CAREER_ROLES } from "../../config/commerce";
-import { CAREER_TASKS } from "../../data/careerTasks";
+import { CAREER_TASKS, DEFAULT_TASK_ROUND_DEADLINE_TEXT } from "../../data/careerTasks";
 
 const parseLinks = (s: FormDataEntryValue | null) =>
   String(s || "")
@@ -521,63 +521,68 @@ export default function Careers({ portal = false }: { portal?: boolean }) {
             </button>
             <a href="/careers/tasks">Already applied? Submit your task</a>
           </form>
-
-          {/* Detailed Task Instructions Guide for Applicants */}
-          <div className="mt-12 text-left border-t border-stone-200 dark:border-stone-800 pt-8">
-            <h2 className="text-xl font-bold mb-2">📋 Task Round Guidelines by Role</h2>
-            <p className="small mb-4 text-stone-600 dark:text-stone-400">
-              When your application is selected, you will be invited to complete a short, focused task round. Below are the detailed instructions and deliverables for each role:
-            </p>
-
-            <div className="flex gap-2 flex-wrap mb-4">
-              {CAREER_ROLES.map((role) => (
-                <button
-                  type="button"
-                  key={role}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                    activeTaskPreview === role
-                      ? "bg-stone-800 text-white dark:bg-stone-100 dark:text-stone-900"
-                      : "bg-stone-200 text-stone-700 dark:bg-stone-800 dark:text-stone-300"
-                  }`}
-                  onClick={() => setActiveTaskPreview(role)}
-                >
-                  {role}
-                </button>
-              ))}
-            </div>
-
-            {CAREER_TASKS[activeTaskPreview] && (
-              <div className="notice p-5 bg-stone-100 dark:bg-stone-900 rounded-lg">
-                <h3 className="font-bold text-base mb-1">{CAREER_TASKS[activeTaskPreview].title}</h3>
-                <p className="small text-stone-600 dark:text-stone-400 mb-3">{CAREER_TASKS[activeTaskPreview].subtitle}</p>
-
-                <div className="mb-3">
-                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Objective:</strong>
-                  <p className="text-sm mt-0.5">{CAREER_TASKS[activeTaskPreview].objective}</p>
-                </div>
-
-                <div className="mb-3">
-                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Instructions:</strong>
-                  <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
-                    {CAREER_TASKS[activeTaskPreview].instructions.map((ins, i) => (
-                      <li key={i}>{ins}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Deliverables to Link:</strong>
-                  <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
-                    {CAREER_TASKS[activeTaskPreview].deliverables.map((del, i) => (
-                      <li key={i}>{del}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
         </>
       )}
+
+      {/* Detailed Task Instructions Guide for Applicants */}
+      <div className="mt-12 text-left border-t border-stone-200 dark:border-stone-800 pt-8">
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <h2 className="text-xl font-bold">📋 Task Round Guidelines by Role</h2>
+          <span className="text-xs font-semibold px-2.5 py-1 bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-full">
+            Submission Deadline: {DEFAULT_TASK_ROUND_DEADLINE_TEXT}
+          </span>
+        </div>
+        <p className="small mb-4 text-stone-600 dark:text-stone-400">
+          When your application is selected, you will be invited to complete a short, focused task round. Below are the detailed instructions and deliverables for each role:
+        </p>
+
+        <div className="flex gap-2 flex-wrap mb-4">
+          {CAREER_ROLES.map((role) => (
+            <button
+              type="button"
+              key={role}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                activeTaskPreview === role
+                  ? "bg-stone-800 text-white dark:bg-stone-100 dark:text-stone-900"
+                  : "bg-stone-200 text-stone-700 dark:bg-stone-800 dark:text-stone-300"
+              }`}
+              onClick={() => setActiveTaskPreview(role)}
+            >
+              {role}
+            </button>
+          ))}
+        </div>
+
+        {CAREER_TASKS[activeTaskPreview] && (
+          <div className="notice p-5 bg-stone-100 dark:bg-stone-900 rounded-lg">
+            <h3 className="font-bold text-base mb-1">{CAREER_TASKS[activeTaskPreview].title}</h3>
+            <p className="small text-stone-600 dark:text-stone-400 mb-3">{CAREER_TASKS[activeTaskPreview].subtitle}</p>
+
+            <div className="mb-3">
+              <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Objective:</strong>
+              <p className="text-sm mt-0.5">{CAREER_TASKS[activeTaskPreview].objective}</p>
+            </div>
+
+            <div className="mb-3">
+              <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Instructions:</strong>
+              <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                {CAREER_TASKS[activeTaskPreview].instructions.map((ins, i) => (
+                  <li key={i}>{ins}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <strong className="text-xs uppercase tracking-wider block text-stone-700 dark:text-stone-300">Deliverables to Link:</strong>
+              <ul className="text-sm mt-1 space-y-1 pl-4 list-disc">
+                {CAREER_TASKS[activeTaskPreview].deliverables.map((del, i) => (
+                  <li key={i}>{del}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

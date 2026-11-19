@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { careerRequest as api } from "../../../lib/careers";
-import { CAREER_TASKS } from "../../../data/careerTasks";
+import { CAREER_TASKS, DEFAULT_TASK_ROUND_DEADLINE_INPUT } from "../../../data/careerTasks";
 import AdminLayout from "./AdminLayout";
 
 const istInput = (value?: string) => {
@@ -233,7 +233,9 @@ export default function AdminCareers() {
                         type="datetime-local"
                         required
                         defaultValue={
-                          a.task_deadline ? istInput(a.task_deadline) : ""
+                          a.task_deadline
+                            ? istInput(a.task_deadline)
+                            : DEFAULT_TASK_ROUND_DEADLINE_INPUT
                         }
                       />
                     </label>
